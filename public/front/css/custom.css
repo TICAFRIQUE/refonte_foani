@@ -1,0 +1,226 @@
+/* Custom Styles for Foani E-commerce code colors */
+:root {
+    --color-vert: #2a6b2a;
+    --color-rouge: #a61c1c;
+    --color-jaune: #f1c40f;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    /* background: linear-gradient(135deg, var(--color-vert), var(--color-jaune, var(--color-rouge))); */
+    background: #f5f8f5;
+background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 28, 0.08) 56%, rgba(241, 196, 15, 0.07) 100%);
+
+}
+
+/* Navbar */
+.navbar {
+    background: var(--color-vert);
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: #fff !important;
+}
+
+.navbar .btn-cta {
+    background: var(--color-jaune);
+    color: #2a6b2a;
+    border-radius: 25px;
+}
+
+.navbar .btn-cta:hover {
+    background: var(--color-rouge);
+    color: #fff;
+}
+
+.sticky-top {
+    z-index: 1020;
+}
+
+/* Categories */
+
+/* Effets d'animation sur les cartes de catégories au survol */
+.category-card {
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+    border-radius: 20px;
+    position: relative; /* Pour le positionnement des éléments enfants */
+    overflow: hidden; /* Pour éviter que le contenu déborde */
+}
+
+.category-card:hover {
+     transform: translateY(-8px) scale(1.05) rotate(-1deg); /* Déplacement, zoom et légère rotation */
+    box-shadow: 0 12px 30px rgba(42, 107, 42, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombres multiples */
+    background-color: rgba(255, 251, 0, 0.15); /* Fond léger au survol */
+    filter: brightness(1.05) saturate(1.1); /* Légère luminosité et saturation */
+    border: 1px solid rgba(42, 107, 42, 0.3); /* Bordure subtile */
+}
+
+
+/* Ajout d'un effet de zoom sur l'image de la catégorie */
+.category-card img {
+    transition: transform 0.4s ease;
+}
+
+.category-card:hover img {
+    transform: scale(1.1); /* Zoom léger sur l'image */
+}
+
+/* Ajout d'une animation de texte au survol */
+.category-card h3,
+.category-card p {
+    transition: color 0.3s ease;
+}
+
+.category-card:hover h3,
+.category-card:hover p {
+    color: var(--color-jaune); /* Changer la couleur du texte au survol */
+}
+
+/* Products */
+.product-card {
+    border-radius: 20px;
+    overflow: hidden; /* Évite le débordement */
+    transition: box-shadow 0.3s, transform 0.3s;
+    border-color: #f1c40f;
+}
+
+.product-card:hover {
+    box-shadow: 0 8px 24px rgba(166, 28, 28, 0.12);
+    transform: scale(1.03); /* Légère augmentation de la carte au survol */
+    border-color: var(--color-vert);
+}
+
+.product-card img {
+    width: 100%; /* Prend toute la largeur de la carte */
+    height: auto; /* Garde le ratio d'aspect de l'image */
+    object-fit: contain; /* Assure que l'image est entièrement visible */
+    max-height: 200px; /* Limite la hauteur de l'image */
+    transition: transform 0.4s; /* Transition pour l'effet de zoom */
+}
+
+.product-card:hover img {
+    transform: scale(1.1); /* Zoom léger sur l'image au survol */
+}
+
+.btn-add {
+    background: var(--color-vert);
+    color: #fff;
+    border-radius: 20px;
+}
+
+.btn-add:hover {
+    background: var(--color-jaune);
+    color: var(--color-vert);
+}
+
+/* Footer */
+.footer {
+    background: var(--color-vert);
+    color: #fff;
+}
+
+.footer a {
+    color: var(--color-jaune);
+}
+
+/* Blog */
+.blog-card {
+    border-radius: 18px;
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.blog-card:hover {
+    box-shadow: 0 8px 24px rgba(241, 196, 15, 0.12);
+    transform: translateY(-5px) scale(1.03);
+}
+
+/* Slider */
+.custom-caption {
+    right: 5%;
+    bottom: 10%;
+    top: 10%;
+    width: 35%;
+    /* background: rgba(0, 0, 0, 0.55); */
+    border-radius: 12px;
+}
+
+.custom-caption h1,
+.custom-caption p {
+    color: #fff;
+}
+
+.btn-cta {
+    background-color: #2a6b2a;
+    border: none;
+    color: #fff;
+    transition: 0.3s ease;
+}
+.btn-cta:hover {
+    background-color: #a61c1c;
+    color: #fff;
+}
+
+/* Parallax effect */
+.parallax {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Carousel caption sur le côté droit */
+.carousel-caption-right {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    /* background: rgba(42, 107, 42, 0.85); */
+    border-radius: 15px;
+    padding: 2.5rem;
+    max-width: 400px;
+    width: 100%;
+    backdrop-filter: blur(5px);
+    /* box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); */
+}
+
+.carousel-caption-right h1 {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-caption-right p {
+    color: #ffffff !important;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+    .carousel-caption-right {
+        right: 15px;
+        left: 15px;
+        max-width: none;
+        padding: 1.5rem;
+        bottom: 20px;
+        top: auto;
+        transform: none;
+    }
+    
+    .carousel-caption-right h1 {
+        font-size: 1.8rem;
+    }
+    
+    .carousel-caption-right p {
+        font-size: 0.95rem;
+    }
+}
+
+/* Ajout de l'effet de survol pour toutes les cartes */
+.carte-valeur {
+    transition: transform 0.3s ease;
+}
+
+.carte-valeur:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}

@@ -4,19 +4,19 @@
     <div class="navbar-brand-box">
         {{-- <h4 class="text-white"> {{config('app.name')}} </h4> --}}
         <!-- Dark Logo-->
-        {{-- @if ($setting != null)
+        @if ($data_parametre != null)
             
             <!-- Light Logo-->
             <a href="#" class="logo logo-light">
-                <span class="logo-sm">
-                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" height="22">
-                </span>
+                {{-- <span class="logo-sm">
+                    <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"alt="logo" height="22">
+                </span> --}}
                 <span class="logo-lg">
-                    <img src="{{ URL::asset($setting->getFirstMediaUrl('logo_header')) }}" alt="" width="50"
+                    <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}" alt="logo" width="auto"
                         class="rounded-circle">
                 </span>
             </a>
-        @endif --}}
+        @endif
 
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
             id="vertical-hover">
