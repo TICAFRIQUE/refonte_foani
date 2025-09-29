@@ -13,29 +13,42 @@ return new class extends Migration
     {
         Schema::create('produits', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
+            $table->string('code')->nullable(); // Code unique du produit (SKU)
+            $table->string('slug')->unique()->nullable();
+            $table->string('libelle')->nullable();
 
-            // Clé étrangère vers categories
-            $table->foreignId('id_categorie')
-                ->constrained('categories')
-                ->onDelete('cascade');
-
-            $table->decimal('prix_de_vente', 10, 2)->nullable();
-            $table->decimal('frais_de_port', 10, 2)->default(0);
-
-            // Clé étrangère vers appreciations
-            $table->foreignId('id_appreciation')
-                ->constrained('appreciations')
-                ->onDelete('cascade');
 
             $table->integer('stock')->default(0);
-            $table->text('description')->nullable();
-            $table->string('photo_de_couverture')->nullable();
-            $table->string('galerie')->nullable(); // pour stocker plusieurs images
-            $table->string('mots_cle')->nullable();
-            $table->decimal('prix_achat', 10, 2)->nullable();
-            $table->integer('reduction_en_pourcentage')->default(0);
+            $table->longText('description')->nullable();
+            $table->double('prix_achat', 10, 2)->nullable();
+            $table->double('prix_de_vente', 10, 2)->nullable();
+            $table->double('frais_de_port', 10, 2)->default(0);
+
+            //PROMOTION
+            $table->enum('type_reduction', ['montant', 'pourcentage'])->nullable();
+            $table->double('valeur_reduction', 10, 2)->nullable();
+            $table->date('date_debut_reduction')->nullable();
+            $table->date('date_fin_reduction')->nullable();
+
             $table->boolean('visibilite')->default(true); // true = public, false = privé
+            $table->boolean('statut')->default(true);
+
+
+
+
+            // Clé étrangère vers categories
+            $table->foreignId('categorie_id')
+                ->constrained('categories')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+
+
+            // Clé étrangère vers type_offres
+            $table->foreignId('type_offre_id')
+                ->constrained('type_offres')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
