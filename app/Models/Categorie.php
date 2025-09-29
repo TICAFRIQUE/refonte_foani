@@ -16,7 +16,7 @@ class Categorie extends Model implements HasMedia
     public $incrementing = false;  // decrementer l'incrementation automatique de l'id
 
     protected $fillable = [
-        'titre',
+        'libelle',
         'image'
     ];
 
