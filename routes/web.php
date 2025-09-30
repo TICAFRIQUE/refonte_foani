@@ -74,14 +74,11 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         route::post('update/{id}', 'update')->name('module.update');
         route::get('delete/{id}', 'delete')->name('module.delete');
     });
-
-
-
 });
 
 
 
-    /**-------------------------------------------------------------ROUTE FRONTEND-------------------------------------------------------- */
-    route::get('/', function () {
-        return view('index');
-    });
+/**-------------------------------------------------------------ROUTE FRONTEND-------------------------------------------------------- */
+route::get('/', function () {
+    return view('index');
+});

@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ville_livraison extends Model
 {
-   
+
     protected $fillable = [
-        'titre'
+        'libelle'
     ];
 }

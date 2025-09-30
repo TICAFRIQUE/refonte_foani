@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        
         Schema::create('produits', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable(); // Code unique du produit (SKU)
@@ -20,13 +21,13 @@ return new class extends Migration
 
             $table->integer('stock')->default(0);
             $table->longText('description')->nullable();
-            $table->double('prix_achat', 10, 2)->nullable();
-            $table->double('prix_de_vente', 10, 2)->nullable();
-            $table->double('frais_de_port', 10, 2)->default(0);
+            $table->double('prix_achat')->nullable();
+            $table->double('prix_de_vente')->nullable();
+            $table->double('frais_de_port')->default(0);
 
             //PROMOTION
             $table->enum('type_reduction', ['montant', 'pourcentage'])->nullable();
-            $table->double('valeur_reduction', 10, 2)->nullable();
+            $table->double('valeur_reduction')->nullable();
             $table->date('date_debut_reduction')->nullable();
             $table->date('date_fin_reduction')->nullable();
 
