@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Page_page extends Model
+class PagePage extends Model
 {
     //
     protected $fillable = [

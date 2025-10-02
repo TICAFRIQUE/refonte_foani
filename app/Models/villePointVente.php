@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ville_point_vente extends Model
+class villePointVente extends Model
 {
     protected $fillable = [
         'id_ville',

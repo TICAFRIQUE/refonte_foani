@@ -17,18 +17,22 @@ class Produit extends Model implements HasMedia
 
     public $incrementing = false;  // decrementer l'incrementation automatique de l'id
     protected $fillable = [
+        'code',
+        'slug',
         'libelle',
-        'type_offre_id',
-        'categorie_id',
-        'prix_de_vente',
-        'frais_de_port',
         'stock',
         'description',
-        'mots_cle',
         'prix_achat',
-        'reduction_en_procentage',
+        'prix_de_vente',
+        'frais_de_port',
+        'type_reduction',
+        'valeur_reduction',
+        'date_debut_reduction',
+        'date_fin_reduction',
         'visibilite',
-        'slug',
+        'statut',
+        'categorie_id',
+        'type_offre_id',
     ];
     public function sluggable(): array
     {
@@ -47,10 +51,10 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(Categorie::class, 'categorie_id');
     }
 
-    // Relation avec le modèle Type_offre
-    public function appreciation()
+    // Relation avec le modèle Type_offres
+    public function typeOffres()
     {
-        return $this->belongsTo(Type_offre::class, 'type_offre_id');
+        return $this->belongsTo(TypeOffre::class, 'type_offre_id');
     }
 
 

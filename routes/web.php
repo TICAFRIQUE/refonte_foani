@@ -1,12 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\AdminController;
+use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\ModuleController;
-use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\ParametreController;
 use App\Http\Controllers\backend\PermissionController;
+use App\Http\Controllers\backend\RoleController;
+use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\TypeOffreController;
+use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -73,6 +77,36 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         route::post('store', 'store')->name('module.store');
         route::post('update/{id}', 'update')->name('module.update');
         route::get('delete/{id}', 'delete')->name('module.delete');
+    });
+
+
+    // categorie
+    Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
+        Route::get('', 'index')->name('categorie.index');
+        Route::post('store', 'store')->name('categorie.store');
+        Route::put('update/{id}', 'update')->name('categorie.update');
+        Route::delete('delete/{id}', 'delete')->name('categorie.delete');
+    });
+
+    //    offre
+    Route::prefix('offre')->controller(TypeOffreController::class)->group(function () {
+        Route::get('offre', 'index')->name('offre.index');
+        Route::post('offre', 'store')->name('offre.store');
+        // Route::get('show/{id}', 'show')->name('offre.show');
+        Route::get('offre/{id}', 'edit')->name('offre.edit');
+        Route::put('offre/{type_offre}',  'update')->name('offre.update');
+        Route::delete('offre/{type_offre}',  'delete')->name('offre.delete');
+    });
+
+    // produit
+    Route::prefix('produit')->controller(ProduitController::class)->group(function () {
+        route::get('', 'index')->name('produit.index');
+        route::get('create', 'create')->name('produit.create');
+        route::post('store', 'store')->name('produit.store');
+        route::get('show/{id}', 'show')->name('produit.show');
+        route::get('edit/{id}', 'edit')->name('produit.edit');
+        route::post('update/{id}', 'update')->name('produit.update');
+        route::delete('delete/{id}', 'delete')->name('produit.delete');
     });
 });
 

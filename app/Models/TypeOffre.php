@@ -6,16 +6,16 @@ use App\Models\Produit;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
 
-class Type_offre extends Model
+class TypeOffre extends Model
 {
     public $incrementing = false;  // decrementer l'incrementation automatique de l'id
 
 
     protected $fillable = [
-
-        'type_offre_id',
         'libelle',
-
+        'slug',
+        'description',
+        'statut',
     ];
 
 
@@ -25,7 +25,7 @@ class Type_offre extends Model
         return $this->hasMany(Produit::class, 'type_offre_id');
     }
 
-   
+
 
 
     //ID GENERERATED
@@ -33,7 +33,7 @@ class Type_offre extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'type_offre', 'length' => 10, 'prefix' =>
+            $model->id = IdGenerator::generate(['table' => 'type_offres', 'length' => 10, 'prefix' =>
             mt_rand()]);
         });
     }

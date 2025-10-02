@@ -16,9 +16,10 @@ class Categorie extends Model implements HasMedia
     public $incrementing = false;  // decrementer l'incrementation automatique de l'id
 
     protected $fillable = [
-        
         'libelle',
-        'image'
+        'slug',
+        'description',
+        'statut',
     ];
 
 
@@ -42,7 +43,7 @@ class Categorie extends Model implements HasMedia
         ];
     }
 
-
+// Une catégorie peut avoir plusieurs produits
     public function produits()
     {
         return $this->hasMany(Produit::class, 'categorie_id');
