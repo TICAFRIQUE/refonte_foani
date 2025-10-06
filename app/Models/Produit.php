@@ -14,8 +14,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Produit extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia, Sluggable;
-
-    public $incrementing = false;  // decrementer l'incrementation automatique de l'id
+    // decrementer l'incrementation automatique de l'id
+    public $incrementing = false;
     protected $fillable = [
         'code',
         'slug',
@@ -34,6 +34,7 @@ class Produit extends Model implements HasMedia
         'categorie_id',
         'type_offre_id',
     ];
+
     public function sluggable(): array
     {
         return [
@@ -45,11 +46,6 @@ class Produit extends Model implements HasMedia
 
 
 
-    // Relation avec le modèle Categorie
-    public function categories()
-    {
-        return $this->belongsTo(Categorie::class, 'categorie_id');
-    }
 
     // Relation avec le modèle Type_offres
     public function typeOffres()
@@ -57,6 +53,13 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(TypeOffre::class, 'type_offre_id');
     }
 
+
+
+    // Relation avec le modèle Categorie
+    public function categories()
+    {
+        return $this->belongsTo(Categorie::class, 'categorie_id');
+    }
 
 
     //ID GENERERATED
