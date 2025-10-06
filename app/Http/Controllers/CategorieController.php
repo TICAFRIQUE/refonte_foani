@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\convertToMajuscule;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class CategorieController extends Controller
 {
     // Affiche la liste des catégories (index)
     public function index()
     {
-        $categories = Categorie::paginate(25); // pagination
+        $categories = Categorie::alphabetique()->get();
         return view('backend.pages.categorie.index', compact('categories'));
     }
 
@@ -23,8 +25,17 @@ class CategorieController extends Controller
             'description' => 'nullable|string',
             'statut' => 'required|boolean',
         ]);
+        //verifier le nom existe dejà
+        if (Categorie::where('libelle', $request->libelle)->exists()) {
+            return redirect()->route('categorie.index')
+                ->with('error', 'La catégorie existe déjà.');
+        }
 
-        Categorie::create($validated);
+        Categorie::firstOrCreate([
+            'libelle' => convertToMajuscule::toUpperNoAccent($request->libelle),
+            'description' => $request->description,
+            'statut' => $request->statut,
+        ]);
 
         return redirect()->route('categorie.index')
             ->with('success', 'La catégorie a été ajoutée avec succès.');
@@ -34,31 +45,45 @@ class CategorieController extends Controller
     public function update(Request $request, $id)
     {
 
-        $categorie = Categorie::findOrFail($id);
+        try {
+            $categorie = Categorie::findOrFail($id);
 
-        $validated = $request->validate([
-            'libelle' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'statut' => 'required|boolean',
-        ]);
+            $validated = $request->validate([
+                'libelle' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'statut' => 'required|boolean',
+            ]);
 
-        $categorie->update($validated);
+            //verifier le nom existe dejà
+            if (Categorie::where('libelle', $request->libelle)->where('id', '!=', $id)->exists()) {
+                return redirect()->route('categorie.index')
+                    ->with('error', 'La catégorie existe déjà.');
+            }
 
-        return redirect()->route('categorie.index')
-            ->with('success', 'La catégorie a été mise à jour avec succès.');
+            $validated['libelle'] = convertToMajuscule::toUpperNoAccent($request->libelle);
+
+            $categorie->update($validated);
+
+
+            // Alert::success('Succès', 'La catégorie a été mise à jour avec succès.');
+            // return redirect()->route('categorie.index');
+
+            return redirect()->route('categorie.index')
+                ->with('success', 'La catégorie a été mise à jour avec succès.');
+        } catch (\Throwable $th) {
+            return redirect()->route('categorie.index')
+                ->with('error', 'Erreur lors de la mise à jour de la catégorie : ' . $th->getMessage());
+        }
     }
 
     // Supprime une catégorie
-    public function delete(Request $request)
+    public function delete($id)
     {
-       
-
-        $categorie = Categorie::findOrFail($request->id);
-
         try {
-            $categorie->delete();
-            return redirect()->route('categorie.index')
-                ->with('success', 'La catégorie a été supprimée avec succès.');
+            Categorie::findOrFail($id)->forceDelete();
+            return response()->json([
+                'status' => 200,
+            ]);
         } catch (\Exception $e) {
             return redirect()->route('categorie.index')
                 ->with('error', 'Impossible de supprimer cette catégorie : ' . $e->getMessage());

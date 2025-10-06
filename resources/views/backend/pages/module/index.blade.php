@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-   Module
+    Module
 @endsection
 @section('css')
     <!--datatable css-->
@@ -74,8 +74,8 @@
                                         </td>
                                     </tr>
                                     @include('backend.pages.module.edit')
-                                    @endforeach
-                                </tbody>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -104,10 +104,10 @@
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
-   <script>
-       $(document).ready(function(){
-        var route = "module"
-        delete_row(route);
-       })
+    <script>
+        $(document).ready(function() {
+            var route = "module"
+            delete_row(route);
+        })
     </script>
 @endsection

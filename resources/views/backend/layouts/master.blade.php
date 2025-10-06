@@ -43,6 +43,7 @@
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
+                    @include('backend.components.alertMessage')
                     @include('sweetalert::alert')
                     @yield('content')
                 </div>

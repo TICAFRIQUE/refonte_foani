@@ -52,8 +52,14 @@ class Categorie extends Model implements HasMedia
 
 
     //scope pour les produits actifs
-    public function scopeActif($query)
+    public function scopeActive($query)
     {
         return $query->where('statut', true);
+    }
+
+    //les categorie par ordre alphabetique
+    public function scopeAlphabetique($query)
+    {
+        return $query->orderBy('libelle', 'asc');
     }
 }

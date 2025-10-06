@@ -84,8 +84,8 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::prefix('categorie')->controller(CategorieController::class)->group(function () {
         Route::get('', 'index')->name('categorie.index');
         Route::post('store', 'store')->name('categorie.store');
-        Route::put('update/{id}', 'update')->name('categorie.update');
-        Route::delete('delete/{id}', 'delete')->name('categorie.delete');
+        Route::post('update/{id}', 'update')->name('categorie.update');
+        Route::get('delete/{id}', 'delete')->name('categorie.delete');
     });
 
     //    offre
