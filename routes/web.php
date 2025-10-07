@@ -95,18 +95,18 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         // Route::get('show/{id}', 'show')->name('offre.show');
         Route::get('offre/{id}', 'edit')->name('offre.edit');
         Route::put('offre/{type_offre}',  'update')->name('offre.update');
-        Route::delete('offre/{type_offre}',  'delete')->name('offre.delete');
+        Route::get('offre/{id}',  'delete')->name('offre.delete');
     });
 
     // produit
     Route::prefix('produit')->controller(ProduitController::class)->group(function () {
-        route::get('', 'index')->name('produit.index');
-        route::get('create', 'create')->name('produit.create');
-        route::post('store', 'store')->name('produit.store');
-        route::get('show/{id}', 'show')->name('produit.show');
-        route::get('edit/{id}', 'edit')->name('produit.edit');
-        route::post('update/{id}', 'update')->name('produit.update');
-        route::delete('delete/{id}', 'delete')->name('produit.delete');
+        Route::get('', 'index')->name('produit.index');
+        Route::get('create', 'create')->name('produit.create');
+        Route::post('store', 'store')->name('produit.store');
+        // Route::get('show/{id}', 'show')->name('produit.show');
+        Route::get('edit/{id}', 'edit')->name('produit.edit');
+        Route::put('update/{id}', 'update')->name('produit.update');
+        Route::get('delete/{id}', 'delete')->name('produit.delete');
     });
 });
 

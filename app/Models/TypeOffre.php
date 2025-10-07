@@ -37,4 +37,10 @@ class TypeOffre extends Model
             mt_rand()]);
         });
     }
+
+     //les offres par ordre alphabetique
+    public function scopeAlphabetique($query)
+    {
+        return $query->orderBy('libelle', 'asc');
+    }
 }

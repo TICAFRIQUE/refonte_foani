@@ -1,233 +1,120 @@
 @extends('backend.layouts.master')
 
+@section('title', 'Offres')
+
+@section('css')
+    <!-- Datatable CSS -->
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+@endsection
+
 @section('content')
+    @component('backend.components.breadcrumb')
+        @slot('li_1')
+            Liste
+        @endslot
+        @slot('title')
+            Offres
+        @endslot
+    @endcomponent
+
     <div class="container-fluid py-4">
-
-        {{-- Message de succès ou erreur --}}
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="fw-bold">Liste des Types d’Offres</h2>
+            <h2 class="fw-bold mb-0">Liste des Offres</h2>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offreModal">
-                <i class="bi bi-plus-circle"></i> Nouveau Type d’Offre
+                <i class="bi bi-plus-circle"></i> Créer une offre
             </button>
         </div>
 
-        <div class="card shadow-sm rounded-3">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="buttons-datatables" class="display table table-bordered" style="width:100%">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>#</th>
-                                <th>Libellé</th>
-                                <th>Slug</th>
-                                <th>Description</th>
-                                <th>Statut</th>
-                                <th>Produits liés</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($types_offres as $offre)
-                                <tr>
-                                    <td>{{ $offre->id }}</td>
-                                    <td>{{ $offre->libelle }}</td>
-                                    <td>{{ $offre->slug }}</td>
-                                    <td>{{ Str::limit($offre->description, 50) }}</td>
-                                    <td>
-                                        @if ($offre->statut == 'actif' || $offre->statut == 1)
-                                            <span class="badge bg-success">Actif</span>
-                                        @else
-                                            <span class="badge bg-secondary">Inactif</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $offre->produits->count() }}</td>
-                                    <td class="text-center">
-                                        <div class="dropdown d-inline-block">
-                                            <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="ri-more-fill align-middle"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <!-- Modifier -->
-                                                <li>
-                                                    <a type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#editModal{{ $offre->id }}">
-                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier
-                                                    </a>
-                                                </li>
-
-                                                <!-- Supprimer -->
-                                                <li>
-                                                    <form action="{{ route('offre.delete', $offre->id) }}" method="POST"
-                                                        class="d-inline"
-                                                        onsubmit="return confirm('Voulez-vous vraiment supprimer ce type d’offre ?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger">
-                                                            <i class="ri-delete-bin-fill align-bottom me-2"></i> Supprimer
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-
-                                </tr>
-
-                                <!-- MODAL EDIT -->
-                                <div class="modal fade" id="editModal{{ $offre->id }}" tabindex="-1"
-                                    aria-labelledby="editModalLabel{{ $offre->id }}" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-
-                                            <div class="modal-header">
-                                                <h5 class="modal-title fw-bold" id="editModalLabel{{ $offre->id }}">
-                                                    Modifier le Type d’Offre
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <form action="{{ route('offre.update', $offre->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-
-                                                    <div class="mb-3">
-                                                        <label for="libelle{{ $offre->id }}"
-                                                            class="form-label">Libellé</label>
-                                                        <input type="text" name="libelle"
-                                                            id="libelle{{ $offre->id }}" class="form-control"
-                                                            value="{{ $offre->libelle }}" required>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="slug{{ $offre->id }}"
-                                                            class="form-label">Slug</label>
-                                                        <input type="text" name="slug" id="slug{{ $offre->id }}"
-                                                            class="form-control" value="{{ $offre->slug }}" required>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="description{{ $offre->id }}"
-                                                            class="form-label">Description</label>
-                                                        <textarea name="description" id="description{{ $offre->id }}" rows="4" class="form-control">{{ $offre->description }}</textarea>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="statut{{ $offre->id }}"
-                                                            class="form-label">Statut</label>
-                                                        <select name="statut" id="statut{{ $offre->id }}"
-                                                            class="form-select">
-                                                            <option value="1"
-                                                                {{ $offre->statut == 1 ? 'selected' : '' }}>Actif</option>
-                                                            <option value="0"
-                                                                {{ $offre->statut == 0 ? 'selected' : '' }}>Inactif
-                                                            </option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-secondary me-2"
-                                                            data-bs-dismiss="modal">Annuler</button>
-                                                        <button type="submit" class="btn btn-warning">
-                                                            <i class="bi bi-pencil-square"></i> Mettre à jour
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-
-                                        </div>
+        <div class="card shadow-sm">
+            <div class="card-body table-responsive">
+                <table id="buttons-datatables" class="table table-bordered table-hover align-middle" style="width:100%">
+                    <thead class="table-primary">
+                        <tr class="text-center">
+                            <th>#</th>
+                            <th>Libellé</th>
+                            <th>Slug</th>
+                            <th>Description</th>
+                            <th>Statut</th>
+                            <th>Produits liés</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($types_offres as $keys => $offre)
+                            <tr id="row_{{ $offre->id }}">
+                                <td>{{ ++$keys }}</td>
+                                <td>{{ $offre->libelle }}</td>
+                                <td>{{ $offre->slug }}</td>
+                                <td>{{ Str::limit($offre->description, 50) }}</td>
+                                <td>
+                                    @if ($offre->statut == 'actif' || $offre->statut == 1)
+                                        <span class="badge bg-success">Actif</span>
+                                    @else
+                                        <span class="badge bg-secondary">Inactif</span>
+                                    @endif
+                                </td>
+                                <td>{{ $offre->produits->count() }}</td>
+                                <td class="text-center">
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-more-fill align-middle"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <!-- Modifier -->
+                                            <li>
+                                                <a class="dropdown-item" data-bs-toggle="modal"
+                                                    data-bs-target="#editModal{{ $offre->id }}">
+                                                    <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Modifier
+                                                </a>
+                                            </li>
+                                            <!-- Supprimer -->
+                                            <li>
+                                                <a href="#" class="dropdown-item delete"
+                                                    data-id="{{ $offre->id }}">
+                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                    Supprimer
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                </div>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="text-center text-muted">Aucun type d’offre trouvé</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                {{-- Pagination --}}
-                <div class="d-flex justify-content-center mt-3">
-                    {{ $types_offres->links() }}
-                </div>
+                                </td>
+                            </tr>
+                            @include('backend.pages.offres.partials.edit')
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- MODAL AJOUT -->
-    <div class="modal fade" id="offreModal" tabindex="-1" aria-labelledby="offreModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+    @include('backend.pages.offres.partials.create')
+@endsection
 
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold" id="offreModalLabel">Ajouter un Type d’Offre</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+@section('script')
+    <!-- jQuery et DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-                <div class="modal-body">
-                    <form action="{{ route('offre.store') }}" method="POST">
-                        @csrf
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-                        <div class="mb-3">
-                            <label for="libelle" class="form-label">Libellé</label>
-                            <input type="text" name="libelle" id="libelle"
-                                class="form-control @error('libelle') is-invalid @enderror" value="{{ old('libelle') }}"
-                                required>
-                            @error('libelle')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <input type="hidden" name="slug" value="{{ old('slug') }}">
-
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea name="description" id="description" rows="4"
-                                class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="statut" class="form-label">Statut</label>
-                            <select name="statut" id="statut"
-                                class="form-select @error('statut') is-invalid @enderror" required>
-                                <option value="1" {{ old('statut') == 1 ? 'selected' : '' }}>Actif</option>
-                                <option value="0" {{ old('statut') == 0 ? 'selected' : '' }}>Inactif</option>
-                            </select>
-                            @error('statut')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-secondary me-2"
-                                data-bs-dismiss="modal">Annuler</button>
-                            <button type="submit" class="btn btn-success">
-                                <i class="bi bi-save"></i> Enregistrer
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    <!-- Initialisation DataTables -->
+    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            const route = "offre";
+            delete_row(route);
+        });
+    </script>
 @endsection

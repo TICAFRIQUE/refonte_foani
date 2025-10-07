@@ -2,24 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Produit;
+use App\Http\Controllers\Controller;
 use App\Models\Categorie;
+use App\Models\Produit;
 use App\Models\TypeOffre;
+use App\Services\convertToMajuscule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ProduitController extends Controller
 {
     /**
-     * Afficher la liste des produits
+     * Affiche la liste des produits actifs.
      */
     public function index()
     {
-        $produits = Produit::with(['categories', 'typeOffres'])->orderBy('id', 'desc')->paginate(10);
-        $categories = Categorie::all();
-        $typeoffres = TypeOffre::all();
+        try {
+            // Récupérer les produits actifs avec leurs relations
+            $produits = Produit::with(['categorie', 'typeOffres'])
+                ->where('statut', 1)
+                ->orderByDesc('created_at')
+                ->get();
 
-        return view('backend.pages.produits.index', compact('produits', 'categories', 'typeoffres'));
+            // Retourner la vue avec les données
+            return view('backend.pages.produits.index', compact('produits'));
+        } catch (\Exception $e) {
+            // En cas d'erreur, logguer et rediriger avec un message
+            redirect()->route('produit.index')->with('error', 'Erreur lors du chargement des produits : ' . $e->getMessage());
+
+            return redirect()->back()->with('error', "Une erreur est survenue lors du chargement des produits.");
+        }
+    }
+
+
+
+    /**
+     * Afficher le formulaire de création de produit
+     */
+    public function create()
+    {
+        try {
+            $categories = Categorie::where('statut', 1)->get(); // Catégories actives
+            $typeoffres = TypeOffre::where('statut', 1)->get(); // Types d'offres actifs
+
+            return view('backend.pages.produits.partials.create', compact('categories', 'typeoffres'));
+        } catch (\Exception $e) {
+            redirect()->back()->with('error', 'Erreur lors de l\'affichage du formulaire de création de produit : ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Impossible de charger le formulaire de création du produit.');
+        }
     }
 
     /**
@@ -27,86 +58,146 @@ class ProduitController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'libelle' => 'required|string|max:255',
-            'categorie_id' => 'required|exists:categories,id',
-            'type_offre_id' => 'required|exists:type_offres,id',
-            'prix_achat' => 'nullable|numeric',
-            'prix_de_vente' => 'nullable|numeric',
-            'frais_de_port' => 'nullable|numeric',
-            'stock' => 'nullable|integer',
-            'type_reduction' => 'nullable|in:montant,pourcentage',
-            'valeur_reduction' => 'nullable|numeric',
-            'date_debut_reduction' => 'nullable|date',
-            'date_fin_reduction' => 'nullable|date|after_or_equal:date_debut_reduction',
-            'visibilite' => 'nullable|boolean',
-            'statut' => 'nullable|boolean',
-            'description' => 'nullable|string',
-        ]);
+        try {
+            $validated = $request->validate([
+                'libelle' => 'required|string|max:255',
+                'categorie_id' => 'required|exists:categories,id',
+                'type_offre_id' => 'required|exists:type_offres,id',
+                'prix_achat' => 'nullable|numeric',
+                'prix_de_vente' => 'nullable|numeric',
+                'frais_de_port' => 'nullable|numeric',
+                'stock' => 'nullable|integer',
+                'type_reduction' => 'nullable|in:montant,pourcentage',
+                'valeur_reduction' => 'nullable|numeric',
+                'date_debut_reduction' => 'nullable|date',
+                'date_fin_reduction' => 'nullable|date|after_or_equal:date_debut_reduction',
+                'visibilite' => 'nullable|boolean',
+                'statut' => 'nullable|boolean',
+                'description' => 'nullable|string',
+            ]);
 
-        // Créer une nouvelle instance de Produit
-        $produit = new Produit($validated);
+            if (Produit::where('libelle', $request->libelle)
+                ->where('prix_de_vente', $request->prix_de_vente)
+                ->exists()
+            ) {
+                return redirect()->route('produit.index')->with('error', 'Le produit existe déjà.');
+            }
 
-        // Générer un code produit si vide
-        if (!$produit->code) {
-            $produit->code = 'PROD-' . Str::upper(Str::random(6));
+            $validated['libelle'] = convertToMajuscule::toUpperNoAccent($request->libelle);
+
+            // Créer une nouvelle instance de Produit
+            $produit = new Produit($validated);
+
+            // Générer un code produit si vide
+            if (!$produit->code) {
+                $produit->code = 'PROD-' . Str::upper(Str::random(6));
+            }
+
+            // Générer un slug unique
+            $produit->slug = Str::slug($produit->libelle . '-' . time());
+
+            $produit->save();
+
+            return redirect()->route('produit.index')->with('success', 'Produit ajouté avec succès.');
+        } catch (\Exception $e) {
+            redirect()->back()->with('error', 'Erreur lors de la création d\'un produit : ' . $e->getMessage());
+            return redirect()->route('produit.index')->with('error', 'Une erreur est survenue lors de l\'ajout du produit.');
         }
-
-        // Générer un slug unique
-        $produit->slug = Str::slug($produit->libelle . '-' . time());
-
-        $produit->save();
-
-        return redirect()->back()->with('success', 'Produit ajouté avec succès.');
     }
 
-    /**
-     * Afficher la modale d'édition (optionnel si modal inline)
-     */
-    public function edit(Produit $produit)
+
+    public function edit($id)
     {
-        $categories = Categorie::all();
-        $typeoffres = TypeOffre::all();
-        return view('backend.pages.produits.edit', compact('produit', 'categories', 'typeoffres'));
+        try {
+            // Récupère le produit avec ses relations
+            $produit = Produit::with(['categorie', 'typeOffres'])->findOrFail($id);
+
+            // Vérifie que le produit est actif
+            if ($produit->statut != 1) {
+                return redirect()
+                    ->route('produit.index')
+                    ->with('error', 'Produit introuvable ou inactif.');
+            }
+
+            // Récupère uniquement les catégories et types d’offres actifs
+            $categories = Categorie::where('statut', 1)->get(['id', 'libelle']);
+            $typeoffres = TypeOffre::where('statut', 1)->get(['id', 'libelle']);
+
+            return view('backend.pages.produits.partials.edit', compact('produit', 'categories', 'typeoffres'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erreur lors du chargement de l’édition du produit : ' . $e->getMessage());
+        }
     }
+
+
+
+
+
 
     /**
      * Mettre à jour un produit
      */
-    public function update(Request $request, Produit $produit)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'libelle' => 'required|string|max:255',
-            'categorie_id' => 'required|exists:categories,id',
-            'type_offre_id' => 'required|exists:type_offres,id',
-            'prix_achat' => 'nullable|numeric',
-            'prix_de_vente' => 'nullable|numeric',
-            'frais_de_port' => 'nullable|numeric',
-            'stock' => 'nullable|integer',
-            'type_reduction' => 'nullable|in:montant,pourcentage',
-            'valeur_reduction' => 'nullable|numeric',
-            'date_debut_reduction' => 'nullable|date',
-            'date_fin_reduction' => 'nullable|date',
-            'visibilite' => 'nullable|boolean',
-            'statut' => 'nullable|boolean',
-            'description' => 'nullable|string',
-        ]);
+        try {
 
-        $produit->update($validated);
+            // ✅ Validation des données
+            $validated = $request->validate([
+                'libelle' => 'required|string|max:255',
+                'categorie_id' => 'required|exists:categories,id',
+                'type_offre_id' => 'required|exists:type_offres,id',
+                'prix_achat' => 'nullable|numeric',
+                'prix_de_vente' => 'nullable|numeric',
+                'frais_de_port' => 'nullable|numeric',
+                'stock' => 'nullable|integer',
+                'type_reduction' => 'nullable|in:montant,pourcentage',
+                'valeur_reduction' => 'nullable|numeric',
+                'date_debut_reduction' => 'nullable|date',
+                'date_fin_reduction' => 'nullable|date',
+                'visibilite' => 'nullable|boolean',
+                'statut' => 'nullable|boolean',
+                'description' => 'nullable|string',
+            ]);
 
-        // Mettre à jour le slug si le libelle change
-        $produit->slug = Str::slug($produit->libelle . '-' . $produit->id);
-        $produit->save();
+            // ✅ Récupération du produit
+            $produit = Produit::findOrFail($id);
 
-        return redirect()->back()->with('success', 'Produit mis à jour avec succès.');
+            // ✅ Vérification d’unicité personnalisée
+            $existe = Produit::where('libelle', $request->libelle)
+                ->where('prix_de_vente', $request->prix_de_vente)
+                ->where('id', '!=', $id)
+                ->exists();
+
+            if ($existe) {
+                return redirect()->back()->with('error', 'Un produit identique existe déjà.');
+            }
+
+            // ✅ Mise à jour du produit
+            $produit->update($validated);
+
+            // ✅ Recalcule du slug (si libellé changé)
+            $produit->slug = Str::slug($produit->libelle . '-' . $produit->id);
+            $produit->save();
+
+            return redirect()->route('produit.index')->with('success', 'Produit mis à jour avec succès.');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
+        }
     }
-
     /**
      * Supprimer un produit
      */
-    public function delete(Produit $produit)
+
+    public function delete($id)
     {
-        $produit->delete();
-        return redirect()->back()->with('success', 'Produit supprimé avec succès.');
+        try {
+            Produit::findOrFail($id)->forceDelete();
+            return response()->json([
+                'status' => 200,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->route('produit.index')
+                ->with('error', 'Impossible de supprimer ce produit : ' . $e->getMessage());
+        }
     }
 }

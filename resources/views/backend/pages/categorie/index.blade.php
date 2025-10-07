@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 @section('title')
-    Module
+    categorie
 @endsection
 @section('css')
     <!--datatable css-->
@@ -16,7 +16,7 @@
             Liste
         @endslot
         @slot('title')
-            Modules
+            Catégorie
         @endslot
     @endcomponent
 
@@ -25,9 +25,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title mb-0">Liste des modules</h5>
-                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#createCategorieModal">Créer
-                        un module</button>
+                    <h5 class="card-title mb-0">Liste des catégorie</h5>
+                    <button type="button" class="btn btn-primary " data-bs-toggle="modal"
+                        data-bs-target="#createCategorieModal">Créer
+                        une catégorie</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -67,11 +68,14 @@
                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View</a>
                                                     </li> --}}
-                                                    <li><a type="button" class="dropdown-item edit-item-btn"
+                                                    <li>
+                                                        <a type="button" class="dropdown-item edit-item-btn"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#editModal{{ $categorie['id'] }}"><i
                                                                 class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                            Modifier</a></li>
+                                                            Modifier
+                                                        </a>
+                                                    </li>
                                                     <li>
                                                         <a href="#" class="dropdown-item remove-item-btn delete"
                                                             data-id={{ $categorie['id'] }}>
