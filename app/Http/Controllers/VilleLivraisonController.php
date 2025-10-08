@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\VilleLivraison;
+use App\Models\Ville;
 use Illuminate\Http\Request;
 
 class VilleLivraisonController extends Controller
@@ -10,7 +10,7 @@ class VilleLivraisonController extends Controller
     public function index()
     {
         try {
-            $villes = VilleLivraison::all();
+            $villes = Ville::all();
             return view('backend.pages.point_de_livraison.ville.index', compact('villes'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erreur lors du chargement des villes : ' . $e->getMessage());
@@ -22,7 +22,7 @@ class VilleLivraisonController extends Controller
         $request->validate(['libelle' => 'required|string|max:255']);
 
         try {
-            VilleLivraison::create([
+            Ville::create([
                 'libelle' => $request->libelle,
             ]);
 
@@ -37,7 +37,7 @@ class VilleLivraisonController extends Controller
         $request->validate(['libelle' => 'required|string|max:255']);
 
         try {
-            $ville = VilleLivraison::findOrFail($id);
+            $ville = Ville::findOrFail($id);
             $ville->update(['libelle' => $request->libelle]);
 
             return redirect()->route('ville.index')->with('success', 'Ville mise à jour avec succès.');
@@ -49,7 +49,7 @@ class VilleLivraisonController extends Controller
     public function delete($id)
     {
         try {
-            $ville = VilleLivraison::findOrFail($id);
+            $ville = Ville::findOrFail($id);
             $ville->delete();
 
             return response()->json(['status' => 200]);

@@ -7,8 +7,10 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class Ville extends Model
 {
-    public $fillable = [
-        'titre',
+
+    protected $fillable = [
+        'libelle'
+
     ];
 
     // génère automatiquement Id
