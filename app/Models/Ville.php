@@ -8,6 +8,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 class Ville extends Model
 {
 
+    public $incrementing = false;  // decrementer l'incrementation automatique de l'id
     protected $fillable = [
         'libelle'
 
