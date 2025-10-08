@@ -7,9 +7,13 @@ use App\Http\Controllers\backend\ParametreController;
 use App\Http\Controllers\backend\PermissionController;
 use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\CommuneLivraisonController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\TypeOffreController;
+use App\Http\Controllers\VilleLivraisonController;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 
@@ -107,6 +111,25 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('edit/{id}', 'edit')->name('produit.edit');
         Route::put('update/{id}', 'update')->name('produit.update');
         Route::get('delete/{id}', 'delete')->name('produit.delete');
+    });
+
+
+    // Ville de livraison
+    Route::prefix('ville')->controller(VilleLivraisonController::class)->group(function () {
+        Route::get('', 'index')->name('ville.index');
+        Route::get('create', 'create')->name('ville.create');
+        Route::post('', 'store')->name('ville.store');
+        Route::get('{id}/edit', 'edit')->name('ville.edit');
+        Route::put('{id}', 'update')->name('ville.update');
+        Route::delete('{id}', 'delete')->name('ville.delete');
+    });
+
+    //CommuneLivraison
+    Route::prefix('commune')->controller(CommuneLivraisonController::class)->group(function () {
+        Route::get('/', 'index')->name('commune.index');            // Liste des communes
+        Route::post('/store', 'store')->name('commune.store');       // Ajouter une commune
+        Route::put('/update/{id}', 'update')->name('commune.update'); // Modifier une commune
+        Route::get('/delete/{id}', 'delete')->name('commune.delete'); // Supprimer une commune
     });
 });
 

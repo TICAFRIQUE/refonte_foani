@@ -3,7 +3,6 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         @if ($data_parametre != null)
-            <!-- Logo -->
             <a href="#" class="logo logo-light">
                 <span class="logo-lg">
                     <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
@@ -27,7 +26,7 @@
                 {{-- Tableau de bord --}}
                 @can('voir-tableau de bord')
                     <li class="nav-item">
-                        <a class="nav-link menu-link {{ Route::is('dashboard.*') ? 'active' : '' }} "
+                        <a class="nav-link menu-link {{ Route::is('dashboard.*') ? 'active' : '' }}"
                             href="{{ route('dashboard.index') }}">
                             <i class="ri-dashboard-2-line"></i> <span>TABLEAU DE BORD</span>
                         </a>
@@ -40,6 +39,7 @@
                         <i class="ri-shopping-bag-3-line"></i> <span>PRODUITS</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="{{ route('categorie.index') }}" class="nav-link">
                         <i class="ri-price-tag-3-line me-1"></i> Catégories
@@ -50,6 +50,37 @@
                     <a href="{{ route('offre.index') }}" class="nav-link">
                         <i class="ri-gift-line me-1"></i> Voir offres
                     </a>
+                </li>
+
+                <li class="nav-item">
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarLivraison" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ Route::is('ville.*') || Route::is('commune.*') ? 'true' : 'false' }}"
+                        aria-controls="sidebarLivraison">
+                        <i class="bi bi-geo-alt-fill"></i> <span>Point de livraison</span>
+                    </a>
+                    <div class="collapse menu-dropdown {{ Route::is('ville.*') || Route::is('commune.*') ? 'show' : '' }}"
+                        id="sidebarLivraison">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item">
+                                <a href="{{ route('commune.index') }}"
+                                    class="nav-link {{ Route::is('commune.*') ? 'active' : '' }}">
+                                    <i class="bi bi-map-fill"></i> Communes
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('ville.index') }}"
+                                    class="nav-link {{ Route::is('ville.*') ? 'active' : '' }}">
+                                    <i class="bi bi-pin-map-fill"></i> Villes
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
                 </li>
 
 

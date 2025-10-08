@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ville_livraisons', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
+            $table->string('libelle');
             $table->timestamps();
         });
     }

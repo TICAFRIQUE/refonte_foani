@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('commune_livraisons', function (Blueprint $table) {
             $table->id();
-            $table->string('commune');
+            $table->string('libelle');
             $table->foreignId('id_ville_livraison')->constrained('ville_livraisons')->onDelete('cascade');
             $table->string('frais_de_port');
             $table->timestamps();

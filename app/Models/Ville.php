@@ -3,10 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class Ville extends Model
 {
     public $fillable = [
         'titre',
     ];
+
+    // génère automatiquement Id
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->id = IdGenerator::generate(['table' => 'villes', 'length' => 10, 'prefix' =>
+            mt_rand()]);
+        });
+    }
 }

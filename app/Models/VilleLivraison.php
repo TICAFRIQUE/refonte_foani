@@ -9,5 +9,6 @@ class VilleLivraison extends Model
 
     protected $fillable = [
         'libelle'
+        
     ];
 }
