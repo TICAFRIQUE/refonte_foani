@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        
+
         Schema::create('produits', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable(); // Code unique du produit (SKU)
@@ -39,17 +39,30 @@ return new class extends Migration
 
             // Clé étrangère vers categories
             $table->foreignId('categorie_id')
+                ->nullable()
                 ->constrained('categories')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
 
 
 
             // Clé étrangère vers type_offres
             $table->foreignId('type_offre_id')
+                ->nullable()
                 ->constrained('type_offres')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->onDelete('cascade')
+            ;
+
+            //user_id utilisateur qui a créé le produit
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade')
+            ;
+
             $table->timestamps();
         });
     }

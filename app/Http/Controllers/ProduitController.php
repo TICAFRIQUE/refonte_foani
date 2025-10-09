@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Categorie;
 use App\Models\Produit;
+use App\Models\Categorie;
 use App\Models\TypeOffre;
-use App\Services\convertToMajuscule;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
+use App\Services\convertToMajuscule;
+use Illuminate\Support\Facades\Auth;
 
 class ProduitController extends Controller
 {
@@ -43,8 +44,8 @@ class ProduitController extends Controller
     public function create()
     {
         try {
-            $categories = Categorie::where('statut', 1)->get(); // Catégories actives
-            $typeoffres = TypeOffre::where('statut', 1)->get(); // Types d'offres actifs
+            $categories = Categorie::active()->alphabetique()->get(); // Catégories actives
+            $typeoffres = TypeOffre::active()->alphabetique()->get(); // Types d'offres actifs
 
             return view('backend.pages.produits.partials.create', compact('categories', 'typeoffres'));
         } catch (\Exception $e) {
@@ -62,7 +63,7 @@ class ProduitController extends Controller
             $validated = $request->validate([
                 'libelle' => 'required|string|max:255',
                 'categorie_id' => 'required|exists:categories,id',
-                'type_offre_id' => 'required|exists:type_offres,id',
+                'type_offre_id' => 'nullable|exists:type_offres,id',
                 'prix_achat' => 'nullable|numeric',
                 'prix_de_vente' => 'nullable|numeric',
                 'frais_de_port' => 'nullable|numeric',
@@ -74,6 +75,9 @@ class ProduitController extends Controller
                 'visibilite' => 'nullable|boolean',
                 'statut' => 'nullable|boolean',
                 'description' => 'nullable|string',
+                'image_principale' => 'required|image|mimes:jpg,jpeg,png,gif|max:1024',
+                'autre_images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:1024',
+
             ]);
 
             if (Produit::where('libelle', $request->libelle)
@@ -82,26 +86,33 @@ class ProduitController extends Controller
             ) {
                 return redirect()->route('produit.index')->with('error', 'Le produit existe déjà.');
             }
-
+            // Convertir le libellé en majuscules sans accents
             $validated['libelle'] = convertToMajuscule::toUpperNoAccent($request->libelle);
+            // Générer un code produit si vide
+            $validated['code'] = 'PROD-' . Str::upper(Str::random(6));
+            // Assigner l'ID de l'utilisateur authentifié
+            $validated['user_id'] = Auth::user()->id;
 
             // Créer une nouvelle instance de Produit
-            $produit = new Produit($validated);
+            $produit = Produit::create($validated);
 
-            // Générer un code produit si vide
-            if (!$produit->code) {
-                $produit->code = 'PROD-' . Str::upper(Str::random(6));
+            // Gestion de l'image principale
+            if ($request->hasFile('image_principale')) {
+                $produit->addMediaFromRequest('image_principale')
+                    ->toMediaCollection('image_principale');
             }
 
-            // Générer un slug unique
-            $produit->slug = Str::slug($produit->libelle . '-' . time());
-
-            $produit->save();
+            // Gestion des images multiples
+            if ($request->hasFile('autre_images')) {
+                foreach ($request->file('autre_images') as $image) {
+                    $produit->addMedia($image)
+                        ->toMediaCollection('autre_images');
+                }
+            }
 
             return redirect()->route('produit.index')->with('success', 'Produit ajouté avec succès.');
         } catch (\Exception $e) {
-            redirect()->back()->with('error', 'Erreur lors de la création d\'un produit : ' . $e->getMessage());
-            return redirect()->route('produit.index')->with('error', 'Une erreur est survenue lors de l\'ajout du produit.');
+            return back()->with('error', 'Erreur lors de la création d\'un produit : ' . $e->getMessage());
         }
     }
 
@@ -140,12 +151,10 @@ class ProduitController extends Controller
     public function update(Request $request, $id)
     {
         try {
-
-            // ✅ Validation des données
             $validated = $request->validate([
                 'libelle' => 'required|string|max:255',
                 'categorie_id' => 'required|exists:categories,id',
-                'type_offre_id' => 'required|exists:type_offres,id',
+                'type_offre_id' => 'nullable|exists:type_offres,id',
                 'prix_achat' => 'nullable|numeric',
                 'prix_de_vente' => 'nullable|numeric',
                 'frais_de_port' => 'nullable|numeric',
@@ -153,16 +162,19 @@ class ProduitController extends Controller
                 'type_reduction' => 'nullable|in:montant,pourcentage',
                 'valeur_reduction' => 'nullable|numeric',
                 'date_debut_reduction' => 'nullable|date',
-                'date_fin_reduction' => 'nullable|date',
+                'date_fin_reduction' => 'nullable|date|after_or_equal:date_debut_reduction',
                 'visibilite' => 'nullable|boolean',
                 'statut' => 'nullable|boolean',
                 'description' => 'nullable|string',
+                'image_principale' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:1024',
+                'autre_images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:1024',
+                'supprimer_image_principale' => 'nullable|boolean',
+                'supprimer_autres_images' => 'nullable|array',
             ]);
 
-            // ✅ Récupération du produit
             $produit = Produit::findOrFail($id);
 
-            // ✅ Vérification d’unicité personnalisée
+            // Vérification d’unicité personnalisée
             $existe = Produit::where('libelle', $request->libelle)
                 ->where('prix_de_vente', $request->prix_de_vente)
                 ->where('id', '!=', $id)
@@ -172,12 +184,43 @@ class ProduitController extends Controller
                 return redirect()->back()->with('error', 'Un produit identique existe déjà.');
             }
 
-            // ✅ Mise à jour du produit
+            $validated['libelle'] = convertToMajuscule::toUpperNoAccent($request->libelle);
+
             $produit->update($validated);
 
-            // ✅ Recalcule du slug (si libellé changé)
+            // Slug recalculé
             $produit->slug = Str::slug($produit->libelle . '-' . $produit->id);
             $produit->save();
+
+            // Suppression image principale
+            if ($request->boolean('supprimer_image_principale')) {
+                $produit->clearMediaCollection('image_principale');
+            }
+
+            // Ajout ou remplacement image principale
+            if ($request->hasFile('image_principale')) {
+                $produit->clearMediaCollection('image_principale');
+                $produit->addMediaFromRequest('image_principale')
+                    ->toMediaCollection('image_principale');
+            }
+
+            // Suppression des images multiples cochées
+            if ($request->has('supprimer_autres_images')) {
+                foreach ($request->supprimer_autres_images as $mediaId) {
+                    $media = $produit->getMedia('autre_images')->where('id', $mediaId)->first();
+                    if ($media) {
+                        $media->delete();
+                    }
+                }
+            }
+
+            // Ajout de nouvelles images multiples
+            if ($request->hasFile('autre_images')) {
+                foreach ($request->file('autre_images') as $image) {
+                    $produit->addMedia($image)
+                        ->toMediaCollection('autre_images');
+                }
+            }
 
             return redirect()->route('produit.index')->with('success', 'Produit mis à jour avec succès.');
         } catch (\Throwable $e) {
@@ -191,7 +234,13 @@ class ProduitController extends Controller
     public function delete($id)
     {
         try {
-            Produit::findOrFail($id)->forceDelete();
+            // supprimer les médias associés
+            $produit = Produit::findOrFail($id);
+            $produit->clearMediaCollection('image_principale');
+            $produit->clearMediaCollection('autre_images');
+            // supprimer le produit
+            $produit->delete();
+
             return response()->json([
                 'status' => 200,
             ]);

@@ -33,7 +33,19 @@ class Produit extends Model implements HasMedia
         'statut',
         'categorie_id',
         'type_offre_id',
+        'user_id'
     ];
+
+
+    //ID GENERERATED
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->id = IdGenerator::generate(['table' => 'produits', 'length' => 10, 'prefix' =>
+            mt_rand()]);
+        });
+    }
 
     public function sluggable(): array
     {
@@ -61,14 +73,9 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(Categorie::class, 'categorie_id');
     }
 
-
-    //ID GENERERATED
-    public static function boot()
+    // Relation avec le modèle User
+    public function user()
     {
-        parent::boot();
-        self::creating(function ($model) {
-            $model->id = IdGenerator::generate(['table' => 'produits', 'length' => 10, 'prefix' =>
-            mt_rand()]);
-        });
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
