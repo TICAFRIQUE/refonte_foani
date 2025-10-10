@@ -39,6 +39,7 @@
                             <thead class="table-primary">
                                 <tr>
                                     <th>#</th>
+                                    <th>Statut</th>
                                     <th>Image</th>
                                     <th>Libellé</th>
                                     <th>Catégorie</th>
@@ -52,11 +53,20 @@
                                 @foreach ($produits as $produit)
                                     <tr id="row_{{ $produit->id }}">
                                         <td>{{ $loop->iteration }}</td>
+                                        
+                                        {{-- Statut --}}
+                                        <td>
+                                            @if ($produit->statut === 1)
+                                                <span class="badge bg-success">Actif</span>
+                                            @else
+                                                <span class="badge bg-danger">Inactif</span>
+                                            @endif
+                                        </td>
 
                                         {{-- Image --}}
                                         <td>
-                                            @if ($produit->image)
-                                                <img src="{{ asset('storage/' . $produit->image) }}" alt="Image produit"
+                                            @if ($produit->hasMedia('image_principale'))
+                                                <img src="{{ $produit->getFirstMediaUrl('image_principale') }}" alt="Image produit"
                                                     class="img-thumbnail"
                                                     style="width: 50px; height: 50px; object-fit: cover;">
                                             @else

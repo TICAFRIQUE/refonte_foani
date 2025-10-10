@@ -60,6 +60,15 @@ class AppServiceProvider extends ServiceProvider
             $data_parametre = Parametre::with('media')->first();
         }
 
+        view()->composer('frontend.layouts.app', function ($view) {
+            $count = 0;
+            $panier = session('panier', []);
+            if (!empty($panier)) {
+                $count = array_sum(array_column($panier, 'quantite'));
+            }
+            $view->with('count', $count);
+        });
+
         view()->share([
             'data_parametre' => $data_parametre ?? null,
         ]);

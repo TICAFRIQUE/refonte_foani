@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('libelle')->nullable();
             $table->string('slug')->unique()->nullable();
             $table->text('description')->nullable();
+            $table->integer('position')->nullable();
             $table->boolean('statut')->default(true);
             $table->timestamps();
         });

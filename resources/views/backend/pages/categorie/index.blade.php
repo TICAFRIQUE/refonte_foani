@@ -36,16 +36,23 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Image</th>
                                     <th>Libellé</th>
                                     <th>Slug</th>
                                     <th>Description</th>
                                     <th>Statut</th>
+                                    <th>ordre</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($categories as $key => $categorie)
                                     <tr id="row_{{ $categorie['id'] }}">
+                                        <td>
+                                            <img class="rounded avatar-sm"
+                                                src="{{ $categorie->hasMedia('image') ? $categorie->getFirstMediaUrl('image') : asset('front/images/logo.png') }}"
+                                                width="50px" alt="{{ $categorie['libelle'] }}">
+                                        </td>
                                         <td> {{ ++$key }} </td>
                                         <td>{{ $categorie->libelle }}</td>
                                         <td>{{ $categorie->slug }}</td>
@@ -57,6 +64,7 @@
                                                 <span class="badge bg-secondary">Inactif</span>
                                             @endif
                                         </td>
+                                        <td class="text-center badge bg-info fw-bold text-white">{{ $categorie->position }}</td>
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -122,6 +130,29 @@
         $(document).ready(function() {
             var route = "categorie"
             delete_row(route);
+
+
+            // Aperçu et suppression de l'image principale
+            $('#formFile').on('change', function(e) {
+                const [file] = this.files;
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#previewImage').attr('src', e.target.result).show();
+                        $('#removeImageBtn').show();
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#previewImage').hide();
+                    $('#removeImageBtn').hide();
+                }
+            });
+
+            $('#removeImageBtn').on('click', function() {
+                $('#formFile').val('');
+                $('#previewImage').attr('src', '#').hide();
+                $(this).hide();
+            });
         })
     </script>
 @endsection

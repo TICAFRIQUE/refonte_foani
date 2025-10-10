@@ -78,4 +78,11 @@ class Produit extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+
+    // Scope pour les produits actifs
+    public function scopeActive($query)
+    {
+        return $query->where('statut', true);
+    }
 }

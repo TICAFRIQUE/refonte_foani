@@ -19,6 +19,7 @@ class Categorie extends Model implements HasMedia
         'libelle',
         'slug',
         'description',
+        'position',
         'statut',
     ];
 
@@ -61,5 +62,10 @@ class Categorie extends Model implements HasMedia
     public function scopeAlphabetique($query)
     {
         return $query->orderBy('libelle', 'asc');
+    }
+    //les categorie par ordre position
+    public function scopePosition($query)
+    {
+        return $query->orderBy('position', 'asc');
     }
 }

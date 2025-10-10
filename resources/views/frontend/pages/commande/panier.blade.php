@@ -1,0 +1,209 @@
+@extends('frontend.layouts.app')
+
+@section('title', 'Mon Panier')
+
+@section('content')
+<div class="container py-5">
+    <h2 class="fw-bold mb-4 text-center" style="color: #2a6b2a;">Mon Panier</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div id="panier-content">
+                @if (empty($panier))
+                    <div class="alert alert-info text-center">
+                        Votre panier est vide.
+                    </div>
+                @else
+                    <div class="table-responsive mb-4">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th></th>
+                                    <th>Produit</th>
+                                    <th class="text-center">Prix Unitaire</th>
+                                    <th class="text-center">Quantité</th>
+                                    <th class="text-center">Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                @foreach ($panier as $item)
+                                    <tr data-id="{{ $item->id }}">
+                                        <td>
+                                            <img src="{{ $item->getFirstMediaUrl('image_principale') ?: asset('front/images/produits/poulet.png') }}"
+                                                 alt="{{ $item->libelle }}" class="rounded"
+                                                 style="width:60px; height:60px; object-fit:cover;">
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold">{{ $item->libelle }}</span>
+                                            <div class="text-muted small">{{ $item->categorie->libelle ?? '' }}</div>
+                                        </td>
+                                        <td class="text-center prix-unitaire">{{ $item->prix_de_vente }}</td>
+                                        <td class="text-center">
+                                            <div class="d-inline-flex align-items-center">
+                                                <button class="btn btn-sm btn-outline-secondary btn-decrement">−</button>
+                                                <input type="number" class="form-control form-control-sm text-center mx-1 quantite" 
+                                                       value="{{ $item->quantite }}" min="1" 
+                                                       max="{{ $item->stock }}" style="width:70px;">
+                                                <button class="btn btn-sm btn-outline-secondary btn-increment">+</button>
+                                            </div>
+                                        </td>
+                                        <td class="text-center fw-bold total-ligne">
+                                            {{ number_format($item->prix_de_vente * $item->quantite, 0, ',', ' ') }} FCFA
+                                        </td>
+                                        <td class="text-end">
+                                            <button class="btn btn-sm btn-outline-danger btn-remove-panier" data-id="{{ $item->id }}" title="Retirer">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="text-end fw-bold">Total :</td>
+                                    <td class="text-center fw-bold" style="font-size:1.2em;" id="total-general">
+                                        {{ number_format(array_sum(array_map(fn($item) => $item->prix_de_vente * $item->quantite, $panier)), 0, ',', ' ') }} FCFA
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                        <a href="{{ route('produit.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Continuer mes achats
+                        </a>
+                        <a href="#" class="btn btn-success px-4">
+                            <i class="bi bi-check-circle"></i> Valider ma commande
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(function() {
+
+    // === Recalcul du total général ===
+    function updateTotalGeneral() {
+        let total = 0;
+        $('.total-ligne').each(function() {
+            const ligneTotal = parseFloat($(this).text().replace(/[^\d]/g, '')) || 0;
+            total += ligneTotal;
+        });
+        $('#total-general').text(new Intl.NumberFormat('fr-FR').format(total) + ' FCFA');
+    }
+
+    // === Met à jour la ligne + total global + AJAX ===
+    function updateLigne(row, quantite) {
+        const prix = parseFloat(row.find('.prix-unitaire').text());
+        const totalLigne = prix * quantite;
+
+        // Mise à jour affichage
+        row.find('.quantite').val(quantite);
+        row.find('.total-ligne').text(new Intl.NumberFormat('fr-FR').format(totalLigne) + ' FCFA');
+        updateTotalGeneral();
+
+        // AJAX vers le serveur
+        const id = row.data('id');
+        $.ajax({
+            url: `/panier/update/${id}`,
+            method: 'POST',
+            data: {
+                quantite: quantite,
+                _token: '{{ csrf_token() }}'
+            },
+            beforeSend: function() {
+                row.css('opacity', 0.5);
+            },
+            success: function() {
+                row.css('opacity', 1);
+            },
+            error: function() {
+                alert("Erreur lors de la mise à jour du panier.");
+                row.css('opacity', 1);
+            }
+        });
+    }
+
+    // === Incrémenter ===
+    $('.btn-increment').on('click', function() {
+        const row = $(this).closest('tr');
+        const input = row.find('.quantite');
+        let qte = parseInt(input.val());
+        const max = parseInt(input.attr('max'));
+
+        if (qte < max) {
+            qte++;
+            updateLigne(row, qte);
+        }
+    });
+
+    // === Décrémenter ===
+    $('.btn-decrement').on('click', function() {
+        const row = $(this).closest('tr');
+        const input = row.find('.quantite');
+        let qte = parseInt(input.val());
+
+        if (qte > 1) {
+            qte--;
+            updateLigne(row, qte);
+        }
+    });
+
+    // === Saisie directe ===
+    $('.quantite').on('change', function() {
+        const row = $(this).closest('tr');
+        let qte = parseInt($(this).val());
+        const max = parseInt($(this).attr('max'));
+        if (qte < 1) qte = 1;
+        if (qte > max) qte = max;
+        updateLigne(row, qte);
+    });
+
+    // === Supprimer un produit ===
+    $('.btn-remove-panier').on('click', function() {
+        const row = $(this).closest('tr');
+        const id = $(this).data('id');
+
+        Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: "Ce produit sera retiré du panier.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Oui, supprimer',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/panier/remove/${id}`,
+                    method: 'POST',
+                    data: { _token: '{{ csrf_token() }}' },
+                    beforeSend: function() {
+                        row.css('opacity', 0.5);
+                    },
+                    success: function() {
+                        row.fadeOut(400, function() {
+                            $(this).remove();
+                            updateTotalGeneral();
+                        });
+                        Swal.fire('Supprimé !', 'Le produit a été retiré du panier.', 'success');
+                    },
+                    error: function() {
+                        alert("Erreur lors de la suppression du produit.");
+                        row.css('opacity', 1);
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
+@endpush

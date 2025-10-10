@@ -1,17 +1,19 @@
 <?php
 
-use App\Http\Controllers\backend\AdminController;
-use App\Http\Controllers\backend\DashboardController;
-use App\Http\Controllers\backend\ModuleController;
-use App\Http\Controllers\backend\ParametreController;
-use App\Http\Controllers\backend\PermissionController;
-use App\Http\Controllers\backend\RoleController;
-use App\Http\Controllers\CategorieController;
-use App\Http\Controllers\CommuneLivraisonController;
-use App\Http\Controllers\ProduitController;
-use App\Http\Controllers\TypeOffreController;
-use App\Http\Controllers\VilleLivraisonController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\backend\RoleController;
+use App\Http\Controllers\backend\AdminController;
+use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\backend\ModuleController;
+use App\Http\Controllers\backend\ProduitController;
+use App\Http\Controllers\frontend\PanierController;
+use App\Http\Controllers\backend\CategorieController;
+use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\backend\ParametreController;
+use App\Http\Controllers\backend\TypeOffreController;
+use App\Http\Controllers\backend\PermissionController;
+use App\Http\Controllers\backend\VilleLivraisonController;
+use App\Http\Controllers\backend\CommuneLivraisonController;
 
 
 
@@ -136,6 +138,16 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
 
 
 /**-------------------------------------------------------------ROUTE FRONTEND-------------------------------------------------------- */
-route::get('/', function () {
-    return view('index');
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'accueil')->name('accueil'); // page d'accueil
+    // Route::get('/categorie/{id}', 'categorieShow')->name('categorie.show'); // page categorie et ses produits
+});
+
+
+// Panier routes
+Route::controller(PanierController::class)->group(function () {
+    Route::get('/panier', 'index')->name('panier.index');
+    Route::post('/panier/add/{produit_id}', 'add')->name('panier.add');
+    Route::post('/panier/update/{produit_id}', 'update')->name('panier.update');
+    Route::post('/panier/remove/{produit_id}', 'remove')->name('panier.remove');
 });
