@@ -38,6 +38,7 @@
                                     <th>#</th>
                                     <th>Nom</th>
                                     <th>Date de création</th>
+                                    <th>Statut</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -47,6 +48,13 @@
                                         <td>{{ ++$key }}</td>
                                         <td>{{ $ville->libelle }}</td>
                                         <td>{{ $ville->created_at?->format('d/m/Y') ?? '—' }}</td>
+                                        <td>
+                                            @if ($ville->statut==1)
+                                                <span class="badge bg-success">Actif</span>
+                                            @else
+                                                <span class="badge bg-danger">Inactif</span>
+                                            @endif
+                                        </td>
                                         <td class="text-center">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"

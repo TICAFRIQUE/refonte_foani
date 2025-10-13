@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\AdminController;
 use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\UserController;
 use App\Http\Controllers\backend\ModuleController;
 use App\Http\Controllers\backend\ProduitController;
 use App\Http\Controllers\frontend\PanierController;
@@ -122,15 +123,15 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('create', 'create')->name('ville.create');
         Route::post('', 'store')->name('ville.store');
         Route::get('{id}/edit', 'edit')->name('ville.edit');
-        Route::put('{id}', 'update')->name('ville.update');
-        Route::delete('{id}', 'delete')->name('ville.delete');
+        Route::post('/update/{id}', 'update')->name('ville.update');
+        Route::get('/delete/{id}', 'delete')->name('ville.delete');
     });
 
     //CommuneLivraison
     Route::prefix('commune')->controller(CommuneLivraisonController::class)->group(function () {
         Route::get('/', 'index')->name('commune.index');            // Liste des communes
         Route::post('/store', 'store')->name('commune.store');       // Ajouter une commune
-        Route::put('/update/{id}', 'update')->name('commune.update'); // Modifier une commune
+        Route::post('/update/{id}', 'update')->name('commune.update'); // Modifier une commune
         Route::get('/delete/{id}', 'delete')->name('commune.delete'); // Supprimer une commune
     });
 });
@@ -150,4 +151,14 @@ Route::controller(PanierController::class)->group(function () {
     Route::post('/panier/add/{produit_id}', 'add')->name('panier.add');
     Route::post('/panier/update/{produit_id}', 'update')->name('panier.update');
     Route::post('/panier/remove/{produit_id}', 'remove')->name('panier.remove');
+    Route::get('/caisse', 'caisse')->name('panier.caisse')->middleware('client');
+});
+
+//Authentification user
+Route::controller(UserController::class)->group(function () {
+    route::get('login', 'loginForm')->name('user.loginForm');
+    route::post('loginStore', 'login')->name('user.login');
+    route::get('register', 'registerForm')->name('user.registerForm');
+    route::post('registerStore', 'register')->name('user.register');
+    route::post('logout', 'logout')->name('user.logout')->middleware('client');
 });

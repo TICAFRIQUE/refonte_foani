@@ -43,18 +43,25 @@
                                     <th>Ville</th>
                                     <th>Frais de port</th>
                                     <th>Date de création</th>
+                                    <th>Statut</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($communes as $key => $commune)
-                              
                                     <tr id="row_{{ $commune->id }}">
                                         <td>{{ ++$key }}</td>
                                         <td>{{ $commune->libelle }}</td>
                                         <td>{{ $commune->ville->libelle ?? '—' }}</td>
                                         <td>{{ $commune->frais_de_port ?? '—' }}</td>
                                         <td>{{ $commune->created_at?->format('d/m/Y') ?? '—' }}</td>
+                                        <td>
+                                            @if ($commune->statut == 1)
+                                                <span class="badge bg-success">Actif</span>
+                                            @else
+                                                <span class="badge bg-danger">Inactif</span>
+                                            @endif
+                                        </td>
                                         <td class="text-center">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
@@ -84,7 +91,8 @@
 
                                     {{-- Inclure le modal d’édition spécifique --}}
                                     @include('backend.pages.point_de_livraison.communes.partials.edit', [
-                                        'commune' => $commune,])
+                                        'commune' => $commune,
+                                    ])
                                 @endforeach
                             </tbody>
                         </table>
@@ -117,7 +125,7 @@
 
     <script>
         $(document).ready(function() {
-            var route = "commune_livraisons";
+            var route = "commune";
             delete_row(route);
         });
     </script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Models\Ville;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\convertToMajuscule;
 
 class VilleLivraisonController extends Controller
 {
@@ -23,8 +24,9 @@ class VilleLivraisonController extends Controller
         $request->validate(['libelle' => 'required|string|max:255']);
 
         try {
-            Ville::create([
-                'libelle' => $request->libelle,
+            Ville::firstOrCreate([
+                'libelle' => convertToMajuscule::toUpperNoAccent($request->libelle),
+                'statut' => true,
             ]);
 
             return redirect()->route('ville.index')->with('success', 'Ville ajoutée avec succès.');
@@ -39,7 +41,7 @@ class VilleLivraisonController extends Controller
 
         try {
             $ville = Ville::findOrFail($id);
-            $ville->update(['libelle' => $request->libelle]);
+            $ville->update(['libelle' => convertToMajuscule::toUpperNoAccent($request->libelle), 'statut' => $request->statut]);
 
             return redirect()->route('ville.index')->with('success', 'Ville mise à jour avec succès.');
         } catch (\Exception $e) {

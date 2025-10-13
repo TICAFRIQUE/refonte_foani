@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\backend;
 
-use App\Http\Controllers\Controller;
-use App\Models\Commune;
 use App\Models\Ville;
+use App\Models\Commune;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\convertToMajuscule;
 
 class CommuneLivraisonController extends Controller
 {
@@ -22,16 +23,19 @@ class CommuneLivraisonController extends Controller
 
     public function store(Request $request)
     {
-
-
         $request->validate([
             'libelle' => 'required|string|max:255',
-            'id_ville_livraison' => 'required|exists:ville_livraisons,id',
-            'frais_de_port' => 'nullable|numeric',
+            'ville_id' => 'required|exists:villes,id',
+            'frais_de_port' => 'required|numeric',
         ]);
 
         try {
-            Commune::create($request->all());
+            Commune::firstOrCreate([
+                'libelle' => convertToMajuscule::toUpperNoAccent($request->libelle),
+                'ville_id' => $request->ville_id,
+                'frais_de_port' => $request->frais_de_port,
+                'statut' => true,
+            ]);
             return redirect()->route('commune.index')->with('success', 'Commune ajoutée avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Impossible d’ajouter la commune : ' . $e->getMessage());
@@ -42,13 +46,18 @@ class CommuneLivraisonController extends Controller
     {
         $request->validate([
             'libelle' => 'required|string|max:255',
-            'id_ville_livraison' => 'required|exists:ville_livraisons,id',
-            'frais_de_port' => 'nullable|numeric',
+            'ville_id' => 'required|exists:villes,id',
+            'frais_de_port' => 'required|numeric',
         ]);
 
         try {
             $commune = Commune::findOrFail($id);
-            $commune->update($request->all());
+            $commune->update([
+                'libelle' => convertToMajuscule::toUpperNoAccent($request->libelle),
+                'ville_id' => $request->ville_id,
+                'frais_de_port' => $request->frais_de_port,
+                'statut' => $request->statut,
+            ]);
             return redirect()->route('commune.index')->with('success', 'Commune mise à jour avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Impossible de mettre à jour la commune : ' . $e->getMessage());

@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('communes', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle');
-            $table->foreignId('id_ville')->constrained('villes')->onDelete('cascade');
-            $table->string('frais_de_port');
+            $table->string('libelle')->nullable();
+            $table->foreignId('ville_id')
+            ->nullable()
+            ->constrained('villes')
+            ->onDelete('cascade');
+            $table->double('frais_de_port')->default(0);
+            $table->boolean('statut')->default(true);
             $table->timestamps();
         });
     }

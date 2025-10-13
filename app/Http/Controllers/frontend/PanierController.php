@@ -76,4 +76,22 @@ class PanierController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+
+    //caisse
+    public function caisse()
+    {
+        $panier_sessions = Session::get('panier', []);
+        $panier = [];
+
+        foreach ($panier_sessions as $id => $item) {
+            $produit = Produit::find($id);
+            if ($produit) {
+                $produit->quantite = $item['quantite'];
+                $panier[] = $produit;
+            }
+        }
+
+        return view('frontend.pages.commande.caisse', compact('panier'));
+    }
 }

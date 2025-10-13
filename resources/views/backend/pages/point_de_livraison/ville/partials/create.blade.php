@@ -13,6 +13,18 @@
                         <label for="libelle" class="form-label">Nom de la ville</label>
                         <input type="text" name="libelle" id="libelle" class="form-control"
                             value="{{ old('libelle') }}" required>
+
+                        {{-- <div class="mb-3">
+                            <label for="statut" class="form-label">Statut</label>
+                            <select name="statut" id="statut"
+                                class="form-select @error('statut') is-invalid @enderror" required>
+                                <option value="1" selected {{ old('statut') == 1 ? 'selected' : '' }}>Actif</option>
+                                <option value="0" {{ old('statut') == 0 ? 'selected' : '' }}>Inactif</option>
+                            </select>
+                            @error('statut')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer">

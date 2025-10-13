@@ -1,7 +1,7 @@
 <div class="modal fade" id="modalAddCommune" tabindex="-1" aria-labelledby="modalAddCommuneLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{ route('commune.store') }}" method="POST">
+            <form action="{{ route('commune.store') }}" method="POST" class="needs-validation" novalidate>
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalAddCommuneLabel">Ajouter une Commune</h5>
@@ -14,16 +14,16 @@
                     </div>
                     <div class="mb-3">
                         <label for="id_ville_livraison" class="form-label">Ville</label>
-                        <select name="id_ville_livraison" class="form-select" required>
+                        <select name="ville_id" class="form-select" required>
                             <option value="">-- Sélectionner --</option>
-                            @foreach($villes as $ville)
-                            <option value="{{ $ville->id }}">{{ $ville->libelle }}</option>
+                            @foreach ($villes as $ville)
+                                <option value="{{ $ville->id }}">{{ $ville->libelle }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="frais_de_port" class="form-label">Frais de port</label>
-                        <input type="number" name="frais_de_port" step="0.01" class="form-control">
+                        <input type="number" name="frais_de_port" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">

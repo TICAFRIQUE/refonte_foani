@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('villes', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle');
+            $table->string('libelle')->nullable();
+            $table->boolean('statut')->default(true);
             $table->timestamps();
         });
     }
