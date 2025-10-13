@@ -25,7 +25,7 @@ class HomeController extends Controller
             return view('index', compact('categories'));
         } catch (\Throwable $th) {
             //throw $th;
-            return view('backend.utility.auth-404-basic'); 
+            return view('backend.utility.auth-404-basic');
         }
     }
 }

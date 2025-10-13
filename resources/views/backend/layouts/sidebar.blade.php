@@ -53,8 +53,6 @@
                 </li>
 
                 <li class="nav-item">
-
-                <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarLivraison" data-bs-toggle="collapse" role="button"
                         aria-expanded="{{ Route::is('ville.*') || Route::is('commune.*') ? 'true' : 'false' }}"
                         aria-controls="sidebarLivraison">
@@ -80,8 +78,33 @@
                         </ul>
                     </div>
                 </li>
-
+                {{-- Pages --}}
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" href="#menuPages" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="menuPages">
+                        <i class="bi bi-file-earmark-fill me-2"></i>
+                        <span>Pages</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="menuPages">
+                        <ul class="nav nav-sm flex-column ms-3">
+                            <li class="nav-item">
+                                <a href="{{ route('pages.index') }}" class="nav-link d-flex align-items-center">
+                                    <i class="bi bi-bookmark-fill me-2"></i>
+                                    Gestion des pages
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('categorie_page.index') }}" class="nav-link d-flex align-items-center">
+                                    <i class="bi bi-bookmark-fill me-2"></i>
+                                    Gestion des catégories
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
+
+
+
 
 
                 {{-- Paramètres --}}

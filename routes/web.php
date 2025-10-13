@@ -1,23 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\AdminController;
-use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\UserController;
-use App\Http\Controllers\backend\ModuleController;
 use App\Http\Controllers\backend\ProduitController;
-use App\Http\Controllers\frontend\PanierController;
 use App\Http\Controllers\backend\CategorieController;
-use App\Http\Controllers\backend\DashboardController;
-use App\Http\Controllers\backend\ParametreController;
-use App\Http\Controllers\backend\TypeOffreController;
-use App\Http\Controllers\backend\PermissionController;
-use App\Http\Controllers\backend\VilleLivraisonController;
+use App\Http\Controllers\backend\CategoriePageController;
 use App\Http\Controllers\backend\CommuneLivraisonController;
-
-
-
+use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\backend\ModuleController;
+use App\Http\Controllers\backend\ParametreController;
+use App\Http\Controllers\backend\PermissionController;
+use App\Http\Controllers\backend\RoleController;
+use App\Http\Controllers\backend\TypeOffreController;
+use App\Http\Controllers\backend\VilleLivraisonController;
+use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\PanierController;
+use App\Http\Controllers\backend\PageController;
+use App\Models\Page;
+use Illuminate\Support\Facades\Route;
 
 
 
@@ -133,6 +133,27 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('/store', 'store')->name('commune.store');       // Ajouter une commune
         Route::post('/update/{id}', 'update')->name('commune.update'); // Modifier une commune
         Route::get('/delete/{id}', 'delete')->name('commune.delete'); // Supprimer une commune
+    });
+
+
+    // Categorie page
+    Route::prefix('categorie_page')->controller(CategoriePageController::class)->group(function () {
+        Route::get('/', 'index')->name('categorie_page.index'); // Page d'index (liste)
+        Route::post('/store', 'store')->name('categorie_page.store'); // Enregistrement
+        Route::get('/edit/{id}', 'edit')->name('categorie_page.edit'); // Récupération d'une catégorie pour édition
+        Route::post('/update/{id}', 'update')->name('categorie_page.update'); // Mise à jour
+        Route::delete('/delete/{id}', 'delete')->name('categorie_page.delete'); // Suppression
+    });
+
+
+    // Page
+    Route::prefix('page')->controller(PageController::class)->group(function () {
+        Route::get('/', 'index')->name('pages.index'); // liste des page
+        Route::get('create', 'create')->name('pages.create');
+        Route::post('store', 'store')->name('pages.store');
+        Route::get('edit/{id}', 'edit')->name('pages.edit');
+        Route::post('update/{id}', 'update')->name('pages.update');
+        Route::post('delete/{id}', 'delete')->name('pages.delete');
     });
 });
 
