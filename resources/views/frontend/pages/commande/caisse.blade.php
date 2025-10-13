@@ -41,7 +41,9 @@
                                 <label class="form-label">Commune de livraison <span class="text-danger">*</span></label>
                                 <select name="commune" id="commune" class="form-select" required>
                                     <option value="0">-- Commune --</option>
-
+                                    @foreach ($communes as $commune)
+                                        <option value="{{ $commune->id }}">{{ $commune->libelle }} - {{ $commune->frais_de_port }} FCFA</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6">

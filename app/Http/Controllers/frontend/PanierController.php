@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\frontend;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use App\Models\Ville;
+use App\Models\Commune;
 use App\Models\Produit;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class PanierController extends Controller
 {
@@ -92,6 +94,10 @@ class PanierController extends Controller
             }
         }
 
-        return view('frontend.pages.commande.caisse', compact('panier'));
+        // recuperer les communes et villes de livraison
+        $villes = Ville::active()->alphabetique()->get();
+        $communes = Commune::active()->alphabetique()->get();
+
+        return view('frontend.pages.commande.caisse', compact('panier' , 'villes', 'communes'));
     }
 }
