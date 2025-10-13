@@ -1,8 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title')
-    Produits
-@endsection
+@section('title', 'Pages')
 
 @section('css')
     <!-- Datatables CSS -->
@@ -17,98 +15,111 @@
             Liste
         @endslot
         @slot('title')
-            Produits
+            Pages
         @endslot
     @endcomponent
 
-
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Liste des produits</h5>
-                    <a href="{{ route('produit.create') }}" class="btn btn-primary">
-                        <i class="bi bi-plus-circle"></i> Créer un produit
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold">Liste des pages</h5>
+                    <a href="{{ route('pages.create') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Ajouter une page
                     </a>
-
                 </div>
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="buttons-datatables" class="display table table-bordered table-hover" style="width:100%">
-                            <thead class="table-primary">
+                        <table id="buttons-datatables" class="table table-striped table-hover align-middle"
+                            style="width:100%">
+                            <thead class="table-primary text-center">
                                 <tr>
-                                    <th>#</th>
-                                    <th>Statut</th>
+                                    <th class="d-none">#</th>
                                     <th>Image</th>
-                                    <th>Libellé</th>
+                                    <th>Titre</th>
                                     <th>Catégorie</th>
-                                    <th>Prix de vente</th>
-                                    <th>Stock</th>
+                                    <th>Mot clé</th>
+                                    <th>Visibilité</th>
                                     <th>Date</th>
-                                    <th class="text-center">Actions</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($produits as $produit)
-                                    <tr id="row_{{ $produit->id }}">
-                                        <td>{{ $loop->iteration }}</td>
 
-                                        {{-- Statut --}}
-                                        <td>
-                                            @if ($produit->statut === 1)
-                                                <span class="badge bg-success">Actif</span>
-                                            @else
-                                                <span class="badge bg-danger">Inactif</span>
-                                            @endif
-                                        </td>
+                            <tbody>
+                                @forelse ($pages as $page)
+                                    <tr id="row_{{ $page->id }}">
+                                        {{-- Numéro --}}
+                                        <td class="text-center d-none">{{ $loop->iteration }}</td>
 
                                         {{-- Image --}}
-                                        <td>
-                                            @if ($produit->hasMedia('image_principale'))
-                                                <img src="{{ $produit->getFirstMediaUrl('image_principale') }}" alt="Image produit"
-                                                    class="img-thumbnail"
+                                        <td class="text-center">
+                                            @if ($page->image && file_exists(public_path($page->image)))
+                                                <img src="{{ asset($page->image) }}" alt="Image"
+                                                    class="img-thumbnail rounded"
                                                     style="width: 50px; height: 50px; object-fit: cover;">
                                             @else
-                                                <span class="text-muted">Aucune</span>
+                                                <span class="text-muted fst-italic">Aucune</span>
                                             @endif
                                         </td>
 
-                                        {{-- Informations produit --}}
-                                        <td>{{ $produit->libelle }}</td>
-                                        <td>{{ $produit->categorie->libelle ?? '—' }}</td>
-                                        <td>{{ number_format($produit->prix_de_vente, 0, ',', ' ') }} F</td>
-                                        <td>{{ $produit->stock }}</td>
-                                        <td>{{ $produit->created_at?->format('d/m/Y') ?? '—' }}</td>
+                                        {{-- Titre --}}
+                                        <td class="fw-semibold">{{ $page->titre }}</td>
+
+                                        {{-- Catégorie --}}
+                                        <td>{{ $page->categorie->titre ?? '—' }}</td>
+
+                                        {{-- Mot clé --}}
+                                        <td>{{ $page->mot_cle ?? '—' }}</td>
+
+                                        {{-- Visibilité --}}
+                                        <td class="text-center">
+                                            @if ($page->visibilite)
+                                                <span
+                                                    class="badge bg-success-subtle text-success border border-success-subtle px-3">Visible</span>
+                                            @else
+                                                <span
+                                                    class="badge bg-danger-subtle text-danger border border-danger-subtle px-3">Cachée</span>
+                                            @endif
+                                        </td>
+
+                                        {{-- Date --}}
+                                        <td class="text-center">{{ $page->created_at?->format('d/m/Y') ?? '—' }}</td>
 
                                         {{-- Actions --}}
                                         <td class="text-center">
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
-                                                    data-bs-toggle="dropdown">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-light border dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="ri-more-fill"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li>
-                                                        <a href="{{ route('produit.edit',$produit->id) }}"
+                                                        <a href="{{ route('pages.edit', $page->id) }}"
                                                             class="dropdown-item">
                                                             <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Modifier
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#" class="dropdown-item delete"
-                                                            data-id="{{ $produit->id }}">
+                                                        <button type="button" class="dropdown-item text-danger delete"
+                                                            data-id="{{ $page->id }}">
                                                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                             Supprimer
-                                                        </a>
+                                                        </button>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </td>
-
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-4">
+                                            <i class="bi bi-inbox fs-4 d-block mb-2"></i>
+                                            Aucune page enregistrée.
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -116,6 +127,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @section('script')
@@ -139,7 +151,7 @@
 
     <script>
         $(document).ready(function() {
-            const route = "produit";
+            const route = "pages";
             delete_row(route);
         });
     </script>
