@@ -8,7 +8,6 @@ class CategoriePointVente extends Model
 {
     protected $fillable = [
         'titre_categorie',
-        'contact',
         'image',
     ];
 }

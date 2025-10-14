@@ -51,33 +51,77 @@
                         <i class="ri-gift-line me-1"></i> Voir offres
                     </a>
                 </li>
-
+                {{-- Points de vente --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarLivraison" data-bs-toggle="collapse" role="button"
-                        aria-expanded="{{ Route::is('ville.*') || Route::is('commune.*') ? 'true' : 'false' }}"
-                        aria-controls="sidebarLivraison">
-                        <i class="bi bi-geo-alt-fill"></i> <span>Point de livraison</span>
-                    </a>
-                    <div class="collapse menu-dropdown {{ Route::is('ville.*') || Route::is('commune.*') ? 'show' : '' }}"
-                        id="sidebarLivraison">
-                        <ul class="nav nav-sm flex-column">
+                    <a class="nav-link d-flex align-items-center justify-content-between" href="#menuPointsVente"
+                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="menuPointsVente">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-shop me-2"></i>
+                            <span>Points de vente</span>
+                        </div>
 
+                    </a>
+
+                    <div class="collapse menu-dropdown" id="menuPointsVente">
+                        <ul class="nav nav-sm flex-column ms-4">
                             <li class="nav-item">
-                                <a href="{{ route('commune.index') }}"
-                                    class="nav-link {{ Route::is('commune.*') ? 'active' : '' }}">
-                                    <i class="bi bi-map-fill"></i> Communes
+                                <a href="{{ route('ville_point_vente.index') }}"
+                                    class="nav-link d-flex align-items-center">
+                                    <i class="bi bi-list-check me-2"></i>
+                                    Gestion des points de vente
                                 </a>
                             </li>
-
                             <li class="nav-item">
-                                <a href="{{ route('ville.index') }}"
-                                    class="nav-link {{ Route::is('ville.*') ? 'active' : '' }}">
-                                    <i class="bi bi-pin-map-fill"></i> Villes
+                                <a href="{{ route('categorie_point_de_vente.index') }}"
+                                    class="nav-link d-flex align-items-center">
+                                    <i class="bi bi-tags-fill me-2"></i>
+                                    Catégories des points de vente
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('ville.index') }}" class="nav-link d-flex align-items-center">
+                                    <i class="bi bi-geo-alt-fill me-2"></i>
+                                    Villes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('commune.index') }}" class="nav-link d-flex align-items-center">
+                                    <i class="bi bi-building-fill me-2"></i>
+                                    Communes
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
+                {{-- Points de livraison --}}
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center justify-content-between" href="#menuLivraison"
+                        data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="menuLivraison">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-truck me-2"></i>
+                            <span>Points de livraison</span>
+                        </div>
+
+                    </a>
+
+                    <div class="collapse menu-dropdown" id="menuLivraison">
+                        <ul class="nav nav-sm flex-column ms-4">
+                            <li class="nav-item">
+                                <a href="{{ route('ville.index') }}" class="nav-link d-flex align-items-center">
+                                    <i class="bi bi-geo-alt-fill me-2"></i>
+                                    Villes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('commune.index') }}" class="nav-link d-flex align-items-center">
+                                    <i class="bi bi-building-fill me-2"></i>
+                                    Communes
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
                 {{-- Pages --}}
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center" href="#menuPages" data-bs-toggle="collapse"
@@ -94,7 +138,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('categorie_page.index') }}" class="nav-link d-flex align-items-center">
+                                <a href="{{ route('categorie_page.index') }}"
+                                    class="nav-link d-flex align-items-center">
                                     <i class="bi bi-bookmark-fill me-2"></i>
                                     Gestion des catégories
                                 </a>

@@ -16,7 +16,8 @@ use App\Http\Controllers\backend\VilleLivraisonController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\PanierController;
 use App\Http\Controllers\backend\PageController;
-use App\Models\Page;
+use App\Http\Controllers\backend\CategoriePointVenteController;
+use App\Http\Controllers\backend\VillePointVenteController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -153,7 +154,24 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('store', 'store')->name('pages.store');
         Route::get('edit/{id}', 'edit')->name('pages.edit');
         Route::post('update/{id}', 'update')->name('pages.update');
-        Route::post('delete/{id}', 'delete')->name('pages.delete');
+        Route::get('delete/{id}', 'delete')->name('pages.delete');
+    });
+// categorie point de vente
+    Route::prefix('categorie_point_de_vente')->name('categorie_point_de_vente.')->controller(CategoriePointVenteController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::get('delete/{id}', 'delete')->name('delete');
+    });
+
+    // ville point de vente
+    Route::prefix('ville_point_vente')->name('ville_point_vente.')->controller(VillePointVenteController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::get('delete/{id}', 'delete')->name('delete');
     });
 });
 
