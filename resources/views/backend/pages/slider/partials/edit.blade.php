@@ -5,7 +5,7 @@
         <div class="modal-content">
             <form action="{{ route('sliders.update', $slider->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('PUT')
+              
 
                 <div class="modal-header">
                     <h5 class="modal-title">Modifier le slider</h5>

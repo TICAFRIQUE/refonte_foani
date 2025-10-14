@@ -83,6 +83,8 @@
                                                 <span class="text-muted">—</span>
                                             @endif
                                         </td>
+
+                                        <td>{{ Str::limit($slider->description, 50) ?? '—' }}</td>
                                         {{-- visibility --}}
                                         <td class="text-center">
                                             @if ($slider->visible)
@@ -91,9 +93,6 @@
                                                 <span class="badge bg-secondary">Masqué</span>
                                             @endif
                                         </td>
-
-
-                                        <td>{{ Str::limit($slider->description, 50) ?? '—' }}</td>
                                         <td>{{ $slider->created_at?->format('d/m/Y') ?? '—' }}</td>
 
                                         {{-- Actions --}}

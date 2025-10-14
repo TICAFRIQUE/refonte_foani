@@ -30,7 +30,7 @@ class SliderController extends Controller
                 'btn_nom' => 'nullable|string|max:100',
                 'description' => 'nullable|string|max:500',
                 'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-                'visible' => 'required|boolean',
+                'visible' => 'nullable|boolean',
             ]);
 
             // Vérifier si un slider du même libellé existe déjà
@@ -42,6 +42,9 @@ class SliderController extends Controller
             if ($request->hasFile('image')) {
                 $validated['image'] = $request->file('image')->store('sliders', 'public');
             }
+
+            // Assurer que 'visible' a une valeur même si non cochée
+            $validated['visible'] = $request->has('visible') ? (bool) $request->visible : false;
 
             Slider::create($validated);
 
@@ -65,7 +68,7 @@ class SliderController extends Controller
                 'btn_nom' => 'nullable|string|max:100',
                 'description' => 'nullable|string|max:500',
                 'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-                'visible' => 'required|boolean',
+                'visible' => 'nullable|boolean',
             ]);
 
             // Upload d’une nouvelle image si fournie
@@ -77,6 +80,9 @@ class SliderController extends Controller
 
                 $validated['image'] = $request->file('image')->store('sliders', 'public');
             }
+            // Assurer que 'visible' a une valeur même si non cochée
+            $validated['visible'] = $request->has('visible') ? (bool) $request->visible : false;
+
 
             $slider->update($validated);
 
