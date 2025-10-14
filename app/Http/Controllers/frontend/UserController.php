@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\frontend;
 
+use App\Models\User;
+use App\Models\Commande;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -20,16 +23,29 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        // Valider les données du formulaire
+        $request->validate(
+            [
+                'phone' => 'required|string|min:10|max:10',
+                'password' => 'required|string|min:6',
+            ],
+            [
+                'phone.required' => 'Le numéro de téléphone est requis.',
+                //le numero de telephone doit contenir 10 chiffres minimum
+                'phone.min' => 'Le numéro de téléphone doit contenir au moins 10 chiffres.',
+                'phone.max' => 'Le numéro de téléphone ne doit pas dépasser 10 chiffres.',
+                'password.required' => 'Le mot de passe est requis.',
+                'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
+            ]
+        );
+        $credentials = $request->only('phone', 'password');
 
         if (Auth::attempt($credentials)) {
             // Authentication passed...
-            return redirect()->intended('/caisse')->with('success', 'Connexion réussie !');
+            return redirect()->intended('/panier')->with('success', 'Connexion réussie ! vous pouvez valider votre commande.');
         }
 
-        return back()->withErrors([
-            'email' => 'Les informations de connexion sont incorrectes.',
-        ])->withInput();
+        return back()->withErrors('Numéro de téléphone ou mot de passe incorrect.')->withInput();
     }
     public function register(Request $request)
     {
@@ -70,16 +86,74 @@ class UserController extends Controller
             Auth::login($user);
 
             // Rediriger vers une page spécifique après l'inscription
-            return redirect('/caisse')->with('success', 'Inscription réussie !');
+            return redirect('/panier')->with('success', 'Inscription réussie !');
         } catch (\Throwable $th) {
             return back()->withErrors('Une erreur est survenue lors de l\'inscription : ' . $th->getMessage());
         }
     }
+
+    //mes commandes
+    public function mesCommandes()
+    {
+        try {
+            $commandes = Commande::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+            return view('frontend.pages.dashboard_client.commandes', compact('commandes'));
+        } catch (\Throwable $th) {
+            return back()->withErrors('Une erreur est survenue lors de la récupération des commandes : ' . $th->getMessage());
+        }
+    }
+
+    //détail d'une commande
+    public function mesCommandesShow($id)
+    {
+        try {
+            $commande = Commande::with('produits')->where('user_id', Auth::id())->where('id', $id)->firstOrFail();
+            return view('frontend.pages.dashboard_client.commande_detail', compact('commande'));
+        } catch (\Throwable $th) {
+            return back()->withErrors('Une erreur est survenue lors de la récupération de la commande : ' . $th->getMessage());
+        }
+    }
+
+    public function profil(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'username' => 'required|string|max:255',
+                'email' => 'nullable|email|unique:users,email,' . $user->id,
+                'phone' => 'required|string|min:10|max:10|unique:users,phone,' . $user->id,
+                'password' => 'nullable|string|min:6|confirmed',
+            ], [
+                'username.required' => 'Le nom d\'utilisateur est requis.',
+                'email.email' => 'L\'adresse email doit avoir un format valide.',
+                'email.unique' => 'Cet email est deja utilisé.',
+                'phone.required' => 'Le numéro de téléphone est requis.',
+                'phone.min' => 'Le numéro de téléphone doit contenir au moins 10 chiffres.',
+                'phone.max' => 'Le numéro de téléphone ne doit pas dépasser 10 chiffres.',
+                'phone.unique' => 'Ce numéro de téléphone est deja utilisé.',
+                'password.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
+                'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
+            ]);
+
+
+            User::where('id', $user->id)->update([
+                'username' => $request->username,
+                'email' => $request->email,
+                'phone' => trim($request->phone),
+                'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
+            ]);
+
+            return back()->with('success', 'Profil mis à jour avec succès !');
+        }
+
+        return view('frontend.pages.dashboard_client.profil', compact('user'));
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/');
+        Alert::success( 'Déconnexion', 'Déconnexion réussie !');
+        return redirect()->route('accueil');
     }
 }

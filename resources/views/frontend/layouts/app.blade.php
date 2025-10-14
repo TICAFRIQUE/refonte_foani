@@ -33,7 +33,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background-color:#2a6b2a;">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">
-                <img src="{{ asset('front/images/logo.png') }}" alt="Foani" height="60" class="me-2">
+                <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}" alt="Foani" height="60" class="me-2">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -45,7 +45,7 @@
                     <li class="nav-item"><a class="nav-link text-white" href="#">Activités</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Conseils</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Points de vente</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Boutique</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('boutique.index') }}">Boutique</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Contacts</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
@@ -56,8 +56,29 @@
                             {{ $count ?? 0 }}
                         </span>
                     </a>
-                    <a href="#" class="btn btn-outline-light rounded-pill px-3">Login</a>
-                    <a href="#" class="btn btn-outline-light rounded-pill px-3">Register</a>
+
+
+                    @guest
+                        <a href="{{ route('user.loginForm') }}" class="btn btn-outline-light rounded-pill px-3"> <i class="bi bi-person"></i>
+                            Se connecter</a>
+                        <a href="{{ route('user.registerForm') }}" class="btn btn-outline-light rounded-pill px-3"> <i class="bi bi-person-plus"></i>
+                            S'inscrire</a>
+                    @else
+                        <div class="dropdown">
+                            <a class="btn btn-outline-light dropdown-toggle fw-bold" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> {{ Auth::user()->username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
+                                <li><a class="dropdown-item" href="{{ route('user.commandes') }}">Mes commandes</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ route('user.logout') }}">Déconnexion</a></li>
+                            </ul>
+                        </div>
+                    @endguest
                 </div>
             </div>
         </div>
@@ -68,6 +89,9 @@
     <!-- Yield content -->
 
     @yield('content')
+
+    <!-- sweetalert-->
+    @include('sweetalert::alert')
 
 
     <!-- Footer -->
@@ -124,10 +148,9 @@
     {{-- <script src="{{ asset('myJs/js/cart_update.js') }}"></script>
     <script src="{{ asset('myJs/js/cart_remove.js') }}"></script> --}}
     @stack('scripts')
-    
+
     <!-- bootstrap form validation -->
     <script>
-       
         (function() {
             'use strict'
             var forms = document.querySelectorAll('.needs-validation')

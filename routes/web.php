@@ -1,23 +1,24 @@
 <?php
 
-use App\Http\Controllers\backend\AdminController;
-use App\Http\Controllers\frontend\UserController;
-use App\Http\Controllers\backend\ProduitController;
-use App\Http\Controllers\backend\CategorieController;
-use App\Http\Controllers\backend\CategoriePageController;
-use App\Http\Controllers\backend\CommuneLivraisonController;
-use App\Http\Controllers\backend\DashboardController;
-use App\Http\Controllers\backend\ModuleController;
-use App\Http\Controllers\backend\ParametreController;
-use App\Http\Controllers\backend\PermissionController;
-use App\Http\Controllers\backend\RoleController;
-use App\Http\Controllers\backend\TypeOffreController;
-use App\Http\Controllers\backend\VilleLivraisonController;
-use App\Http\Controllers\frontend\HomeController;
-use App\Http\Controllers\frontend\PanierController;
-use App\Http\Controllers\backend\PageController;
 use App\Models\Page;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\backend\PageController;
+use App\Http\Controllers\backend\RoleController;
+use App\Http\Controllers\backend\AdminController;
+use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\UserController;
+use App\Http\Controllers\backend\ModuleController;
+use App\Http\Controllers\backend\ProduitController;
+use App\Http\Controllers\frontend\PanierController;
+use App\Http\Controllers\backend\CategorieController;
+use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\backend\ParametreController;
+use App\Http\Controllers\backend\TypeOffreController;
+use App\Http\Controllers\frontend\BoutiqueController;
+use App\Http\Controllers\backend\PermissionController;
+use App\Http\Controllers\backend\CategoriePageController;
+use App\Http\Controllers\backend\VilleLivraisonController;
+use App\Http\Controllers\backend\CommuneLivraisonController;
 
 
 
@@ -162,7 +163,12 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
 /**-------------------------------------------------------------ROUTE FRONTEND-------------------------------------------------------- */
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'accueil')->name('accueil'); // page d'accueil
-    // Route::get('/categorie/{id}', 'categorieShow')->name('categorie.show'); // page categorie et ses produits
+});
+
+// boutique
+Route::controller(BoutiqueController::class)->group(function () {
+    Route::get('/boutique', 'index')->name('boutique.index'); // page boutique
+    Route::get('/boutique/categorie/{slug}', 'categorie')->name('boutique.categorie'); // page boutique par categorie', 'show')->name('boutique.show'); // page detail produit
 });
 
 
@@ -173,6 +179,7 @@ Route::controller(PanierController::class)->group(function () {
     Route::post('/panier/update/{produit_id}', 'update')->name('panier.update');
     Route::post('/panier/remove/{produit_id}', 'remove')->name('panier.remove');
     Route::get('/caisse', 'caisse')->name('panier.caisse')->middleware('client');
+    Route::post('/commande-store', 'commandeStore')->name('panier.commande.store')->middleware('client'); // route de validation de la commande
 });
 
 //Authentification user
@@ -181,5 +188,10 @@ Route::controller(UserController::class)->group(function () {
     route::post('loginStore', 'login')->name('user.login');
     route::get('register', 'registerForm')->name('user.registerForm');
     route::post('registerStore', 'register')->name('user.register');
-    route::post('logout', 'logout')->name('user.logout')->middleware('client');
+    route::get('mes-commandes', 'mesCommandes')->name('user.commandes')->middleware('client');
+    route::get('mes-commandes/{id}', 'mesCommandesShow')->name('user.commandes.show')->middleware('client');
+    route::get('profil', 'profil')->name('user.profil')->middleware('client');
+    route::post('profil', 'profil')->name('user.profil')->middleware('client');
+
+    route::get('logout', 'logout')->name('user.logout')->middleware('client');
 });

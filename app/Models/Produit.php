@@ -79,6 +79,16 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Relation avec le modèle Commande (plusieurs commandes peuvent contenir plusieurs produits)
+    public function commandes()
+    {
+        return $this->belongsToMany(Commande::class, 'commande_produit')
+                    ->withPivot('quantite', 'prix_unitaire' , 'total')
+                    ->withTimestamps();
+    }
+
+    //
+
 
     // Scope pour les produits actifs
     public function scopeActive($query)
