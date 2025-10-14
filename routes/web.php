@@ -18,6 +18,7 @@ use App\Http\Controllers\frontend\PanierController;
 use App\Http\Controllers\backend\PageController;
 use App\Http\Controllers\backend\CategoriePointVenteController;
 use App\Http\Controllers\backend\VillePointVenteController;
+use App\Http\Controllers\SliderController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -156,7 +157,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('update/{id}', 'update')->name('pages.update');
         Route::get('delete/{id}', 'delete')->name('pages.delete');
     });
-// categorie point de vente
+    // categorie point de vente
     Route::prefix('categorie_point_de_vente')->name('categorie_point_de_vente.')->controller(CategoriePointVenteController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('store', 'store')->name('store');
@@ -172,6 +173,16 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('update/{id}', 'update')->name('update');
         Route::get('delete/{id}', 'delete')->name('delete');
+    });
+
+    // sliders
+    Route::prefix('sliders')->name('sliders.')->controller(SliderController::class)->group(function () {
+        Route::get('/', 'index')->name('index');           // Liste des sliders
+        Route::get('create', 'create')->name('create');    // Formulaire d'ajout
+        Route::post('store', 'store')->name('store');      // Enregistrement
+        Route::get('edit/{id}', 'edit')->name('edit');     // Formulaire d'édition
+        Route::post('update/{id}', 'update')->name('update'); // Mise à jour
+        Route::get('delete/{id}', 'delete')->name('delete');  // Suppression
     });
 });
 

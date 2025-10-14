@@ -61,7 +61,6 @@
                         </div>
 
                     </a>
-
                     <div class="collapse menu-dropdown" id="menuPointsVente">
                         <ul class="nav nav-sm flex-column ms-4">
                             <li class="nav-item">
@@ -149,6 +148,13 @@
                 </li>
 
 
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('sliders*') ? 'active' : '' }}"
+                        href="{{ route('sliders.index') }}">
+                        <i class="bi bi-images me-2"></i>
+                        <span>Sliders</span>
+                    </a>
+                </li>
 
 
 
