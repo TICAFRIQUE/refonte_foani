@@ -19,7 +19,7 @@ class Commande extends Model
         'total',
         'nom',
         'telephone',
-        'adresse',
+        'adresse', // adresse détaillée ou quartier
         'ville',
         'commune',
         'statut',

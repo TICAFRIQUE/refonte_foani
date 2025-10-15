@@ -189,8 +189,8 @@ class PanierController extends Controller
             'commune'         => 'required|exists:communes,id',
             'quartier'        => 'required|string|max:255',
             'frais_livraison' => 'required|numeric',
-            'sous_total'      => 'required|numeric',
-            'total_general'   => 'required|numeric',
+            'sous_total'      => 'required|numeric|min:10000',
+            'total_general'   => 'required|numeric|min:10000',
         ], [
             'commune.exists' => 'La commune choisie n\'existe pas.',
             'phone.required' => 'Le numéro de téléphone est obligatoire pour vous contacter.',
