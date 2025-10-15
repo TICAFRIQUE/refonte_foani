@@ -20,6 +20,7 @@ use App\Http\Controllers\backend\VillePointVenteController;
 use App\Http\Controllers\frontend\BoutiqueController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\PanierController;
+use App\Http\Controllers\frontend\ReservationController;
 use App\Http\Controllers\frontend\UserController;
 use App\Http\Controllers\SliderController;
 use App\Models\Page;
@@ -207,6 +208,21 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
 
 
 /**-------------------------------------------------------------ROUTE FRONTEND-------------------------------------------------------- */
+//Authentification user
+Route::controller(UserController::class)->group(function () {
+    route::get('login', 'loginForm')->name('user.loginForm');
+    route::post('loginStore', 'login')->name('user.login');
+    route::get('register', 'registerForm')->name('user.registerForm');
+    route::post('registerStore', 'register')->name('user.register');
+    route::get('mes-commandes', 'mesCommandes')->name('user.commandes')->middleware('client');
+    route::get('mes-commandes/{id}', 'mesCommandesShow')->name('user.commandes.show')->middleware('client');
+    route::get('profil', 'profil')->name('user.profil')->middleware('client');
+    route::post('profil', 'profil')->name('user.profil')->middleware('client');
+    route::get('logout', 'logout')->name('user.logout')->middleware('client');
+});
+
+
+
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'accueil')->name('accueil'); // page d'accueil
 });
@@ -228,15 +244,9 @@ Route::controller(PanierController::class)->group(function () {
     Route::post('/commande-store', 'commandeStore')->name('panier.commande.store')->middleware('client'); // route de validation de la commande
 });
 
-//Authentification user
-Route::controller(UserController::class)->group(function () {
-    route::get('login', 'loginForm')->name('user.loginForm');
-    route::post('loginStore', 'login')->name('user.login');
-    route::get('register', 'registerForm')->name('user.registerForm');
-    route::post('registerStore', 'register')->name('user.register');
-    route::get('mes-commandes', 'mesCommandes')->name('user.commandes')->middleware('client');
-    route::get('mes-commandes/{id}', 'mesCommandesShow')->name('user.commandes.show')->middleware('client');
-    route::get('profil', 'profil')->name('user.profil')->middleware('client');
-    route::post('profil', 'profil')->name('user.profil')->middleware('client');
-    route::get('logout', 'logout')->name('user.logout')->middleware('client');
+//Reservation
+Route::controller(ReservationController::class)->group(function () {
+    Route::get('/reservation/{slug}', 'create')->name('reservation.create')->middleware('client');
+    Route::post('/reservation/{id}', 'store')->name('reservation.store')->middleware('client');
+   
 });

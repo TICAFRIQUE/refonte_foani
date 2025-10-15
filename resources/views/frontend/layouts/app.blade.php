@@ -19,6 +19,11 @@
 
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- OwlCarousel CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
@@ -33,7 +38,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background-color:#2a6b2a;">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">
-                <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}" alt="Foani" height="60" class="me-2">
+                <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
+                    alt="Foani" height="60" class="me-2">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -45,7 +51,8 @@
                     <li class="nav-item"><a class="nav-link text-white" href="#">Activités</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Conseils</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Points de vente</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('boutique.index') }}">Boutique</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="{{ route('boutique.index') }}">Boutique</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Contacts</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
@@ -59,9 +66,11 @@
 
 
                     @guest
-                        <a href="{{ route('user.loginForm') }}" class="btn btn-outline-light rounded-pill px-3"> <i class="bi bi-person"></i>
+                        <a href="{{ route('user.loginForm') }}" class="btn btn-outline-light rounded-pill px-3"> <i
+                                class="bi bi-person"></i>
                             Se connecter</a>
-                        <a href="{{ route('user.registerForm') }}" class="btn btn-outline-light rounded-pill px-3"> <i class="bi bi-person-plus"></i>
+                        <a href="{{ route('user.registerForm') }}" class="btn btn-outline-light rounded-pill px-3"> <i
+                                class="bi bi-person-plus"></i>
                             S'inscrire</a>
                     @else
                         <div class="dropdown">
@@ -72,6 +81,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
                                 <li><a class="dropdown-item" href="{{ route('user.commandes') }}">Mes commandes</a></li>
+                                <li><a class="dropdown-item" href="{{ route('user.reservations') }}">Mes reservations</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

@@ -1,0 +1,28 @@
+# 1️⃣ Se placer sur ta branche de dev locale
+git checkout alex
+git pull origin alex           # récupère les derniers commits de ta branche
+
+# 2️⃣ Récupérer toutes les branches distantes
+git fetch origin
+
+# 3️⃣ Fusionner le travail de Kassoum dans ta branche
+git merge origin/kassoum       # résous les conflits si nécessaire
+git add .                      # ajouter les fichiers résolus
+git commit -m "Fusion du travail de Kassoum dans alex" 2>/dev/null
+
+# 4️⃣ Tester ton code localement
+echo "✅ Teste ton code maintenant avant de pousser"
+
+# 5️⃣ Fusionner ta branche dans la branche finale commune
+git checkout finaly
+git pull origin finaly         # récupérer la dernière version distante
+git merge alex                 # fusionner ta branche
+
+# 6️⃣ Résoudre les conflits si nécessaire, puis
+git add .
+git commit -m "Fusion des branches alex et kassoum dans finaly" 2>/dev/null
+
+# 7️⃣ Pousser la branche finale vers le dépôt distant
+git push origin finaly
+
+echo "🎉 Fusion terminée et poussée sur finaly !"

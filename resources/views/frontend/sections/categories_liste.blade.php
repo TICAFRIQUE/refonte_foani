@@ -1,4 +1,6 @@
 {{-- filepath: resources/views/frontend/sections/categories_produits.blade.php --}}
+
+
 <section class="container mb-5">
     <h2 class="text-center mb-4 fw-bold" style="color:#2a6b2a;">Nos Catégories</h2>
     <div id="categoriesCarousel" class="carousel slide" data-bs-ride="carousel">
