@@ -227,6 +227,5 @@ Route::controller(UserController::class)->group(function () {
     route::get('mes-commandes/{id}', 'mesCommandesShow')->name('user.commandes.show')->middleware('client');
     route::get('profil', 'profil')->name('user.profil')->middleware('client');
     route::post('profil', 'profil')->name('user.profil')->middleware('client');
-
     route::get('logout', 'logout')->name('user.logout')->middleware('client');
 });
