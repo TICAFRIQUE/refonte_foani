@@ -85,9 +85,9 @@
                                     <i class="bi bi-cart-plus me-2"></i>Ajouter
                                 </button>
                             @else
-                                <button class="btn btn-warning w-100 mt-auto">
+                                <a href="{{route('reservation.create' , ['slug'=>$produit->slug])}}" class="btn btn-warning w-100 mt-auto">
                                     <i class="bi bi-clock me-2"></i>Réserver
-                                </button>
+                                </a>
                             @endif
                         </div>
                     </div>
