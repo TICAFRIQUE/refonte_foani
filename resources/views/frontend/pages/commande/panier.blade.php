@@ -49,9 +49,11 @@
                                             </td>
                                             <td>
                                                 <span class="fw-bold">{{ $item->libelle }}</span>
-                                                <div class="text-muted small text-lowercase " style="font-size: 13px">{{ $item->categorie->libelle ?? '' }}</div>
+                                                <div class="text-muted small text-lowercase " style="font-size: 13px">
+                                                    {{ $item->categorie->libelle ?? '' }}</div>
                                             </td>
-                                            <td class="text-center prix-unitaire">{{number_format($item->prix_de_vente, 0, ',', ' ') }}</td>
+                                            <td class="text-center prix-unitaire">
+                                                {{ number_format($item->prix_de_vente, 0, ',', ' ') }}</td>
                                             <td class="text-center">
                                                 <div class="d-inline-flex align-items-center">
                                                     <button
@@ -94,7 +96,8 @@
                                 <i class="bi bi-arrow-left"></i> Continuer mes achats
                             </a>
                             <a href="{{ route('panier.caisse') }}" class="btn btn-success px-4 btn-valide-cmd">
-                                <i class="bi bi-check-circle"></i> {{Auth::check() ? 'Valider ma commande' : 'Se connecter pour valider ma commande'}}
+                                <i class="bi bi-check-circle"></i>
+                                {{ Auth::check() ? 'Valider ma commande' : 'Se connecter pour valider ma commande' }}
                             </a>
                         </div>
                     @endif
@@ -117,11 +120,12 @@
                     total += ligneTotal;
                 });
                 $('#total-general').text(new Intl.NumberFormat('fr-FR').format(total) + ' FCFA');
+
             }
 
             // === Met à jour la ligne + total global + AJAX ===
             function updateLigne(row, quantite) {
-                const prix = parseFloat(row.find('.prix-unitaire').text());
+                const prix = parseFloat(row.find('.prix-unitaire').text().replace(/[^\d]/g, '')) || 0;
                 const totalLigne = prix * quantite;
 
                 // Mise à jour affichage
@@ -254,4 +258,140 @@
 
         });
     </script>
+
+    {{-- <script>
+        $(function() {
+
+            // === Recalcul du total général ===
+            function updateTotalGeneral() {
+                let total = 0;
+                $('.total-ligne').each(function() {
+                    const ligneTotal = parseFloat($(this).text().replace(/[^\d]/g, '')) || 0;
+                    total += ligneTotal;
+                });
+                $('#total-general').text(new Intl.NumberFormat('fr-FR').format(total) + ' FCFA');
+            }
+
+            // === Met à jour la ligne + total global + AJAX ===
+            function updateLigne(row, quantite) {
+                const prix = parseFloat(row.find('.prix-unitaire').text().replace(/[^\d]/g, '')) || 0;
+                const totalLigne = prix * quantite;
+
+                // Mise à jour affichage
+                row.find('.quantite').val(quantite);
+                row.find('.total-ligne').text(new Intl.NumberFormat('fr-FR').format(totalLigne) + ' FCFA');
+                updateTotalGeneral();
+
+                // AJAX vers le serveur
+                const id = row.data('id');
+                $.ajax({
+                    url: `/panier/update/${id}`,
+                    method: 'POST',
+                    data: {
+                        quantite: quantite,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    beforeSend: () => row.css('opacity', 0.5),
+                    success: () => row.css('opacity', 1),
+                    error: () => {
+                        alert("Erreur lors de la mise à jour du panier.");
+                        row.css('opacity', 1);
+                    }
+                });
+            }
+
+            // === Incrémenter ===
+            $('.btn-increment').on('click', function() {
+                const row = $(this).closest('tr');
+                const input = row.find('.quantite');
+                let qte = parseInt(input.val());
+                const max = parseInt(input.attr('max'));
+
+                if (qte < max) {
+                    updateLigne(row, ++qte);
+                }
+            });
+
+            // === Décrémenter ===
+            $('.btn-decrement').on('click', function() {
+                const row = $(this).closest('tr');
+                const input = row.find('.quantite');
+                let qte = parseInt(input.val());
+
+                if (qte > 1) {
+                    updateLigne(row, --qte);
+                }
+            });
+
+            // === Saisie directe ===
+            $('.quantite').on('change', function() {
+                const row = $(this).closest('tr');
+                let qte = parseInt($(this).val());
+                const max = parseInt($(this).attr('max'));
+
+                qte = Math.min(Math.max(qte, 1), max);
+                updateLigne(row, qte);
+            });
+
+            // === Supprimer un produit ===
+            $('.btn-remove-panier').on('click', function() {
+                const row = $(this).closest('tr');
+                const id = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Êtes-vous sûr ?',
+                    text: "Ce produit sera retiré du panier.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Oui, supprimer',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/panier/remove/${id}`,
+                            method: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            beforeSend: () => row.css('opacity', 0.5),
+                            success: () => {
+                                row.fadeOut(400, function() {
+                                    $(this).remove();
+                                    updateTotalGeneral();
+                                    if ($('#table-body tr').length === 0)
+                                        location.reload();
+                                });
+                                Swal.fire('Supprimé !',
+                                    'Le produit a été retiré du panier.', 'success');
+                            },
+                            error: () => {
+                                alert("Erreur lors de la suppression du produit.");
+                                row.css('opacity', 1);
+                            }
+                        });
+                    }
+                });
+            });
+
+            // === Validation de la commande ===
+            $('.btn-valide-cmd').on('click', function(e) {
+                let total = 0;
+                $('.total-ligne').each(function() {
+                    total += parseFloat($(this).text().replace(/[^\d]/g, '')) || 0;
+                });
+
+                if (total < 10000) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Montant insuffisant',
+                        text: 'Votre commande doit être égale ou supérieure à 10 000 FCFA pour être validée.'
+                    });
+                }
+            });
+
+        });
+    </script> --}}
 @endpush
