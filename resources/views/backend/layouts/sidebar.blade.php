@@ -6,7 +6,7 @@
             <a href="#" class="logo logo-light">
                 <span class="logo-lg">
                     <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
-                        alt="logo" width="auto" class="rounded-circle">
+                        alt="logo" width="auto" class="rounded-circle" height="60">
                 </span>
             </a>
         @endif

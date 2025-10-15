@@ -9,13 +9,13 @@
                         @foreach($chunk as $categorie)
                             <div class="col-6 col-md-3">
                                 <div class="card text-center p-3 shadow-sm border-0 category-card">
-                                  <a href="" class="text-decoration-none text-dark">
-                                      <img src="{{ $categorie->getFirstMediaUrl('image') ?: asset('front/images/logo.png') }}"
-                                        class="rounded-circle mb-2"
-                                        style="width:120px;height:120px;object-fit:cover;margin:0 auto;"
-                                        alt="{{ $categorie->libelle }}">
-                                    <h5 class="fw-bold">{{ $categorie->libelle }}</h5>
-                                  </a>
+                                    <a href="{{ route('boutique.categorie', ['slug' => $categorie->slug]) }}" class="text-decoration-none text-dark">
+                                        <img src="{{ $categorie->getFirstMediaUrl('image') ?: asset('front/images/logo.png') }}"
+                                            class="rounded-circle mb-2"
+                                            style="width:120px;height:120px;object-fit:cover;margin:0 auto;"
+                                            alt="{{ $categorie->libelle }}">
+                                        <h5 class="fw-bold">{{ $categorie->libelle }}</h5>
+                                    </a>
                                 </div>
                             </div>
                         @endforeach

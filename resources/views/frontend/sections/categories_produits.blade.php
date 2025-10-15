@@ -1,7 +1,7 @@
 {{-- filepath: resources/views/frontend/sections/categories_produits.blade.php --}}
 @foreach($categories as $categorie)
     <section class="container mb-5 bg-white p-3">
-        <a href="#" class="text-decoration-none">
+        <a href="{{ route('boutique.categorie', ['slug' => $categorie->slug]) }}" class="text-decoration-none">
             <div class="text-center">
                 <h3 class="fw-bold" style="color: var(--color-vert);">{{ $categorie->libelle }}</h3>
                 <img src="{{ $categorie->getFirstMediaUrl('image') ?: asset('front/images/logo.png') }}"
@@ -44,7 +44,7 @@
             @endforelse
         </div>
         <div class="text-center mt-3">
-            <a href="#" class="btn btn-cta">Tout voir {{ $categorie->libelle }}</a>
+            <a href="{{route('boutique.index', ['categorie' => $categorie->slug])}}" class="btn btn-cta">Tout voir {{ $categorie->libelle }}</a>
         </div>
     </section>
 @endforeach

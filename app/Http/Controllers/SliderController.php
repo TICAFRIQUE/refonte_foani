@@ -95,9 +95,10 @@ class SliderController extends Controller
     /**
      * Supprime un slider.
      */
-    public function destroy($id)
+    public function delete($id)
     {
         try {
+
             $slider = Slider::findOrFail($id);
 
             // Supprimer l’image du stockage
@@ -107,7 +108,11 @@ class SliderController extends Controller
 
             $slider->delete();
 
-            return redirect()->route('sliders.index')->with('success', 'Slider supprimé avec succès.');
+            return response()->json([
+                'status' => 200,
+            ]);
+
+            // return redirect()->route('sliders.index')->with('success', 'Slider supprimé avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
         }

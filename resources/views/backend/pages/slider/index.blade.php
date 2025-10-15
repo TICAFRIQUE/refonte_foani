@@ -158,7 +158,10 @@
 
     <script>
         $(document).ready(function() {
-            delete_row("sliders");
+           var route = "sliders"
+           delete_row(route);
         });
+
+
     </script>
 @endsection

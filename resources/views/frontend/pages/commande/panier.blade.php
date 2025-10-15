@@ -5,12 +5,14 @@
 @section('content')
     <div class="container py-5">
         <h2 class="fw-bold mb-4 text-center" style="color: #2a6b2a;">Mon Panier</h2>
+        <!-- Afficher un message de session -->
+        @include('frontend.components.message_session')
         <div class="col-lg-10 mx-auto alert alert-info alert-dismissible fade show d-none" role="alert" id="alertPanier">
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <strong>Votre commande doit être egale ou superieur à <strong>10 000 FCFA</strong> avant de pouvoir la valider.
         </div>
 
-       
+
 
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -19,6 +21,11 @@
                         <div class="alert alert-info text-center">
                             Votre panier est vide.
                         </div>
+                        <div class="text-center">
+                            <a href="{{ route('produit.index') }}" class="btn btn-success px-5 fw-bold">
+                                <i class="bi bi-cart-plus"></i> Continuer mes achats
+                            </a>
+                        </div>
                     @else
                         <div class="table-responsive mb-4">
                             <table class="table align-middle">
@@ -26,8 +33,8 @@
                                     <tr>
                                         <th></th>
                                         <th>Produit</th>
-                                        <th class="text-center">Prix Unitaire</th>
-                                        <th class="text-center">Quantité</th>
+                                        <th class="text-center">Pu</th>
+                                        <th class="text-center">Qté</th>
                                         <th class="text-center">Total</th>
                                         <th></th>
                                     </tr>
@@ -42,9 +49,9 @@
                                             </td>
                                             <td>
                                                 <span class="fw-bold">{{ $item->libelle }}</span>
-                                                <div class="text-muted small">{{ $item->categorie->libelle ?? '' }}</div>
+                                                <div class="text-muted small text-lowercase " style="font-size: 13px">{{ $item->categorie->libelle ?? '' }}</div>
                                             </td>
-                                            <td class="text-center prix-unitaire">{{ $item->prix_de_vente }}</td>
+                                            <td class="text-center prix-unitaire">{{number_format($item->prix_de_vente, 0, ',', ' ') }}</td>
                                             <td class="text-center">
                                                 <div class="d-inline-flex align-items-center">
                                                     <button
@@ -86,8 +93,8 @@
                             <a href="{{ route('produit.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left"></i> Continuer mes achats
                             </a>
-                            <a href="{{ route('panier.caisse') }}" class="btn btn-success px-4">
-                                <i class="bi bi-check-circle"></i> Valider ma commande
+                            <a href="{{ route('panier.caisse') }}" class="btn btn-success px-4 btn-valide-cmd">
+                                <i class="bi bi-check-circle"></i> {{Auth::check() ? 'Valider ma commande' : 'Se connecter pour valider ma commande'}}
                             </a>
                         </div>
                     @endif
@@ -208,6 +215,11 @@
                                 row.fadeOut(400, function() {
                                     $(this).remove();
                                     updateTotalGeneral();
+                                    // Si le panier est vide, on recharge la page
+                                    if ($('#table-body').children('tr')
+                                        .length === 0) {
+                                        location.reload();
+                                    }
                                 });
                                 Swal.fire('Supprimé !',
                                     'Le produit a été retiré du panier.', 'success');
@@ -222,7 +234,7 @@
             });
 
             // === Validation de la commande si la commande est superieur a 10 000 ===
-            $('.btn-success').on('click', function(e) {
+            $('.btn-valide-cmd').on('click', function(e) {
                 let total = 0;
                 $('.total-ligne').each(function() {
                     const ligneTotal = parseFloat($(this).text().replace(/[^\d]/g, '')) || 0;
@@ -233,11 +245,13 @@
                     Swal.fire({
                         icon: 'warning',
                         title: 'Montant insuffisant',
-                        text: 'Votre commande doit être égale ou supérieure à 100 000 FCFA pour être validée.'
+                        text: 'Votre commande doit être égale ou supérieure à 10 000 FCFA pour être validée.'
                     });
                     return false;
                 }
             });
+
+
         });
     </script>
 @endpush
