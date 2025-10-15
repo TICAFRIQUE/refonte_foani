@@ -11,37 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('commandes', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            // Client lié à la commande
-            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-
-            // Code unique pour identifier la commande (utile pour le suivi)
             $table->string('code')->unique();
-
-            // Totaux financiers
-            $table->double('sous_total')->default(0);
-            $table->double('frais_livraison')->default(0);
-            $table->double('total')->default(0);
-
             // Adresse de livraison
             $table->string('nom')->nullable();
             $table->string('telephone')->nullable();
             $table->string('adresse')->nullable(); // adresse détaillée ou quartier
             $table->string('ville')->nullable();
             $table->string('commune')->nullable();
-
+            // Totaux financiers
+            $table->foreignId('produit_id')->nullable()->constrained('produits')->onUpdate('cascade')->onDelete('cascade');
+            $table->double('prix_unitaire')->default(0);
+            $table->double('sous_total')->default(0);
+            $table->double('frais_livraison')->default(0);
+            $table->double('total')->default(0);
+            $table->timestamp('date_reservation')->nullable();
+            $table->longText('commentaire')->nullable();
             // Statuts
             $table->enum('statut', ['en_attente', 'en_cours', 'livrée', 'annulée'])
                 ->default('en_attente');
-
-            // Mode de paiement
-            $table->enum('mode_paiement', ['espece', 'cash', 'mobile_money', 'carte'])
-                ->default('espece');
-            // Date de la commande
-            $table->timestamp('date_commande')->nullable();
-            $table->timestamp('date_livraison')->nullable();
-            $table->longText('commentaire')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -52,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('commandes');
+        Schema::dropIfExists('reservations');
     }
 };

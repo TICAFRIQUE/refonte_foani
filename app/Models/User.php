@@ -49,10 +49,17 @@ class User extends Authenticatable
     }
 
 
+    //RELATIONSHIPS
+    public function commandes()
+    {
+        return $this->hasMany(Commande::class);
+    }
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 
-
-
-
+    
 
 
     /**
