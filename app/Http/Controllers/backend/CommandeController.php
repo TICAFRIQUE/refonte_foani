@@ -54,6 +54,12 @@ class CommandeController extends Controller
                 'statut' => $request->statut,
             ]);
 
+            // mettre à jour la date de livraison si le statut est "livrée"
+            if ($request->statut === 'livrée' && !$commande->date_livraison) {
+                $commande->date_livraison = now();
+                $commande->save();
+            }
+
             Alert::success('Succès', 'Commande mise à jour avec succès');
             return redirect()->route('commandes.index', $commande->id);
         } catch (Exception $e) {
