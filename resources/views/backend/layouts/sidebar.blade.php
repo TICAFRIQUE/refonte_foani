@@ -32,6 +32,14 @@
                         </a>
                     </li>
                 @endcan
+                
+                {{-- Commande --}}
+                <li class="nav-item">
+                    <a href="{{ route('commandes.index') }}"
+                        class="nav-link menu-link {{ Route::is('commandes.*') ? 'active' : '' }}">
+                        <i class="bi bi-bag-check me-1"></i> Commandes
+                    </a>
+                </li>
 
                 {{-- Produits --}}
                 <li class="nav-item">

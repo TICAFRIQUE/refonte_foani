@@ -5,6 +5,7 @@ use App\Http\Controllers\backend\AdminController;
 use App\Http\Controllers\backend\CategorieController;
 use App\Http\Controllers\backend\CategoriePageController;
 use App\Http\Controllers\Backend\CategoriePointVenteController;
+use App\Http\Controllers\Backend\CommandeController;
 use App\Http\Controllers\backend\CommuneLivraisonController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\ModuleController;
@@ -190,6 +191,16 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('edit/{id}', 'edit')->name('edit');     // Formulaire d'édition
         Route::post('update/{id}', 'update')->name('update'); // Mise à jour
         Route::get('delete/{id}', 'delete')->name('delete');  // Suppression
+    });
+
+    // commandes
+    Route::prefix('commandes')->name('commandes.')->controller(CommandeController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // Liste des commandes
+        Route::get('create', 'create')->name('create'); // Formulaire de création
+        Route::post('store', 'store')->name('store'); // Enregistrement d'une commande
+        Route::get('{commande}', 'show')->name('show'); // Détail d'une commande
+        Route::post('{commande}', 'update')->name('update'); // Mise à jour
+        Route::delete('{commande}', 'destroy')->name('destroy'); // Suppression
     });
 });
 
