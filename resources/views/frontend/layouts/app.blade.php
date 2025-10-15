@@ -81,6 +81,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
                                 <li><a class="dropdown-item" href="{{ route('user.commandes') }}">Mes commandes</a></li>
+                                <li><a class="dropdown-item" href="{{ route('user.reservations') }}">Mes reservations</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
