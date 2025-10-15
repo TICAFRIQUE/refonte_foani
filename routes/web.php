@@ -20,7 +20,9 @@ use App\Http\Controllers\backend\VillePointVenteController;
 use App\Http\Controllers\frontend\BoutiqueController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\PanierController;
+use App\Http\Controllers\backend\ReservationAdminController;
 use App\Http\Controllers\frontend\ReservationController;
+
 use App\Http\Controllers\frontend\UserController;
 use App\Http\Controllers\SliderController;
 use App\Models\Page;
@@ -197,11 +199,19 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     // commandes
     Route::prefix('commandes')->name('commandes.')->controller(CommandeController::class)->group(function () {
         Route::get('/', 'index')->name('index'); // Liste des commandes
-        Route::get('create', 'create')->name('create'); // Formulaire de création
         Route::post('store', 'store')->name('store'); // Enregistrement d'une commande
         Route::get('{commande}', 'show')->name('show'); // Détail d'une commande
         Route::post('{commande}', 'update')->name('update'); // Mise à jour
         Route::delete('{commande}', 'destroy')->name('destroy'); // Suppression
+    });
+
+
+    // reservations
+    Route::prefix('reservation')->name('reservation.')->controller(ReservationAdminController::class)->group(function () {
+        Route::get('/', 'index')->name('index');           // Liste des réservations
+        Route::post('{reservation}', 'update')->name('update'); // Mise à jour
+        Route::get('{reservation}', 'show')->name('show'); // Détail d'une réservation
+        Route::delete('{reservation}', 'delete')->name('delete'); // Suppression
     });
 });
 
@@ -250,5 +260,4 @@ Route::controller(PanierController::class)->group(function () {
 Route::controller(ReservationController::class)->group(function () {
     Route::get('/reservation/{slug}', 'create')->name('reservation.create')->middleware('client');
     Route::post('/reservation/{id}', 'store')->name('reservation.store')->middleware('client');
-   
 });

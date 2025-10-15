@@ -23,7 +23,7 @@
 
             <ul class="navbar-nav" id="navbar-nav">
 
-                {{-- Tableau de bord --}}
+                {{-- 1. Tableau de bord --}}
                 @can('voir-tableau de bord')
                     <li class="nav-item">
                         <a class="nav-link menu-link {{ Route::is('dashboard.*') ? 'active' : '' }}"
@@ -32,8 +32,8 @@
                         </a>
                     </li>
                 @endcan
-                
-                {{-- Commande --}}
+
+                {{-- 2. Commandes --}}
                 <li class="nav-item">
                     <a href="{{ route('commandes.index') }}"
                         class="nav-link menu-link {{ Route::is('commandes.*') ? 'active' : '' }}">
@@ -41,137 +41,129 @@
                     </a>
                 </li>
 
-                {{-- Produits --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('produit.index') }}">
-                        <i class="ri-shopping-bag-3-line"></i> <span>PRODUITS</span>
+                    <a href="{{ route('reservation.index') }}"
+                        class="nav-link menu-link {{ Route::is('reservation.*') ? 'active' : '' }}">
+                        <i class="bi bi-calendar-check me-1"></i> Réservations
                     </a>
                 </li>
-
+                {{-- 3. Produits & Catégories --}}
                 <li class="nav-item">
-                    <a href="{{ route('categorie.index') }}" class="nav-link">
+                    <a class="nav-link menu-link {{ Route::is('produit.*') ? 'active' : '' }}"
+                        href="{{ route('produit.index') }}">
+                        <i class="ri-shopping-bag-3-line"></i> Produits
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('categorie.index') }}"
+                        class="nav-link {{ Route::is('categorie.*') ? 'active' : '' }}">
                         <i class="ri-price-tag-3-line me-1"></i> Catégories
                     </a>
                 </li>
 
+                {{-- 4. Offres / Promotions --}}
                 <li class="nav-item">
-                    <a href="{{ route('offre.index') }}" class="nav-link">
-                        <i class="ri-gift-line me-1"></i> Voir offres
+                    <a href="{{ route('offre.index') }}" class="nav-link {{ Route::is('offre.*') ? 'active' : '' }}">
+                        <i class="ri-gift-line me-1"></i> Offres
                     </a>
                 </li>
-                {{-- Points de vente --}}
+
+                {{-- 5. Points de vente --}}
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center justify-content-between" href="#menuPointsVente"
                         data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="menuPointsVente">
                         <div class="d-flex align-items-center">
-                            <i class="bi bi-shop me-2"></i>
-                            <span>Points de vente</span>
+                            <i class="bi bi-shop me-2"></i> <span>Points de vente</span>
                         </div>
-
                     </a>
                     <div class="collapse menu-dropdown" id="menuPointsVente">
                         <ul class="nav nav-sm flex-column ms-4">
                             <li class="nav-item">
                                 <a href="{{ route('ville_point_vente.index') }}"
                                     class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-list-check me-2"></i>
-                                    Gestion des points de vente
+                                    <i class="bi bi-list-check me-2"></i> Gestion des points de vente
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('categorie_point_de_vente.index') }}"
                                     class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-tags-fill me-2"></i>
-                                    Catégories des points de vente
+                                    <i class="bi bi-tags-fill me-2"></i> Catégories des points de vente
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('ville.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-geo-alt-fill me-2"></i>
-                                    Villes
+                                    <i class="bi bi-geo-alt-fill me-2"></i> Villes
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('commune.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-building-fill me-2"></i>
-                                    Communes
+                                    <i class="bi bi-building-fill me-2"></i> Communes
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                {{-- Points de livraison --}}
+
+                {{-- 6. Points de livraison --}}
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center justify-content-between" href="#menuLivraison"
                         data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="menuLivraison">
                         <div class="d-flex align-items-center">
-                            <i class="bi bi-truck me-2"></i>
-                            <span>Points de livraison</span>
+                            <i class="bi bi-truck me-2"></i> <span>Points de livraison</span>
                         </div>
-
                     </a>
-
                     <div class="collapse menu-dropdown" id="menuLivraison">
                         <ul class="nav nav-sm flex-column ms-4">
                             <li class="nav-item">
                                 <a href="{{ route('ville.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-geo-alt-fill me-2"></i>
-                                    Villes
+                                    <i class="bi bi-geo-alt-fill me-2"></i> Villes
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('commune.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-building-fill me-2"></i>
-                                    Communes
+                                    <i class="bi bi-building-fill me-2"></i> Communes
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
 
-                {{-- Pages --}}
+                {{-- 7. Pages & Sliders --}}
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center" href="#menuPages" data-bs-toggle="collapse"
                         role="button" aria-expanded="false" aria-controls="menuPages">
-                        <i class="bi bi-file-earmark-fill me-2"></i>
-                        <span>Pages</span>
+                        <i class="bi bi-file-earmark-fill me-2"></i> Pages
                     </a>
                     <div class="collapse menu-dropdown" id="menuPages">
                         <ul class="nav nav-sm flex-column ms-3">
                             <li class="nav-item">
                                 <a href="{{ route('pages.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-bookmark-fill me-2"></i>
-                                    Gestion des pages
+                                    <i class="bi bi-bookmark-fill me-2"></i> Gestion des pages
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('categorie_page.index') }}"
                                     class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-bookmark-fill me-2"></i>
-                                    Gestion des catégories
+                                    <i class="bi bi-bookmark-fill me-2"></i> Catégories
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
 
-
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('sliders*') ? 'active' : '' }}"
                         href="{{ route('sliders.index') }}">
-                        <i class="bi bi-images me-2"></i>
-                        <span>Sliders</span>
+                        <i class="bi bi-images me-2"></i> Sliders
                     </a>
                 </li>
 
-
-
-                {{-- Paramètres --}}
+                {{-- 8. Paramètres --}}
                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-parametre'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarAuth">
-                            <i class="ri-settings-2-fill"></i> <span>PARAMÈTRES</span>
+                            <i class="ri-settings-2-fill"></i> Paramètres
                         </a>
                         <div class="collapse menu-dropdown {{ Route::is('role.*') || Route::is('parametre.*') || Route::is('module.*') || Route::is('permission.*') || Route::is('admin-register.*') ? 'show' : '' }}"
                             id="sidebarAuth">
