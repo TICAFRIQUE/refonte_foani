@@ -51,7 +51,7 @@
                         <div class="col-md-6">
                             <form action="{{ route('reservation.update', $reservation->id) }}" method="POST">
                                 @csrf
-                               
+
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Statut :</label>
                                     <div class="input-group">
@@ -96,7 +96,7 @@
                                 @if ($reservation->produit)
                                     <tr>
                                         <td>1</td>
-                                        <td>{{ $reservation->produit->nom }}</td>
+                                        <td>{{ $reservation->produit->libelle }}</td>
                                         <td>{{ $reservation->quantite ?? 1 }}</td>
                                         <td>{{ number_format($reservation->prix_unitaire ?? 0, 0, ',', ' ') }} Fcfa</td>
                                         <td>{{ number_format($reservation->total ?? 0, 0, ',', ' ') }} Fcfa</td>

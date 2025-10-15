@@ -60,6 +60,7 @@
                                         <td>{{ $reservation->user->username ?? ($reservation->nom ?? 'Inconnu') }}</td>
                                         <td>{{ $reservation->telephone ?? '—' }}</td>
                                         <td>{{ $reservation->produit->libelle ?? '—' }}</td>
+                                    
                                         <td>
                                             <span class="badge bg-success">
                                                 {{ number_format($reservation->total, 0, ',', ' ') }} F
@@ -135,6 +136,13 @@
                 dom: 'Bfrtip',
                 buttons: ['copy', 'excel', 'pdf', 'print']
             });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            const route = "reservation";
+            delete_row(route);
         });
     </script>
 @endsection
