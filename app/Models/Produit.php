@@ -83,8 +83,13 @@ class Produit extends Model implements HasMedia
     public function commandes()
     {
         return $this->belongsToMany(Commande::class, 'commande_produit')
-                    ->withPivot('quantite', 'prix_unitaire' , 'total')
-                    ->withTimestamps();
+            ->withPivot('quantite', 'prix_unitaire', 'total')
+            ->withTimestamps();
+    }
+    // Relation avec le modèle Reservation (plusieurs reservations peuvent contenir plusieurs produits)
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 
     //

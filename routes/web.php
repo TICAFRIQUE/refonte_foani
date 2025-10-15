@@ -216,6 +216,8 @@ Route::controller(UserController::class)->group(function () {
     route::post('registerStore', 'register')->name('user.register');
     route::get('mes-commandes', 'mesCommandes')->name('user.commandes')->middleware('client');
     route::get('mes-commandes/{id}', 'mesCommandesShow')->name('user.commandes.show')->middleware('client');
+    route::get('mes-reservations', 'mesReservations')->name('user.reservations')->middleware('client');
+    route::get('mes-reservations/{id}', 'mesReservationsShow')->name('user.reservations.show')->middleware('client');
     route::get('profil', 'profil')->name('user.profil')->middleware('client');
     route::post('profil', 'profil')->name('user.profil')->middleware('client');
     route::get('logout', 'logout')->name('user.logout')->middleware('client');

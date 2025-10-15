@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Commande;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -111,6 +112,31 @@ class UserController extends Controller
             return view('frontend.pages.dashboard_client.commande_detail', compact('commande'));
         } catch (\Throwable $th) {
             return back()->withErrors('Une erreur est survenue lors de la récupération de la commande : ' . $th->getMessage());
+        }
+    }
+
+
+//MES RESERVATIONS
+        public function mesReservations()
+    {
+        try {
+            $reservations = Reservation::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+            return view('frontend.pages.dashboard_client.reservations', compact('reservations'));
+        } catch (\Throwable $th) {
+            return back()->withErrors('Une erreur est survenue lors de la récupération des reservations : ' . $th->getMessage());
+        }
+    }
+
+    //détail d'une commande
+    public function mesReservationsShow($id)
+    {
+        try {
+
+            $reservation = Reservation::with('produit')->where('user_id', Auth::id())->where('id', $id)->firstOrFail();
+                        
+            return view('frontend.pages.dashboard_client.reservation_detail', compact('reservation'));
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Une erreur est survenue lors de la récupération de la reservation : ' . $th->getMessage());
         }
     }
 
