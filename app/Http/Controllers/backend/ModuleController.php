@@ -49,7 +49,7 @@ class ModuleController extends Controller
         foreach ($permissions as $permissionName) {
             $permission = Permission::firstOrCreate([
                 'name' => $permissionName,
-                'module_id' => $module->id,  // Associer à un module                
+                'module_id' => $module->id,  // Associer à un module
                 'guard_name' => 'web',
             ]);
         }
@@ -122,5 +122,5 @@ class ModuleController extends Controller
         return response()->json([
             'status' => 200,
         ]);
-    }
+    } 
 }

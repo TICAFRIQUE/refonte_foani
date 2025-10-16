@@ -9,7 +9,6 @@
                 </span>
             </a>
         @endif
-
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
             id="vertical-hover">
             <i class="ri-record-circle-line"></i>
@@ -138,6 +137,7 @@
                         </ul>
                     </div>
                 </li>
+
                 {{-- 10. Candidats --}}
                 <li class="nav-item">
                     <a href="{{ route('candidats.index') }}"
