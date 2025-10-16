@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\backend\AdminController;
+use App\Http\Controllers\backend\CandidatController;
 use App\Http\Controllers\backend\CategorieController;
 use App\Http\Controllers\backend\CategoriePageController;
 use App\Http\Controllers\Backend\CategoriePointVenteController;
@@ -218,6 +219,12 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::prefix('clients')->name('client.')->controller(AdminController::class)->group(function () {
         Route::get('/', 'index_client')->name('index_client');            // Liste des clients
         Route::get('delete/{id}', 'delete_client')->name('delete');    // Suppression (retour JSON recommandé)
+    });
+
+    // candidats
+    Route::prefix('candidats')->name('candidats.')->controller(CandidatController::class)->group(function () {
+        Route::get('/', 'index')->name('index');           // liste des candidats
+        Route::get('delete/{id}', 'delete')->name('delete'); // suppression
     });
 });
 

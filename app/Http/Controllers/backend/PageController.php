@@ -124,6 +124,7 @@ class PageController extends  Controller
     // Delete
     public function delete($id)
     {
+       
         try {
             $page = Page::findOrFail($id);
 

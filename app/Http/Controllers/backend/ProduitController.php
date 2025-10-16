@@ -233,6 +233,7 @@ class ProduitController extends Controller
 
     public function delete($id)
     {
+      
         try {
             // supprimer les médias associés
             $produit = Produit::findOrFail($id);

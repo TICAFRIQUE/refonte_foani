@@ -138,8 +138,15 @@
                         </ul>
                     </div>
                 </li>
+                {{-- 10. Candidats --}}
+                <li class="nav-item">
+                    <a href="{{ route('candidats.index') }}"
+                        class="nav-link {{ request()->routeIs('candidats.*') ? 'active' : '' }}">
+                        <i class="ri-user-follow-line me-2"></i> Candidats
+                    </a>
+                </li>
 
-                {{-- 10. Pages & Sliders --}}
+                {{-- 11. Pages & Sliders --}}
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center" href="#menuPages" data-bs-toggle="collapse"
                         role="button" aria-expanded="false" aria-controls="menuPages">
@@ -169,7 +176,7 @@
                     </a>
                 </li>
 
-                {{-- 11. Paramètres --}}
+                {{-- 12. Paramètres --}}
                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-parametre'))
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
