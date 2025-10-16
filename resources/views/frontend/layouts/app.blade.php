@@ -46,14 +46,31 @@
             </button>
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav ms-3 me-auto mb-2 mb-lg-0 fw-bold">
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('accueil') }}">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Entreprise</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Activités</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Conseils</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Points de vente</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('accueil') }}"> <i class="bi bi-house-door-fill"></i> ACCUEIL</a></li>
+
+
+                    @foreach ($categories_pages->where('slug', '!=', 'activites') as $categorie_page)
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white px-1" href="#"
+                                id="navbar{{ $categorie_page->id }}" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                {{ $categorie_page->libelle }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbar{{ $categorie_page->id }}">
+                                @foreach ($categorie_page->pages as $page)
+                                    <li><a class="dropdown-item" href="{{ route('page.show', ['slug' => $page->slug]) }}">{{ $page->libelle }}</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endforeach
+
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('page.activites') }}">NOS ACTIVITES</a></li>
+                    {{-- <li class="nav-item"><a class="nav-link text-white" href="#">Conseils</a></li> --}}
+                    <li class="nav-item"><a class="nav-link text-white" href="#">POINTS DE VENTE</a></li>
                     <li class="nav-item"><a class="nav-link text-white"
-                            href="{{ route('boutique.index') }}">Boutique</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Contacts</a></li>
+                            href="{{ route('boutique.index') }}">BOUTIQUE</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('contact') }}">CONTACT</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
                     <a href="{{ route('panier.index') }}"
@@ -81,7 +98,8 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
                                 <li><a class="dropdown-item" href="{{ route('user.commandes') }}">Mes commandes</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.reservations') }}">Mes reservations</a></li>
+                                <li><a class="dropdown-item" href="{{ route('user.reservations') }}">Mes reservations</a>
+                                </li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -94,6 +112,17 @@
         </div>
     </nav>
 
+    {{-- À placer où tu veux dans tes vues, par exemple juste avant @yield('content') --}}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb bg-white rounded shadow-sm px-3 py-2 align-items-center">
+            <li class="breadcrumb-item">
+                <a href="{{ url()->previous() }}" class="text-dark text-decoration-none"><i class="bi bi-arrow-left"></i> Retour</a>
+            </li>
+            <li class="breadcrumb-item active fw-bold text-lowercase" aria-current="page">
+                {{ Str::lower(trim($__env->yieldContent('title'))) }}
+            </li>
+        </ol>
+    </nav>
 
 
     <!-- Yield content -->

@@ -36,16 +36,24 @@
                             <thead class="table-primary">
                                 <tr>
                                     <th>#</th>
-                                    <th>Titre</th>
+                                    <th>Libelle</th>
+                                    <th>Statut</th>
                                     <th>Date de création</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($categories as $categorie)
+                                @foreach ($categories as $key => $categorie)
                                     <tr id="row_{{ $categorie->id }}">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $categorie->titre }}</td>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $categorie->libelle }}</td>
+                                        <td>
+                                            @if ($categorie->statut)
+                                                <span class="badge bg-success">Actif</span>
+                                            @else
+                                                <span class="badge bg-secondary">Inactif</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $categorie->created_at?->format('d/m/Y') ?? '—' }}</td>
 
                                         <td class="text-center">
@@ -76,7 +84,7 @@
                                     </tr>
 
                                     {{-- edit --}}
-                                    @include('backend.pages.gestions_pages.categories.partials.edit')
+                                    @include('backend.pages.pages.categories.partials.edit')
                                 @endforeach
                             </tbody>
                         </table>
@@ -87,7 +95,7 @@
     </div>
 
     {{-- create --}}
-    @include('backend.pages.gestions_pages.categories.partials.create')
+    @include('backend.pages.pages.categories.partials.create')
 
 @endsection
 

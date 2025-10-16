@@ -44,7 +44,7 @@
             @endforelse
         </div>
         <div class="text-center mt-3">
-            <a href="{{route('boutique.index', ['categorie' => $categorie->slug])}}" class="btn btn-cta">Tout voir {{ $categorie->libelle }}</a>
+            <a href="{{route('boutique.categorie', ['slug' => $categorie->slug])}}" class="btn btn-cta">Tout voir {{ $categorie->libelle }}</a>
         </div>
     </section>
 @endforeach

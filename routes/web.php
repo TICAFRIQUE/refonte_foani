@@ -1,32 +1,32 @@
 <?php
 
 
-use App\Http\Controllers\backend\AdminController;
-use App\Http\Controllers\backend\CategorieController;
-use App\Http\Controllers\backend\CategoriePageController;
-use App\Http\Controllers\Backend\CategoriePointVenteController;
-use App\Http\Controllers\Backend\CommandeController;
-use App\Http\Controllers\backend\CommuneLivraisonController;
-use App\Http\Controllers\backend\DashboardController;
-use App\Http\Controllers\backend\ModuleController;
-use App\Http\Controllers\backend\PageController;
-use App\Http\Controllers\backend\ParametreController;
-use App\Http\Controllers\backend\PermissionController;
-use App\Http\Controllers\backend\ProduitController;
-use App\Http\Controllers\backend\RoleController;
-use App\Http\Controllers\backend\TypeOffreController;
-use App\Http\Controllers\backend\VilleLivraisonController;
-use App\Http\Controllers\backend\VillePointVenteController;
-use App\Http\Controllers\frontend\BoutiqueController;
-use App\Http\Controllers\frontend\HomeController;
-use App\Http\Controllers\frontend\PanierController;
-use App\Http\Controllers\backend\ReservationAdminController;
-use App\Http\Controllers\frontend\ReservationController;
-
-use App\Http\Controllers\frontend\UserController;
-use App\Http\Controllers\SliderController;
 use App\Models\Page;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SliderController;
+use App\Http\Controllers\backend\PageController;
+use App\Http\Controllers\backend\RoleController;
+use App\Http\Controllers\backend\AdminController;
+use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\UserController;
+use App\Http\Controllers\backend\ModuleController;
+use App\Http\Controllers\backend\ProduitController;
+use App\Http\Controllers\frontend\PanierController;
+use App\Http\Controllers\Backend\CommandeController;
+use App\Http\Controllers\backend\CategorieController;
+use App\Http\Controllers\backend\DashboardController;
+use App\Http\Controllers\backend\ParametreController;
+use App\Http\Controllers\backend\TypeOffreController;
+use App\Http\Controllers\frontend\BoutiqueController;
+use App\Http\Controllers\backend\PermissionController;
+use App\Http\Controllers\frontend\ReservationController;
+use App\Http\Controllers\backend\CategoriePageController;
+use App\Http\Controllers\backend\VilleLivraisonController;
+use App\Http\Controllers\frontend\PageDynamiqueController;
+use App\Http\Controllers\backend\PointVenteController;
+use App\Http\Controllers\backend\CommuneLivraisonController;
+use App\Http\Controllers\backend\ReservationAdminController;
+use App\Http\Controllers\Backend\CategoriePointVenteController;
 
 
 
@@ -155,7 +155,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('/store', 'store')->name('categorie_page.store'); // Enregistrement
         Route::get('/edit/{id}', 'edit')->name('categorie_page.edit'); // Récupération d'une catégorie pour édition
         Route::post('/update/{id}', 'update')->name('categorie_page.update'); // Mise à jour
-        Route::delete('/delete/{id}', 'delete')->name('categorie_page.delete'); // Suppression
+        Route::get('/delete/{id}', 'delete')->name('categorie_page.delete'); // Suppression
     });
 
 
@@ -178,7 +178,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     });
 
     // ville point de vente
-    Route::prefix('ville_point_vente')->name('ville_point_vente.')->controller(VillePointVenteController::class)->group(function () {
+    Route::prefix('point_vente')->name('point_vente.')->controller(PointVenteController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('store', 'store')->name('store');
         Route::get('edit/{id}', 'edit')->name('edit');
@@ -237,6 +237,13 @@ Route::controller(UserController::class)->group(function () {
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'accueil')->name('accueil'); // page d'accueil
+    Route::get('/contact', 'contact')->name('contact'); // page contact
+});
+
+//gestion des pages dynamiques
+Route::controller(PageDynamiqueController::class)->group(function () {
+    Route::get('/pages/{slug}', 'pageShow')->name('page.show'); // detail de la page
+    Route::get('/nos-activites', 'pageActivites')->name('page.activites'); // liste des activites
 });
 
 // boutique

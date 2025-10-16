@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Throwable;
+use App\Models\Page;
 use App\Models\Parametre;
+use App\Models\CategoriePage;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -26,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
 
-   //pagination par defaut a 10
+        //pagination par defaut a 10
         \Illuminate\Pagination\Paginator::useBootstrapFive();
 
         Schema::defaultStringLength(191);
@@ -57,21 +59,52 @@ class AppServiceProvider extends ServiceProvider
 
 
         //recuperer les parametres
+        $data_parametre = [];
         if (Schema::hasTable('parametres')) {
             $data_parametre = Parametre::with('media')->first();
         }
 
+        //partager le nombre d'éléments dans le panier dans toutes les vues
         view()->composer('frontend.layouts.app', function ($view) {
             $count = 0;
             $panier = session('panier', []);
             if (!empty($panier)) {
                 $count = array_sum(array_column($panier, 'quantite'));
             }
-            $view->with('count', $count);
+
+
+
+            //partager les categories page et les pages dans toutes les vues
+            if (Schema::hasTable('categorie_pages')) {
+                $categories_pages = CategoriePage::with('pages')->active()->orderBy('created_at', 'asc')->get();
+            }
+            if (Schema::hasTable('pages')) {
+                $pages = Page::where('statut', 1)->get();
+            }
+            $categories_pages = [];
+            $pages = [];
+
+            if (Schema::hasTable('categorie_pages')) {
+                $categories_pages = CategoriePage::with('pages')->active()->orderBy('created_at', 'asc')->get();
+            }
+            if (Schema::hasTable('pages')) {
+                $pages = Page::where('statut', 1)->get();
+            }
+
+                //detail de la page
+                $page_detail = null;
+
+            $view->with(['count', $count, 'categories_pages' => $categories_pages, 'pages' => $pages]);
         });
 
-        view()->share([
-            'data_parametre' => $data_parametre ?? null,
-        ]);
+
+        //partager les categories page et les pages dans toutes les vues
+
+
+
+
+
+        //partager les données avec toutes les vues
+        view()->share('data_parametre', $data_parametre);
     }
 }

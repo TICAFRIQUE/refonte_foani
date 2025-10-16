@@ -28,4 +28,11 @@ class HomeController extends Controller
             return view('backend.utility.auth-404-basic');
         }
     }
+
+    // Page de contact
+    public function contact()
+    {
+        return view('frontend.pages.contact');
+    }
+    
 }

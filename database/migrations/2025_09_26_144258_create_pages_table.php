@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
+            $table->string('libelle')->nullable();
+            $table->string('slug')->unique()->nullable();
             $table->string('mot_cle')->nullable();
-            $table->foreignId('id_categorie_page')->constrained('categorie_pages')->cascadeOnDelete();
-            $table->boolean('visibilite')->default(true); // true = visible, false = cachée
-            $table->string('image')->nullable();
-            $table->longText('contenu')->nullable();
+            $table->foreignId('categorie_page_id')->nullable()->constrained('categorie_pages')->onUpdate('cascade')->onDelete('cascade'); // clé étrangère vers categorie_pages
+            $table->boolean('statut')->default(true); // true = visible, false = cachée
+            $table->longText('description')->nullable();
             $table->timestamps();
         });
     }
