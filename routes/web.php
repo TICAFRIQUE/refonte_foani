@@ -213,6 +213,12 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('{reservation}', 'show')->name('show'); // Détail d'une réservation
         Route::delete('{reservation}', 'delete')->name('delete'); // Suppression
     });
+
+    // clients
+    Route::prefix('clients')->name('client.')->controller(AdminController::class)->group(function () {
+        Route::get('/', 'index_client')->name('index_client');            // Liste des clients
+        Route::get('delete/{id}', 'delete_client')->name('delete');    // Suppression (retour JSON recommandé)
+    });
 });
 
 

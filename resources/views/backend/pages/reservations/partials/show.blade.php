@@ -68,11 +68,27 @@
                                         </select>
                                     </div>
                                 </div>
-                                <p class="mt-3"><strong>Total :</strong>
+                                <p class="mt-3">
+                                    <strong class="text-warning">Frais de livraison :</strong>
+                                    <span class="badge bg-warning-subtle text-dark fs-6">
+                                        {{ number_format($reservation->frais_livraison, 0, ',', ' ') }} Fcfa
+                                    </span>
+                                </p>
+
+                                <p class="mt-3">
+                                    <strong class="text-info">Sous total :</strong>
+                                    <span class="badge bg-info-subtle text-dark fs-6">
+                                        {{ number_format($reservation->sous_total, 0, ',', ' ') }} Fcfa
+                                    </span>
+                                </p>
+
+                                <p class="mt-3">
+                                    <strong class="text-success">Total :</strong>
                                     <span class="badge bg-success fs-6">
                                         {{ number_format($reservation->total, 0, ',', ' ') }} Fcfa
                                     </span>
                                 </p>
+
                             </form>
                         </div>
                     </div>
@@ -97,9 +113,12 @@
                                     <tr>
                                         <td>1</td>
                                         <td>{{ $reservation->produit->libelle }}</td>
-                                        <td>{{ $reservation->quantite ?? 1 }}</td>
+
+                                        <td>{{ $reservation->quantite ?? 'undefine' }}</td>
                                         <td>{{ number_format($reservation->prix_unitaire ?? 0, 0, ',', ' ') }} Fcfa</td>
-                                        <td>{{ number_format($reservation->total ?? 0, 0, ',', ' ') }} Fcfa</td>
+                                        <td> <span class="badge bg-success fs-6">
+                                                {{ number_format($reservation->total, 0, ',', ' ') }}
+                                                Fcfa</span> </td>
                                     </tr>
                                 @else
                                     <tr>

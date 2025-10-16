@@ -67,11 +67,14 @@ class ReservationAdminController extends Controller
             $reservation = Reservation::findOrFail($id);
             $reservation->delete();
 
-            Alert::success('Succès', 'Réservation supprimée avec succès');
-            return redirect()->route('reservation.index');
+            return response()->json([
+                'status'  => 200,
+
+            ]);
         } catch (Exception $e) {
-            Alert::error('Erreur', 'Erreur lors de la suppression : ' . $e->getMessage());
-            return back();
+            return response()->json([
+                'status'  => 500,
+            ], 500);
         }
     }
 }

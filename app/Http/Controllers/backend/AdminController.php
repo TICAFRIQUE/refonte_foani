@@ -68,6 +68,40 @@ class AdminController extends Controller
         return view('backend.pages.auth-admin.register.index', compact('data_admin', 'data_role'));
     }
 
+    // liste des clients
+    public function index_client()
+    {
+        try {
+            $clients = User::with('roles')
+                ->where(function ($e) {
+                    $e->whereHas('roles', function ($query) {
+                        $query->where('name', 'client');
+                    })->orWhere('role', 'client');
+                })
+                ->latest()
+                ->get();
+
+            return view('backend.pages.clients.index', compact('clients'));
+        } catch (\Exception $e) {
+            Alert::error('Erreur', 'Impossible de charger les clients : ' . $e->getMessage());
+            return back();
+        }
+    }
+
+      public function delete_client($id)
+    {
+        try {
+            User::find($id)->forceDelete();
+            return response()->json([
+                'status' => 200,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'message' => $th->getMessage(),
+            ]);
+        }
+    }
 
     public function store(Request $request)
     {
@@ -155,7 +189,7 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Une erreur est survenue lors de la mise à jour : ' . $e->getMessage());
             // Alert::error('Erreur', 'Une erreur est survenue lors de la mise à jour : ' . $e->getMessage());
-            return back();
+
         }
     }
 

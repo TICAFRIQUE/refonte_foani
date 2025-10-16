@@ -60,7 +60,7 @@
                                         <td>{{ $reservation->user->username ?? ($reservation->nom ?? 'Inconnu') }}</td>
                                         <td>{{ $reservation->telephone ?? '—' }}</td>
                                         <td>{{ $reservation->produit->libelle ?? '—' }}</td>
-                                    
+
                                         <td>
                                             <span class="badge bg-success">
                                                 {{ number_format($reservation->total, 0, ',', ' ') }} F
@@ -88,18 +88,15 @@
 
                                                         </a>
                                                     </li>
+
                                                     <li>
-                                                        <form action="{{ route('reservation.delete', $reservation->id) }}"
-                                                            method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger"
-                                                                onclick="return confirm('Supprimer cette reservation ?')">
-                                                                <i class="ri-delete-bin-fill align-bottom me-2"></i>
-                                                                Supprimer
-                                                            </button>
-                                                        </form>
+                                                        <a href="#" class="dropdown-item text-danger delete"
+                                                            data-id="{{ $reservation->id }}">
+                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                            Supprimer
+                                                        </a>
                                                     </li>
+
                                                 </ul>
                                             </div>
                                         </td>
