@@ -116,8 +116,8 @@ class UserController extends Controller
     }
 
 
-//MES RESERVATIONS
-        public function mesReservations()
+    //MES RESERVATIONS
+    public function mesReservations()
     {
         try {
             $reservations = Reservation::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
@@ -133,7 +133,7 @@ class UserController extends Controller
         try {
 
             $reservation = Reservation::with('produit')->where('user_id', Auth::id())->where('id', $id)->firstOrFail();
-                        
+
             return view('frontend.pages.dashboard_client.reservation_detail', compact('reservation'));
         } catch (\Throwable $th) {
             return back()->with('error', 'Une erreur est survenue lors de la récupération de la reservation : ' . $th->getMessage());
@@ -179,7 +179,7 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        Alert::success( 'Déconnexion', 'Déconnexion réussie !');
+        Alert::success('Déconnexion', 'Déconnexion réussie !');
         return redirect()->route('accueil');
     }
 }

@@ -48,10 +48,14 @@ class Reservation extends Model
     {
         return $this->belongsTo(Produit::class);
     }
-    
+
     //scope pour les statuts
     public function scopeStatut($query, $statut)
     {
         return $query->where('statut', $statut);
     }
+
+    protected $casts = [
+        'date_reservation' => 'datetime',
+    ];
 }

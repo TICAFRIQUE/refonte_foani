@@ -25,6 +25,7 @@ class Commande extends Model
         'statut',
         'mode_paiement',
         'date_commande',
+        'date_livraison',
     ];
 
     public static function boot()
@@ -50,9 +51,16 @@ class Commande extends Model
     }
 
 
-   //scope pour les statuts
-   public function scopeStatut($query, $statut)
-   {
-       return $query->where('statut', $statut);
-   }
+    //scope pour les statuts
+    public function scopeStatut($query, $statut)
+    {
+        return $query->where('statut', $statut);
+    }
+
+
+
+    protected $casts = [
+        'date_commande' => 'datetime',
+        'date_livraison' => 'datetime',
+    ];
 }
