@@ -119,23 +119,32 @@ class PageController extends  Controller
     }
 
 
-    // Delete
-    public function delete(Request $request, $id)
-    {
 
+
+    // Delete
+    public function delete($id)
+    {
         try {
-            $page = Page::findOrFail($request->id);
+            $page = Page::findOrFail($id);
 
             // Supprimer l'image si elle existe
             if ($page->image && file_exists(public_path($page->image))) {
-                unlink(public_path($page->image));
+                @unlink(public_path($page->image));
             }
 
-            $page->delete();
+            // Suppression définitive (comme dans ModuleController)
+            $page->forceDelete();
 
-            return redirect()->route('pages.index')->with('success', 'La page a été supprimée avec succès.');
+            return response()->json([
+                'status'  => 200,
+            ]);
         } catch (\Exception $e) {
-            return redirect()->route('pages.index')->with('error', 'Erreur : ' . $e->getMessage());
+            return response()->json([
+                'status'  => 500,
+                'message' => 'Erreur lors de la suppression : ' . $e->getMessage(),
+            ], 500);
         }
     }
+
+
 }

@@ -151,7 +151,7 @@
 
     <script>
         $(document).ready(function() {
-            const route = "pages";
+            const route = "page";
             delete_row(route);
         });
     </script>
