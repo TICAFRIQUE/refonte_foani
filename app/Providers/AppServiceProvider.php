@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Throwable;
 use App\Models\Page;
+use App\Models\Contact;
 use App\Models\Parametre;
 use App\Models\CategoriePage;
 use Spatie\Permission\Models\Role;
@@ -101,10 +102,15 @@ class AppServiceProvider extends ServiceProvider
 
 
 
+        if (Schema::hasTable('contacts')) {
+            $newMessagesCount = Contact::where('is_read', false)->count();
+        } else {
+            $newMessagesCount = 0;
+        }
 
-
-
-        //partager les données avec toutes les vues
-        view()->share('data_parametre', $data_parametre);
+        view()->share([
+            'data_parametre' => $data_parametre,
+            'newMessagesCount' => $newMessagesCount,
+        ]);
     }
 }

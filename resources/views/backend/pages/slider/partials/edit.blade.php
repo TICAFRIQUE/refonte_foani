@@ -5,7 +5,7 @@
         <div class="modal-content">
             <form action="{{ route('sliders.update', $slider->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-              
+
 
                 <div class="modal-header">
                     <h5 class="modal-title">Modifier le slider</h5>
@@ -53,10 +53,16 @@
                         <div class="col-md-12">
                             <label class="form-label">Image</label>
                             <input type="file" name="image" class="form-control">
-                            @if ($slider->image && file_exists(public_path('storage/' . $slider->image)))
-                                <img src="{{ asset('storage/' . $slider->image) }}" alt="Image slider"
-                                    class="rounded mt-2" style="width: 100px; height: 60px; object-fit: cover;">
-                            @endif
+
+                            <div>
+                                @if ($slider->hasMedia('image'))
+                                    <img src="{{ $slider->getFirstMediaUrl('image') }}" alt="Image Slider"
+                                        class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                @else
+                                    <span class="text-muted">Aucune</span>
+                                @endif
+                            </div>
+
                         </div>
                     </div>
                 </div>

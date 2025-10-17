@@ -52,4 +52,10 @@ class CategoriePointVente extends Model implements Hasmedia
     {
         return $query->where('statut', true);
     }
+
+        public function scopeAlphabetique($query)
+    {
+        return $query->orderBy('libelle', 'asc');
+    }
+
 }

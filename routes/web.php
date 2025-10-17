@@ -1,9 +1,10 @@
 <?php
 
 
+use App\Http\Controllers\backend\ContactController;
 use App\Models\Page;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SliderController;
+use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\PageController;
 use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\AdminController;
@@ -234,6 +235,13 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/', 'index')->name('index');           // liste des candidats
         Route::get('delete/{id}', 'delete')->name('delete'); // suppression
     });
+
+    // contact
+    Route::prefix('contact')->name('contact.')->controller(ContactController::class)->group(function () {
+        Route::get('/', 'index')->name('index');       // Liste des contacts
+        Route::post('/', 'store')->name('store');      // Ajouter un contact
+        Route::get('/{id}', 'show')->name('show');     // Voir un contact
+    });
 });
 
 
@@ -259,6 +267,7 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'accueil')->name('accueil'); // page d'accueil
     Route::get('/contact', 'contact')->name('contact'); // page contact
+    Route::get('/points-de-vente/{slug}', 'pointsDeVente')->name('points_de_vente'); // points de vente
 });
 
 //gestion des pages dynamiques

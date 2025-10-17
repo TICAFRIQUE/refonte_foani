@@ -59,11 +59,11 @@
                                         <td>{{ $loop->iteration }}</td>
 
                                         {{-- Image --}}
-                                        <td>
-                                            @if ($slider->image && file_exists(public_path('storage/' . $slider->image)))
-                                                <img src="{{ asset('storage/' . $slider->image) }}" alt="Image Slider"
-                                                    class="rounded-circle border"
-                                                    style="width: 45px; height: 45px; object-fit: cover;">
+                                       <td>
+                                            @if ($slider->hasMedia('image'))
+                                                <img src="{{ $slider->getFirstMediaUrl('image') }}" alt="Image Slider"
+                                                    class="img-thumbnail"
+                                                    style="width: 50px; height: 50px; object-fit: cover;">
                                             @else
                                                 <span class="text-muted">Aucune</span>
                                             @endif

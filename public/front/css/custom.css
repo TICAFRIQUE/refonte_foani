@@ -24,7 +24,7 @@ background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 2
 
 .navbar .btn-cta {
     background: var(--color-jaune);
-    color: #559e33;
+    color: #f1c40f;
     border-radius: 25px;
 }
 
@@ -81,7 +81,7 @@ background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 2
     border-radius: 20px;
     overflow: hidden; /* Évite le débordement */
     transition: box-shadow 0.3s, transform 0.3s;
-    border-color: #f1c40f;
+    border-color: #f1c40f!important;
 }
 
 .product-card:hover {
@@ -150,13 +150,13 @@ background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 2
 }
 
 .btn-cta {
-    background-color: #559e33;
+    background-color: #be5218;
     border: none;
     color: #fff;
     transition: 0.3s ease;
 }
 .btn-cta:hover {
-    background-color: #a61c1c;
+    background-color: var(--color-rouge);
     color: #fff;
 }
 

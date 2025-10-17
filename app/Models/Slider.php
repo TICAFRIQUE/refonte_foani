@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Slider extends Model
+class Slider extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory , InteractsWithMedia;
 
     /**
      * Les attributs pouvant être remplis massivement.
@@ -24,8 +26,8 @@ class Slider extends Model
     /**
      * Retourne le chemin complet de l’image si elle existe.
      */
-    public function getImageUrlAttribute()
-    {
-        return $this->image ? asset('storage/' . $this->image) : asset('images/default.jpg');
-    }
+    // public function getImageUrlAttribute()
+    // {
+    //     return $this->image ? asset('storage/' . $this->image) : asset('images/default.jpg');
+    // }
 }

@@ -15,7 +15,7 @@
     @include('frontend.sections.points_vente')
 
     <!-- Section Blog/Actualités -->
-    @include('frontend.sections.actualite')
+    {{-- @include('frontend.sections.actualite') --}}
 
 
     <!-- Section Valeurs Foani adaptée -->

@@ -113,9 +113,9 @@
 
                     @foreach ($categories_pages->where('slug', '!=', 'activites') as $categorie_page)
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white px-1" href="#"
-                                id="navbar{{ $categorie_page->id }}" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-white px-1 {{ Route::is('page.*') ? 'active' : '' }}"
+                                href="#" id="navbar{{ $categorie_page->id }}" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ $categorie_page->libelle }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbar{{ $categorie_page->id }}">
@@ -132,8 +132,25 @@
                             class="nav-link text-white {{ Route::is('page.activites') ? 'active' : '' }}"
                             href="{{ route('page.activites') }}">NOS
                             ACTIVITES</a></li>
-                    {{-- <li class="nav-item"><a class="nav-link text-white" href="#">Conseils</a></li> --}}
-                    <li class="nav-item"><a class="nav-link text-white" href="#">POINTS DE VENTE</a></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white px-1 {{ Route::is('points_de_vente') ? 'active' : '' }}"
+                            href="#" id="navbar" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            POINTS DE VENTE
+                        </a>
+                        @php
+                            $points_de_vente = \App\Models\CategoriePointVente::active()->alphabetique()->get();
+                        @endphp
+                        <ul class="dropdown-menu" aria-labelledby="navbar">
+                            @foreach ($points_de_vente as $item)
+                                <li><a class="dropdown-item"
+                                        href="{{ route('points_de_vente', ['slug' => $item->slug]) }}">{{ $item->libelle }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+
                     <li class="nav-item"><a
                             class="nav-link text-white {{ Route::is('boutique.index') ? 'active' : '' }}"
                             href="{{ route('boutique.index') }}">BOUTIQUE</a></li>
@@ -194,33 +211,75 @@
     @include('sweetalert::alert')
 
 
+    <!-- Bouton remonter en haut & WhatsApp -->
+    <a href="#"
+       id="btnScrollTop"
+       class="btn btn-success rounded-circle shadow position-fixed"
+       style="bottom: 90px; right: 25px; z-index: 999; width: 48px; height: 48px; display: none;">
+        <i class="bi bi-arrow-up fs-4"></i>
+    </a>
+    <a href="https://wa.me/2250505969625"
+       target="_blank"
+       id="btnWhatsapp"
+       class="btn btn-success rounded-circle shadow position-fixed"
+       style="bottom: 25px; right: 25px; z-index: 999; width: 48px; height: 48px;">
+        <i class="bi bi-whatsapp fs-3"></i>
+    </a>
+
     <!-- Footer -->
-    <footer class="footer py-4 mt-5">
+    <footer class="footer py-4 mt-5" style="background: #f8f9fa;">
         <div class="container">
             <div class="row g-4">
-                <div class="col-md-4">
-                    <h5>Liens rapides</h5>
+                <div class="col-md-3">
+                    <h5 class="fw-bold mb-3" style="color:#559e33;">ACTUALITÉS</h5>
+                    <div class="ratio ratio-16x9 rounded shadow-sm mb-2">
+                        <iframe src="https://www.youtube.com/embed/0Z2W1GitgBE?start=3" title="Spot Foani"
+                            allowfullscreen></iframe>
+                    </div>
                     <ul class="list-unstyled">
-                        <li><a href="#">Accueil</a></li>
-                        <li><a href="#">Produits</a></li>
-                        <li><a href="#">Catégories</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#" class="text-dark text-decoration-none">Spot Foani</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4">
-                    <h5>Contact</h5>
-                    <p><i class="bi bi-envelope me-2"></i> contact@foani.fr</p>
-                    <p><i class="bi bi-telephone me-2"></i> 01 23 45 67 89</p>
+                <div class="col-md-3">
+                    <h5 class="fw-bold mb-3" style="color:#559e33;">INFORMATION</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ route('page.activites') }}" class="text-dark text-decoration-none">Nos
+                                Activités</a></li>
+                        <li><a href="{{ route('boutique.index') }}"
+                                class="text-dark text-decoration-none">Boutique</a></li>
+                        <li><a href="#" class="text-dark text-decoration-none">Entreprise</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-dark text-decoration-none">Contact</a></li>
+                        {{-- <li><a href="https://webmail.foani.ci" target="_blank" class="text-dark text-decoration-none">Webmail</a></li> --}}
+                    </ul>
                 </div>
-                <div class="col-md-4">
-                    <h5>Suivez-nous</h5>
-                    <a href="#" class="me-2"><i class="bi bi-facebook fs-4"></i></a>
-                    <a href="#" class="me-2"><i class="bi bi-instagram fs-4"></i></a>
-                    <a href="#" class="me-2"><i class="bi bi-twitter fs-4"></i></a>
+                <div class="col-md-3">
+                    <h5 class="fw-bold mb-3" style="color:#559e33;">CONTACT</h5>
+                    <ul class="list-unstyled">
+                        <li class="text-dark"><i class="bi bi-telephone me-2"></i>Standard : <a
+                                href="tel:+2250505969625" class="text-dark text-decoration-none">(+225) 05 05 96 96
+                                25</a></li>
+                        <li class="text-dark"><i class="bi bi-envelope me-2"></i>E-mail : <a
+                                href="mailto:info@foani.ci" class="text-dark text-decoration-none">info@foani.ci</a>
+                        </li>
+                        <li><a href="{{ route('boutique.index') }}" class="text-dark text-decoration-none"><i
+                                    class="bi bi-shop me-2"></i>Notre boutique</a></li>
+                        <li><a href="#sectionPointDeVente" class="text-dark text-decoration-none"><i
+                                    class="bi bi-geo-alt me-2"></i>Nos points de vente</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="fw-bold mb-3" style="color:#559e33;">SUIVEZ-NOUS</h5>
+                    <div class="d-flex align-items-center gap-3 fs-4">
+                        <a target="_blank" href="https://www.facebook.com/foaniservices/?_rdc=1&_rdr#" class="text-dark"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-dark"><i class="bi bi-youtube"></i></a>
+                        <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                    </div>
                 </div>
             </div>
             <hr>
-            <div class="text-center">
+            <div class="text-center text-muted small">
                 &copy; {{ date('Y') }} Foani. Tous droits réservés.
             </div>
         </div>
@@ -266,6 +325,20 @@
                 })
         })();
     </script>
+    <script>
+        // Bouton remonter en haut
+        const btnScrollTop = document.getElementById('btnScrollTop');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 200) {
+                btnScrollTop.style.display = 'flex';
+            } else {
+                btnScrollTop.style.display = 'none';
+            }
+        });
+        btnScrollTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
 </body>
-
 </html>

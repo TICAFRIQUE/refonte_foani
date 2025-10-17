@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\backend;
 
 use App\Models\Slider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Services\convertToMajuscule;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
 class SliderController extends Controller
 {
@@ -38,15 +40,17 @@ class SliderController extends Controller
                 return redirect()->back()->with('error', 'Un slider avec ce libellé existe déjà.')->withInput();
             }
 
-            // Upload de l’image
-            if ($request->hasFile('image')) {
-                $validated['image'] = $request->file('image')->store('sliders', 'public');
-            }
 
             // Assurer que 'visible' a une valeur même si non cochée
             $validated['visible'] = $request->has('visible') ? (bool) $request->visible : false;
+            $validated['libelle'] = convertToMajuscule::toUpperNoAccent($request->libelle);
+            $slider = Slider::create($validated);
+            // Upload de l’image avec spatie
+            if ($request->hasFile('image')) {
+                $slider->addMediaFromRequest('image')
+                    ->toMediaCollection('image');
+            }
 
-            Slider::create($validated);
 
             return redirect()->route('sliders.index')->with('success', 'Slider ajouté avec succès.');
         } catch (\Exception $e) {
@@ -71,20 +75,22 @@ class SliderController extends Controller
                 'visible' => 'nullable|boolean',
             ]);
 
-            // Upload d’une nouvelle image si fournie
-            if ($request->hasFile('image')) {
-                // Supprimer l’ancienne image si elle existe
-                if ($slider->image && Storage::disk('public')->exists($slider->image)) {
-                    Storage::disk('public')->delete($slider->image);
-                }
 
-                $validated['image'] = $request->file('image')->store('sliders', 'public');
-            }
             // Assurer que 'visible' a une valeur même si non cochée
             $validated['visible'] = $request->has('visible') ? (bool) $request->visible : false;
 
 
             $slider->update($validated);
+            // Upload de l’image avec spatie
+            // Gestion de l'image 
+            if ($request->hasFile('image')) {
+                //supprimer limage associee
+                if ($slider->hasMedia('image')) {
+                    $slider->clearMediaCollection('image');
+                }
+                $slider->addMediaFromRequest('image')
+                    ->toMediaCollection('image');
+            }
 
             return redirect()->route('sliders.index')->with('success', 'Slider mis à jour avec succès.');
         } catch (\Exception $e) {

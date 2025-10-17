@@ -4,6 +4,7 @@
 @section('title', 'Contact')
 
 @section('content')
+
     <div class="container py-5">
         <h2 class="fw-bold mb-4 text-center" style="color:#559e33;">Contactez-nous</h2>
         <div class="row g-4 justify-content-center">
@@ -63,12 +64,18 @@
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
-                        <h4 class="fw-bold mb-3" style="color:#559e33;">Laissez-nous un message</h4>
-                        <form action="#" method="POST">
+                        <h4 class="fw-bold mb-3" style="color:#2a6b2a;">Formulaire de contact</h4>
+                        {{-- Afficher les messages de succès ou d'erreur --}}
+                        @include('frontend.components.message_session')
+                        <form action="{{ route('contact.store') }}" method="POST" class="needs-validation" novalidate>
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Nom & Prénoms <span class="text-danger">*</span></label>
-                                <input type="text" name="nom" class="form-control" required>
+                                <input type="text" name="nom_prenoms" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Objet <span class="text-danger">*</span></label>
+                                <input type="text" name="objet" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Email <span class="text-danger">*</span></label>
@@ -76,7 +83,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Téléphone</label>
-                                <input type="text" name="telephone" class="form-control">
+                                <input type="number" name="telephone" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Message <span class="text-danger">*</span></label>

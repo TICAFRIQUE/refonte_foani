@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Gestion des Sliders
+    Villes des Points de Vente
 @endsection
 
 @section('css')
@@ -14,10 +14,10 @@
 @section('content')
     @component('backend.components.breadcrumb')
         @slot('li_1')
-            Interface
+            Points de Vente
         @endslot
         @slot('title')
-            Sliders
+            Points de vente
         @endslot
     @endcomponent
 
@@ -26,88 +26,83 @@
             <div class="card">
 
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Liste des Sliders</h5>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAddSlider">
-                        <i class="bi bi-plus-circle me-1"></i> Ajouter un Slider
+                    <h5 class="card-title mb-0">Liste des points de vente</h5>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#modalAddPointVente">
+                        <i class="bi bi-plus-circle me-1"></i> Ajouter
                     </button>
                 </div>
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="buttons-datatables" class="display table table-bordered table-hover align-middle"
-                            style="width:100%">
+                        <table id="buttons-datatables" class="display table table-bordered table-hover" style="width:100%">
                             <thead class="table-primary">
                                 <tr>
                                     <th>#</th>
-                                    <th>Libellé</th>
-                                    <th>Image</th>
-                                    <th>Bouton</th>
-                                    <th>URL</th>
-                                    <th>Description</th>
+
+                                    <th>Commune</th>
+                                    <th>Quartier</th>
+                                    <th>Responsable</th>
+                                    <th>Categorie</th>
+                                    <th>Contact</th>
+                                    <th>Email</th>
+                                    <th class="d-none">Google Map</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @foreach ($sliders as $slider)
-                                    <tr id="row_{{ $slider->id }}">
+                                @foreach ($point_ventes as $pv)
+                                    <tr id="row_{{ $pv->id }}">
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $slider->libelle ?? '-' }}</td>
 
-                                        <td>
-                                            @if ($slider->image && file_exists(public_path('storage/' . $slider->image)))
-                                                <img src="{{ asset('storage/' . $slider->image) }}" alt="Image slider"
-                                                    class="rounded border"
-                                                    style="width: 60px; height: 60px; object-fit: cover;">
-                                            @else
-                                                <span class="text-muted">Aucune</span>
+                                        <td>{{ $pv->commune->libelle ?? '-' }}</td>
+                                        <td>{{ $pv->quartier ?? '-' }}</td>
+                                        <td>{{ $pv->responsable ?? '-' }}</td>
+                                        <td>{{ $pv->categoriePointVente->libelle ?? '-' }}</td>
+                                        <td>{{ $pv->contact ?? '-' }}
+                                            @if ($pv->autre_contact)
+                                                {{ '/' . $pv->autre_contact }}
                                             @endif
                                         </td>
-
-                                        <td>{{ $slider->btn_nom ?? '-' }}</td>
-
-                                        <td>
-                                            @if ($slider->url)
-                                                <a href="{{ $slider->url }}" target="_blank"
-                                                    class="text-primary text-decoration-underline">
-                                                    {{ Str::limit($slider->url, 30) }}
+                                        <td>{{ $pv->email ?? '-' }}</td>
+                                        <td class="d-none">
+                                            @if ($pv->google_map)
+                                                <a href="{{ $pv->google_map }}" target="_blank" class="text-primary">
+                                                    <i class="bi bi-geo-alt-fill"></i>
                                                 </a>
                                             @else
-                                                <span class="text-muted">—</span>
+                                                -
                                             @endif
                                         </td>
-
-                                        <td>{{ Str::limit($slider->description, 40) ?? '-' }}</td>
-
                                         <td class="text-center">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
                                                     data-bs-toggle="dropdown">
                                                     <i class="ri-more-fill"></i>
                                                 </button>
-
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li>
                                                         <a href="#" class="dropdown-item" data-bs-toggle="modal"
-                                                            data-bs-target="#modalEditSlider{{ $slider->id }}">
+                                                            data-bs-target="#modalEditPointVente{{ $pv->id }}">
                                                             <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             Modifier
                                                         </a>
                                                     </li>
+
                                                     <li>
+
                                                         <a href="#" class="dropdown-item text-danger delete"
-                                                            data-id="{{ $slider->id }}">
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </a>
+                                                            data-id="{{ $pv->id }}"> <i
+                                                                class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                            Supprimer </a>
                                                     </li>
                                                 </ul>
+
                                             </div>
 
                                             {{-- Modal d’édition --}}
-                                            @include('backend.pages.slider.partials.edit', [
-                                                'slider' => $slider,
-                                            ])
+                                            @include('backend.pages.gestion_points_de_ventes.points_de_ventes.partials.edit')
                                         </td>
                                     </tr>
                                 @endforeach
@@ -121,7 +116,7 @@
     </div>
 
     {{-- Modal de création --}}
-    @include('backend.pages.slider.partials.create')
+    @include('backend.pages.gestion_points_de_ventes.points_de_ventes.partials.create')
 @endsection
 
 @section('script')
@@ -139,10 +134,9 @@
 
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
     <script>
         $(document).ready(function() {
-            const route = "sliders";
+            const route = "point_vente";
             delete_row(route);
         });
     </script>
