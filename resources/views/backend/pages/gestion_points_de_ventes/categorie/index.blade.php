@@ -27,24 +27,24 @@
                             <thead class="table-primary">
                                 <tr>
                                     <th>#</th>
-                                    <th>Image</th>
-                                    <th>Titre</th>
+                                    <th>Statut</th>
+                                    <th>Libelle</th>
                                     <th>Date de création</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($categories as $categorie)
+                                @foreach ($categories as $key => $categorie)
                                     <tr id="row_{{ $categorie->id }}">
-                                        <td>{{ $loop->iteration }}</td> {{-- Image --}} <td>
-                                            @if ($categorie->image && file_exists(public_path($categorie->image)))
-                                                <img src="{{ asset($categorie->image) }}" alt="Image"
-                                                    class="rounded-circle border"
-                                                    style="width: 45px; height: 45px; object-fit: cover;">
+                                        <td>{{ ++$key }}</td>
+                                        <td>
+                                            @if ($categorie->statut)
+                                                <span class="badge bg-success">Actif</span>
                                             @else
-                                                <span class="text-muted">Aucune</span>
+                                                <span class="badge bg-danger">Inactif</span>
                                             @endif
-                                        </td> {{-- Informations --}} <td>{{ $categorie->titre_categorie }}</td>
+                                        </td>
+                                        <td>{{ $categorie->libelle }}</td>
                                         <td>{{ $categorie->created_at?->format('d/m/Y') ?? '—' }}</td> {{-- Actions --}}
                                         <td class="text-center">
                                             <div class="dropdown d-inline-block"> <button
@@ -62,9 +62,10 @@
                                                 </ul>
                                             </div>
                                         </td>
-                                    </tr> {{-- Modal d’édition --}} @include('backend.pages.points_de_ventes.categorie.partials.edit', [
-                                        'categorie' => $categorie,
-                                    ])
+                                    </tr> {{-- Modal d’édition --}} 
+                                    @include('backend.pages.gestion_points_de_ventes.categorie.partials.edit')
+                                    
+                                    
                                 @endforeach
                             </tbody>
                         </table>
@@ -72,7 +73,7 @@
                 </div>
             </div>
         </div>
-    </div> {{-- Modal de création --}} @include('backend.pages.points_de_ventes.categorie.partials.create')
+    </div> {{-- Modal de création --}} @include('backend.pages.gestion_points_de_ventes.categorie.partials.create')
     @endsection @section('script')
     <!-- jQuery et DataTables -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"

@@ -89,7 +89,7 @@
                     <div class="collapse menu-dropdown" id="menuPointsVente">
                         <ul class="nav nav-sm flex-column ms-4">
                             <li class="nav-item">
-                                <a href="{{ route('ville_point_vente.index') }}"
+                                <a href="{{ route('point_vente.index') }}"
                                     class="nav-link d-flex align-items-center">
                                     <i class="bi bi-list-check me-2"></i> Gestion des points de vente
                                 </a>

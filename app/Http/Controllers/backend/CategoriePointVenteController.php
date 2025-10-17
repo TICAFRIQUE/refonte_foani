@@ -17,7 +17,7 @@ class CategoriePointVenteController extends Controller
     {
         try {
             $categories = CategoriePointVente::latest()->get();
-            return view('backend.pages.points_de_ventes.categorie.index', compact('categories'));
+            return view('backend.pages.gestion_points_de_ventes.categorie.index', compact('categories'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
         }
@@ -29,7 +29,7 @@ class CategoriePointVenteController extends Controller
     public function create()
     {
         try {
-            return view('backend.pages.points_de_ventes.categorie.partials.create');
+            return view('backend.pages.gestion_points_de_ventes.categorie.partials.create');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
         }
@@ -40,33 +40,30 @@ class CategoriePointVenteController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'libelle' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
+            'statut' => 'required|boolean',
+        ]);
 
         try {
-            $validated = $request->validate([
-                'titre_categorie' => 'required|string|max:255|unique:categorie_point_ventes,titre_categorie',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
-            ]);
 
-
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $filename = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('uploads/categories_point_vente'), $filename);
-                $validated['image'] = 'uploads/categories_point_vente/' . $filename;
-            }
-
-
-
-            // mettre le titre en maj et sans accent
-            $validated['titre_categorie'] = convertToMajuscule::toUpperNoAccent($request->titre_categorie);
-
-            if (CategoriePointVente::where('titre_categorie', $validated['titre_categorie'])->exists()) {
+            if (CategoriePointVente::where('libelle', $request->libelle)->exists()) {
                 return redirect()->back()
-                    ->with('error', 'La catégorie "' . $validated['titre_categorie'] . '" existe déjà')
+                    ->with('error', 'La catégorie "' . $request['libelle'] . '" existe déjà')
                     ->withInput();
             }
 
-            CategoriePointVente::create($validated);
+            $CategoriePointVente = CategoriePointVente::firstOrCreate([
+                'libelle' => convertToMajuscule::toUpperNoAccent($request->libelle),
+                'statut' => $request->statut,
+            ]);
+
+            // Upload de l’image avec spatie
+            if ($request->hasFile('image')) {
+                $CategoriePointVente->addMediaFromRequest('image')
+                    ->toMediaCollection('image');
+            }
 
             return redirect()->route('categorie_point_de_vente.index')->with('success', 'Catégorie ajoutée avec succès.');
         } catch (\Exception $e) {
@@ -81,7 +78,7 @@ class CategoriePointVenteController extends Controller
     {
         try {
             $categorie = CategoriePointVente::findOrFail($id);
-            return view('backend.pages.points_de_ventes.categorie.partials.edit', compact('categorie'));
+            return view('backend.pages.gestion_points_de_ventes.categorie.partials.edit', compact('categorie'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
         }
@@ -92,30 +89,28 @@ class CategoriePointVenteController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'libelle' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'statut' => 'required|boolean',
+        ]);
+
         try {
             $categorie = CategoriePointVente::findOrFail($id);
-
-            $validated = $request->validate([
-                'titre_categorie' => 'required|string|max:255|unique:categorie_point_ventes,titre_categorie,' . $id,
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            ]);
-
             if ($request->hasFile('image')) {
-                // Suppression de l’ancienne image
-                if ($categorie->image && File::exists(public_path($categorie->image))) {
-                    File::delete(public_path($categorie->image));
-                }
-
-                $image = $request->file('image');
-                $filename = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('uploads/categories_point_vente'), $filename);
-                $validated['image'] = 'uploads/categories_point_vente/' . $filename;
+                //supprimer limage associeee precedente
+                $categorie->clearMediaCollection('image');
+                //ajouter la nouvelle image
+                $categorie->addMediaFromRequest('image')
+                    ->toMediaCollection('image');
             }
-            // mettre le titre en maj et sans accent
-            $validated['titre_categorie'] = convertToMajuscule::toUpperNoAccent($request->titre_categorie);
-            if (CategoriePointVente::where('titre_categorie', $validated['titre_categorie'])->exists()) {
+            // mettre le libelle en maj et sans accent
+            $validated['libelle'] = convertToMajuscule::toUpperNoAccent($validated['libelle']);
+
+            //verifier si une autre categorie a le meme libelle
+            if (CategoriePointVente::where('libelle', $validated['libelle'])->where('id', '!=', $id)->exists()) {
                 return redirect()->back()
-                    ->with('error', 'La catégorie "' . $validated['titre_categorie'] . '" existe déjà')
+                    ->with('error', 'La catégorie "' . $validated['libelle'] . '" existe déjà')
                     ->withInput();
             }
 
@@ -130,20 +125,24 @@ class CategoriePointVenteController extends Controller
     /**
      * Supprimer une catégorie.
      */
-    public function destroy($id)
+    public function delete($id)
     {
         try {
             $categorie = CategoriePointVente::findOrFail($id);
 
-            if ($categorie->image && File::exists(public_path($categorie->image))) {
-                File::delete(public_path($categorie->image));
-            }
-
+            // Supprimer l’image associée si elle existe
+            $categorie->clearMediaCollection('image');
             $categorie->delete();
 
-            return redirect()->route('categorie_point_de_vente.index')->with('success', 'Catégorie supprimée avec succès.');
+           return response()->json([
+               'status' => 200,
+               'message' => 'Catégorie supprimée avec succès.'
+           ]);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erreur : ' . $e->getMessage()
+            ]);
         }
     }
 }
