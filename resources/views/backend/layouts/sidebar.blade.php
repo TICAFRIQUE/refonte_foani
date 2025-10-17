@@ -136,12 +136,15 @@
                         </ul>
                     </div>
                 </li>
-                {{-- Form Contact dans le menu --}}
                 <li class="nav-item">
                     <a href="{{ route('contact.index') }}" class="nav-link">
                         <i class="ri-mail-line align-middle me-2"></i> Contact
+                        @if ($newMessagesCount > 0)
+                            <span class="badge bg-danger ms-1">{{ $newMessagesCount }}</span>
+                        @endif
                     </a>
                 </li>
+
 
                 {{-- 10. Candidats --}}
                 <li class="nav-item">

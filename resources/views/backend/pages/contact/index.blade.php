@@ -46,40 +46,46 @@
                             </thead>
                             <tbody>
                                 @foreach ($contacts as $key => $contact)
-                                    <tr id="row_{{ $contact['id'] }}"
-                                        @if (!$contact->is_read) class="table-warning" @endif>
+                                    <tr id="row_{{ $contact->id }}">
                                         <td>{{ ++$key }}</td>
                                         <td>{{ $contact->nom_prenoms }}</td>
                                         <td>{{ $contact->objet ?? '-' }}</td>
                                         <td>{{ $contact->email }}</td>
                                         <td>{{ $contact->telephone }}</td>
                                         <td>{{ Str::limit($contact->message, 50, '...') }}</td>
-
                                         <td>
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ri-more-fill align-middle"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    {{-- Supprimer --}}
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id="{{ $contact->id }}">
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </a>
-                                                    </li>
-                                                    {{-- Voir / Marquer comme lu --}}
-                                                    <li>
-                                                        <a href="{{ route('contact.show', $contact->id) }}"
-                                                            class="dropdown-item">
-                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Voir
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                            <div class="d-flex align-items-center">
+                                                @if (!$contact->is_read)
+                                                    <i class="ri-checkbox-blank-circle-fill text-danger me-2"
+                                                        title="Nouveau"></i>
+                                                @endif
+                                                <div class="dropdown d-inline-block">
+                                                    <button class="btn btn-soft-secondary btn-sm dropdown" type="button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="ri-more-fill align-middle"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end">
+                                                        <li>
+                                                            <a href="#" class="dropdown-item remove-item-btn delete"
+                                                                data-id="{{ $contact->id }}">
+                                                                <i
+                                                                    class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                                Supprimer
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('contact.show', $contact->id) }}"
+                                                                class="dropdown-item">
+                                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                Voir
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </td>
+
+                                       
                                     </tr>
                                 @endforeach
                             </tbody>

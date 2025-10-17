@@ -91,8 +91,8 @@ class AppServiceProvider extends ServiceProvider
                 $pages = Page::where('statut', 1)->get();
             }
 
-                //detail de la page
-                $page_detail = null;
+            //detail de la page
+            $page_detail = null;
 
             $view->with(['count', $count, 'categories_pages' => $categories_pages, 'pages' => $pages]);
         });
@@ -102,9 +102,11 @@ class AppServiceProvider extends ServiceProvider
 
 
 
+        $newMessagesCount = \App\Models\Contact::where('is_read', false)->count();
 
-
-        //partager les données avec toutes les vues
-        view()->share('data_parametre', $data_parametre);
+        view()->share([
+            'data_parametre' => $data_parametre,
+            'newMessagesCount' => $newMessagesCount,
+        ]);
     }
 }
