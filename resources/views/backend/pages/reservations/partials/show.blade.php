@@ -49,7 +49,7 @@
 
                         {{-- Statut et totaux --}}
                         <div class="col-md-6">
-                            <form action="{{ route('reservation.update', $reservation->id) }}" method="POST">
+                            <form action="{{ route('reservations.update', $reservation->id) }}" method="POST">
                                 @csrf
 
                                 <div class="mb-3">

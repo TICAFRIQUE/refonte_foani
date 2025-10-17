@@ -8,7 +8,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">
                 <div class="bg-white p-4 rounded shadow-sm">
-                    <h2 class="fw-bold mb-4 text-center" style="color:#2a6b2a;">Connexion client</h2>
+                    <h2 class="fw-bold mb-4 text-center" style="color:#559e33;">Connexion client</h2>
                     <!--afficher les erreurs de validation-->
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -43,16 +43,16 @@
                                 <input type="checkbox" name="remember" id="remember">
                                 <label for="remember" class="form-label">Se souvenir de moi</label>
                             </div>
-                            <a href="#" class="fw-bold" style="color:#2a6b2a;">Mot de passe oublié ?</a>
+                            <a href="#" class="fw-bold" style="color:#559e33;">Mot de passe oublié ?</a>
                         </div> --}}
                         <div class="mt-4 text-center">
-                            <button type="submit" class="btn px-5 fw-bold" style="background:#2a6b2a;color:#fff;">
+                            <button type="submit" class="btn px-5 fw-bold" style="background:#559e33;color:#fff;">
                                 <i class="bi bi-box-arrow-in-right"></i> Se connecter
                             </button>
                         </div>
                         <div class="mt-3 text-center">
                             <span>Pas encore de compte ?</span>
-                            <a href="{{ route('user.registerForm') }}" class="fw-bold" style="color:#2a6b2a;">S'inscrire</a>
+                            <a href="{{ route('user.registerForm') }}" class="fw-bold" style="color:#559e33;">S'inscrire</a>
                         </div>
                     </form>
                 </div>

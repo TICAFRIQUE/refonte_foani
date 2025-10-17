@@ -91,14 +91,14 @@ class AppServiceProvider extends ServiceProvider
                 $pages = Page::where('statut', 1)->get();
             }
 
-                //detail de la page
-                $page_detail = null;
+            //detail de la page
+            $page_detail = null;
 
-            $view->with(['count', $count, 'categories_pages' => $categories_pages, 'pages' => $pages]);
+            $view->with(['count' => $count, 'categories_pages' => $categories_pages, 'pages' => $pages]);
         });
 
 
-        //partager les categories page et les pages dans toutes les vues
+
 
 
 

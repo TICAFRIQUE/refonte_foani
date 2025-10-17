@@ -3,11 +3,12 @@
 
 namespace App\Http\Controllers\backend;
 
-use App\Http\Controllers\Controller;
+use Exception;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
-use Exception;
 
 class ReservationAdminController extends Controller
 {
@@ -52,7 +53,7 @@ class ReservationAdminController extends Controller
             ]);
 
             Alert::success('Succès', 'Statut de la réservation mis à jour avec succès');
-            return redirect()->route('reservation.index', $reservation->id);
+            return redirect()->route('reservations.index', $reservation->id);
         } catch (Exception $e) {
             Alert::error('Erreur', 'Erreur lors de la mise à jour : ' . $e->getMessage());
             return back()->withInput();
@@ -74,6 +75,45 @@ class ReservationAdminController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status'  => 500,
+            ], 500);
+        }
+    }
+
+    // Compte des nouvelles réservations
+    public function newReservationCount(Request $request)
+    {
+        try {
+            // Récupérer les dernières réservations en attente (adapter 'en_attente' si nécessaire)
+            $reservations = Reservation::with(['produit', 'user'])
+                ->where('statut', 'en_attente')
+                ->where('created_at', '>=', now()->subMinutes(2))
+                ->latest()
+                ->take(6)
+                ->get();
+
+            $payload = $reservations->map(function ($r) {
+                return [
+                    'id'         => $r->id,
+                    'code'       => $r->code ?? 'RES-' . $r->id,
+                    'nom'        => $r->nom,
+                    'produit'    => $r->produit->libelle ?? null,
+                    'quantite'   => (int) ($r->quantite ?? 1),
+                    'total'      => (int) ($r->total ?? 0),
+                    'created_at' => optional($r->created_at)->diffForHumans(),
+                    'url'        => route('reservations.show', $r->id),
+                ];
+            });
+
+            return response()->json([
+                'status'       => 200,
+                'count'        => $reservations->count(),
+                'reservations' => $payload,
+            ]);
+        } catch (Exception $e) {
+            Log::error('newReservationCount error: ' . $e->getMessage());
+            return response()->json([
+                'status'  => 500,
+                'message' => 'Erreur serveur',
             ], 500);
         }
     }

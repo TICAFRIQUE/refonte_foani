@@ -37,16 +37,22 @@
             </div>
 
             <div class="d-flex align-items-center">
-
-
-
+                <!-- Dark/Light Mode -->
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button"
                         class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
                         <i class='bx bx-moon fs-22'></i>
                     </button>
                 </div>
+                <!-- End Dark/Light Mode -->
 
+
+                <!--notification-->
+                @include('backend.layouts.partials.notification-commandes')
+                @include('backend.layouts.partials.notification-reservations')
+
+
+                <!--end notification-->
 
 
                 <!-- ========== Start profil ========== -->
@@ -98,6 +104,7 @@
                     </div>
                 @endauth
                 <!-- ========== End profil ========== -->
+
 
             </div>
         </div>

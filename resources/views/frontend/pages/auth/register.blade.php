@@ -72,13 +72,13 @@
                             </div>
                         </div>
                         <div class="mt-4 text-center">
-                            <button type="submit" class="btn px-5 fw-bold" style="background:#2a6b2a;color:#fff;">
+                            <button type="submit" class="btn px-5 fw-bold" style="background:#559e33;color:#fff;">
                                 <i class="bi bi-person-plus"></i> S'inscrire
                             </button>
                         </div>
                         <div class="mt-3 text-center">
                             <span>Déjà un compte ?</span>
-                            <a href="{{ route('user.loginForm') }}" class="fw-bold" style="color:#2a6b2a;">Se connecter</a>
+                            <a href="{{ route('user.loginForm') }}" class="fw-bold" style="color:#559e33;">Se connecter</a>
                         </div>
                     </form>
                 </div>

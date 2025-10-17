@@ -82,7 +82,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li>
-                                                        <a href="{{ route('reservation.show', $reservation->id) }}"
+                                                        <a href="{{ route('reservations.show', $reservation->id) }}"
                                                             class="dropdown-item">
                                                             <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Voir
 
@@ -138,7 +138,7 @@
 
     <script>
         $(document).ready(function() {
-            const route = "reservation";
+            const route = "reservations";
             delete_row(route);
         });
     </script>

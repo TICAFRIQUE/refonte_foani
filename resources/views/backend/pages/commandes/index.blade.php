@@ -79,16 +79,11 @@
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <form action="{{ route('commandes.destroy', $commande->id) }}"
-                                                            method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger"
-                                                                onclick="return confirm('Supprimer cette commande ?')">
-                                                                <i class="ri-delete-bin-fill align-bottom me-2"></i>
-                                                                Supprimer
-                                                            </button>
-                                                        </form>
+                                                        <a href="#" class="dropdown-item remove-item-btn delete"
+                                                            data-id={{ $commande->id }}>
+                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                            Supprimer
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -116,18 +111,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
-    <script>
+    
+
+    {{-- <script>
         $(document).ready(function() {
-            $('#commandes-table').DataTable({
+            const table = $('#commandes-table').DataTable({
                 responsive: true,
                 order: [
                     [0, 'asc']
                 ],
                 dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'excel', 'pdf', 'print'
+                buttons: ['copy', 'excel', 'pdf', 'print'],
+                columnDefs: [{
+                        orderable: false,
+                        targets: [7]
+                    } // actions not orderable
                 ]
             });
+
+            //supprimer une commande
+            var route = "commandes";
+            delete_row(route);
+
+            //
+
         });
-    </script>
+    </script> --}}
+
+
+@include('backend.pages.commandes.scripts.new_orders_script')
 @endsection

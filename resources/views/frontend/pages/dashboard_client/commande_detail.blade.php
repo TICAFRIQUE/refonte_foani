@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="fw-bold mb-4 text-center" style="color:#2a6b2a;">Détail de la commande</h2>
+    <h2 class="fw-bold mb-4 text-center" style="color:#559e33;">Détail de la commande</h2>
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="bg-white p-4 rounded shadow-sm mb-4">

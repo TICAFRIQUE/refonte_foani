@@ -23,6 +23,7 @@ return new class extends Migration
             // Totaux financiers
             $table->foreignId('produit_id')->nullable()->constrained('produits')->onUpdate('cascade')->onDelete('cascade');
             $table->double('prix_unitaire')->default(0);
+            $table->integer('quantite')->default(1);
             $table->double('sous_total')->default(0);
             $table->double('frais_livraison')->default(0);
             $table->double('total')->default(0);

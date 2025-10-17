@@ -19,6 +19,7 @@ class Reservation extends Model
         'commune',
         'produit_id',
         'prix_unitaire',
+        'quantite',
         'sous_total',
         'frais_livraison',
         'total',

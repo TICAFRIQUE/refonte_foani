@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="fw-bold mb-4 text-center" style="color:#2a6b2a;">Mon profil</h2>
+    <h2 class="fw-bold mb-4 text-center" style="color:#559e33;">Mon profil</h2>
     <div class="row justify-content-center">
         <div class="col-md-7 col-lg-6">
             <div class="bg-white p-4 rounded shadow-sm">
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="mt-4 text-center">
-                        <button type="submit" class="btn px-5 fw-bold" style="background:#2a6b2a;color:#fff;">
+                        <button type="submit" class="btn px-5 fw-bold" style="background:#559e33;color:#fff;">
                             <i class="bi bi-save"></i> Mettre à jour
                         </button>
                     </div>

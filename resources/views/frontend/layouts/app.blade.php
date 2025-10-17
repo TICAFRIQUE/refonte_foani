@@ -31,11 +31,72 @@
 
     @stack('styles')
 
+    <style>
+        /* Effets pour les liens de navigation */
+        .navbar-nav .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* Effet au survol */
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transform: translateY(-2px);
+        }
+
+        /* Effet au clic */
+        .navbar-nav .nav-link:active {
+            transform: scale(0.95);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Lien actif */
+        .navbar-nav .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Effets pour les éléments dropdown */
+        .dropdown-item {
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #559e33;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* Effets pour les boutons */
+        .btn {
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Effet pour le badge du panier */
+        .badge {
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover .badge {
+            transform: scale(1.2);
+        }
+    </style>
 </head>
 
 <body>
     <!-- Header & Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background-color:#2a6b2a;">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background-color:#559e33;">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#">
                 <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
@@ -46,7 +107,8 @@
             </button>
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav ms-3 me-auto mb-2 mb-lg-0 fw-bold">
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('accueil') }}"> <i class="bi bi-house-door-fill"></i> ACCUEIL</a></li>
+                    <li class="nav-item"><a class="nav-link text-white {{ Route::is('accueil') ? 'active' : '' }}"
+                            href="{{ route('accueil') }}"> <i class="bi bi-house-door-fill"></i> ACCUEIL</a></li>
 
 
                     @foreach ($categories_pages->where('slug', '!=', 'activites') as $categorie_page)
@@ -58,19 +120,25 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbar{{ $categorie_page->id }}">
                                 @foreach ($categorie_page->pages as $page)
-                                    <li><a class="dropdown-item" href="{{ route('page.show', ['slug' => $page->slug]) }}">{{ $page->libelle }}</a>
+                                    <li><a class="dropdown-item"
+                                            href="{{ route('page.show', ['slug' => $page->slug]) }}">{{ $page->libelle }}</a>
                                     </li>
                                 @endforeach
                             </ul>
                         </li>
                     @endforeach
 
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('page.activites') }}">NOS ACTIVITES</a></li>
+                    <li class="nav-item"><a
+                            class="nav-link text-white {{ Route::is('page.activites') ? 'active' : '' }}"
+                            href="{{ route('page.activites') }}">NOS
+                            ACTIVITES</a></li>
                     {{-- <li class="nav-item"><a class="nav-link text-white" href="#">Conseils</a></li> --}}
                     <li class="nav-item"><a class="nav-link text-white" href="#">POINTS DE VENTE</a></li>
-                    <li class="nav-item"><a class="nav-link text-white"
+                    <li class="nav-item"><a
+                            class="nav-link text-white {{ Route::is('boutique.index') ? 'active' : '' }}"
                             href="{{ route('boutique.index') }}">BOUTIQUE</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('contact') }}">CONTACT</a></li>
+                    <li class="nav-item"><a class="nav-link text-white {{ Route::is('contact') ? 'active' : '' }}"
+                            href="{{ route('contact') }}">CONTACT</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-3">
                     <a href="{{ route('panier.index') }}"
@@ -112,17 +180,10 @@
         </div>
     </nav>
 
-    {{-- À placer où tu veux dans tes vues, par exemple juste avant @yield('content') --}}
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb bg-white rounded shadow-sm px-3 py-2 align-items-center">
-            <li class="breadcrumb-item">
-                <a href="{{ url()->previous() }}" class="text-dark text-decoration-none"><i class="bi bi-arrow-left"></i> Retour</a>
-            </li>
-            <li class="breadcrumb-item active fw-bold text-lowercase" aria-current="page">
-                {{ Str::lower(trim($__env->yieldContent('title'))) }}
-            </li>
-        </ol>
-    </nav>
+    <!--placer le breadcrumb ici si la route est different de accueil-->
+    @if (Request::routeIs('accueil') == false)
+        @include('frontend.components.breadcrumb')
+    @endif
 
 
     <!-- Yield content -->

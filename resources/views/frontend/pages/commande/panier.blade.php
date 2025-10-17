@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container py-5">
-        <h2 class="fw-bold mb-4 text-center" style="color: #2a6b2a;">Mon Panier</h2>
+        <h2 class="fw-bold mb-4 text-center" style="color: #559e33;">Mon Panier</h2>
         <!-- Afficher un message de session -->
         @include('frontend.components.message_session')
         <div class="col-lg-10 mx-auto alert alert-info alert-dismissible fade show d-none" role="alert" id="alertPanier">
@@ -22,7 +22,7 @@
                             Votre panier est vide.
                         </div>
                         <div class="text-center">
-                            <a href="{{ route('produit.index') }}" class="btn btn-success px-5 fw-bold">
+                            <a href="{{ route('boutique.index') }}" class="btn btn-success px-5 fw-bold">
                                 <i class="bi bi-cart-plus"></i> Continuer mes achats
                             </a>
                         </div>
@@ -92,7 +92,7 @@
                             </table>
                         </div>
                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-                            <a href="{{ route('produit.index') }}" class="btn btn-outline-secondary">
+                            <a href="{{route('boutique.index')}}" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left"></i> Continuer mes achats
                             </a>
                             <a href="{{ route('panier.caisse') }}" class="btn btn-success px-4 btn-valide-cmd">

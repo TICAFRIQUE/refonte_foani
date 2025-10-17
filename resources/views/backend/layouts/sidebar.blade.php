@@ -41,8 +41,8 @@
 
                 {{-- 3. Réservations --}}
                 <li class="nav-item">
-                    <a href="{{ route('reservation.index') }}"
-                        class="nav-link menu-link {{ Route::is('reservation.*') ? 'active' : '' }}">
+                    <a href="{{ route('reservations.index') }}"
+                        class="nav-link menu-link {{ Route::is('reservations.*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check me-1"></i> RESERVATIONS
                     </a>
                 </li>

@@ -109,7 +109,7 @@
                                     class="form-control">
                             </div>
 
-                            <hr class="mb-4" style="height: 5px; background-color: #2a6b2a; border: none;">
+                            <hr class="mb-4" style="height: 5px; background-color: #559e33; border: none;">
                             <div class="col-md-6">
                                 <label class="form-label">Commune de livraison <span class="text-danger">*</span></label>
                                 <select name="commune" id="commune" class="form-select" required>
