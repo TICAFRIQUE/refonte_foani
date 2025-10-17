@@ -35,7 +35,7 @@
                 <li class="nav-item">
                     <a href="{{ route('commandes.index') }}"
                         class="nav-link menu-link {{ Route::is('commandes.*') ? 'active' : '' }}">
-                        <i class="bi bi-bag-check me-2"></i> <span>Commandes</span>
+                        <i class="bi bi-bag-check me-1"></i> COMMANDES
                     </a>
                 </li>
 
@@ -43,7 +43,7 @@
                 <li class="nav-item">
                     <a href="{{ route('reservation.index') }}"
                         class="nav-link menu-link {{ Route::is('reservation.*') ? 'active' : '' }}">
-                        <i class="bi bi-calendar-check me-2"></i> <span>Réservations</span>
+                        <i class="bi bi-calendar-check me-1"></i> RESERVATIONS
                     </a>
                 </li>
 
@@ -150,19 +150,19 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center" href="#menuPages" data-bs-toggle="collapse"
                         role="button" aria-expanded="false" aria-controls="menuPages">
-                        <i class="bi bi-file-earmark-text me-2"></i> <span>Pages</span>
+                        <i class="bi bi-file-earmark-fill me-2"></i> GESTION DE PAGE
                     </a>
-                    <div class="collapse menu-dropdown" id="menuPages">
+                    <div class="collapse menu-dropdown {{ Route::is('pages.*') || Route::is('categorie_page.*') ? 'show' : '' }}" id="menuPages">
                         <ul class="nav nav-sm flex-column ms-3">
                             <li class="nav-item">
-                                <a href="{{ route('pages.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-bookmark-fill me-2"></i> Gestion des pages
+                                <a href="{{ route('categorie_page.index') }}"
+                                    class="nav-link {{ Route::is('categorie_page.*') ? 'active' : '' }} d-flex align-items-center">
+                                    <i class="bi bi-bookmark-fill me-2"></i> Catégories
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('categorie_page.index') }}"
-                                    class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-tags-fill me-2"></i> Catégories
+                                <a href="{{ route('pages.index') }}" class="nav-link {{ Route::is('pages.*') ? 'active' : '' }} d-flex align-items-center">
+                                    <i class="bi bi-bookmark-fill me-2"></i> Pages
                                 </a>
                             </li>
                         </ul>

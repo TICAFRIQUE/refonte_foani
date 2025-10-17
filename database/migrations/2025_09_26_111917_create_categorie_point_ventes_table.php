@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('categorie_point_ventes', function (Blueprint $table) {
             $table->id();
-            $table->string('titre_categorie');
-            $table->string('image')->nullable();
+            $table->string('libelle')->nullable();
+            $table->string('slug')->unique()->nullable();
+            $table->boolean('statut')->default(true);
             $table->timestamps();
         });
     }

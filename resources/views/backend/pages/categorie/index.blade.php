@@ -130,29 +130,6 @@
         $(document).ready(function() {
             var route = "categorie"
             delete_row(route);
-
-
-            // Aperçu et suppression de l'image principale
-            $('#formFile').on('change', function(e) {
-                const [file] = this.files;
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#previewImage').attr('src', e.target.result).show();
-                        $('#removeImageBtn').show();
-                    }
-                    reader.readAsDataURL(file);
-                } else {
-                    $('#previewImage').hide();
-                    $('#removeImageBtn').hide();
-                }
-            });
-
-            $('#removeImageBtn').on('click', function() {
-                $('#formFile').val('');
-                $('#previewImage').attr('src', '#').hide();
-                $(this).hide();
-            });
         })
     </script>
 @endsection

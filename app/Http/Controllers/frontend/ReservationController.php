@@ -65,6 +65,7 @@ class ReservationController extends Controller
                 'commune'        => $commune->libelle,
                 'produit_id'     => $produit->id,
                 'prix_unitaire'  => $prix_unitaire,
+                'quantite'       => $quantite,
                 'sous_total'     => $sous_total,
                 'frais_livraison' => $frais_livraison,
                 'total'          => $total,

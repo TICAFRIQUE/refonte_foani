@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\backend;
 
-use App\Http\Controllers\Controller;
-use App\Models\Commune;
 use App\Models\Ville;
-use App\Models\VillePointVente;
+use App\Models\Commune;
+use App\Models\PointVente;
 use Illuminate\Http\Request;
+use App\Models\VillePointVente;
+use App\Http\Controllers\Controller;
+use App\Services\convertToMajuscule;
 
-class VillePointVenteController extends Controller
+class PointVenteController extends Controller
 {
     /**
      * Afficher la liste des villes liées aux points de vente
@@ -16,13 +18,13 @@ class VillePointVenteController extends Controller
     public function index()
     {
         try {
-            $ville_point_ventes = VillePointVente::with(['ville', 'commune'])->latest()->get();
-            $villes = Ville::all();
-            $communes = Commune::all();
+            $point_ventes = PointVente::with(['categoriePointVente', 'commune'])->get();
+            $villes = Ville::active()->alphabetique()->get();
+            $communes = Commune::ctive()->alphabetique()->get();
 
-            return view('backend.pages.points_de_ventes.gestions_points_de_vente.index', compact('ville_point_ventes', 'villes', 'communes'));
+            return view('backend.pages.gestion_points_de_ventes.points_de_ventes.index', compact('point_ventes', 'villes', 'communes'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Erreur lors du chargement : ' . $e->getMessage());
+            return back()->with('error', 'Erreur lors du chargement : ' . $e->getMessage());
         }
     }
 
@@ -34,27 +36,37 @@ class VillePointVenteController extends Controller
         try {
 
             $validated = $request->validate([
-                'id_ville' => 'required',
-                'id_commune' => 'required',
+                'commune_id' => 'required',
+                'categorie_point_vente_id' => 'required',
                 'quartier' => 'nullable|string|max:255',
                 'responsable' => 'nullable|string|max:255',
-                'contact' => 'nullable|string|max:50',
+                'contact' => 'nullable|string|min:10|max:10',
+                'autre_contact' => 'nullable|string|min:10|max:10',
                 'email' => 'nullable|email|max:255',
                 'google_map' => 'nullable|url|max:255',
             ]);
 
             // Vérifier unicité d’une même ville + commune
-            $exists = VillePointVente::where('id_ville', $request->id_ville)
-                ->where('id_commune', $request->id_commune)
+            $exists = PointVente::where('categorie_point_vente_id', $request->categorie_point_vente_id)
+                ->where('commune_id', $request->commune_id)
                 ->exists();
 
             if ($exists) {
-                return redirect()->back()
+                return back()
                     ->with('error', 'Cette combinaison de ville et de commune existe déjà.')
                     ->withInput();
             }
-         
-            VillePointVente::create($validated);
+            PointVente::create([
+                'categorie_point_vente_id' => $request->categorie_point_vente_id,
+                'commune_id' => $request->commune_id,
+                'quartier' => convertToMajuscule::toUpperNoAccent($request->quartier),
+                'responsable' => $request->responsable,
+                'contact' => $request->contact,
+                'email' => $request->email,
+                'google_map' => $request->google_map,
+                'autre_contact' => $request->autre_contact,
+                'statut' => true,
+            ]);
 
             return redirect()->route('ville_point_vente.index')
                 ->with('success', 'Ville du point de vente ajoutée avec succès.');
@@ -105,7 +117,7 @@ class VillePointVenteController extends Controller
     /**
      * Supprimer un point de vente
      */
-    public function destroy($id)
+    public function delete($id)
     {
         try {
             $villePointVente = VillePointVente::findOrFail($id);

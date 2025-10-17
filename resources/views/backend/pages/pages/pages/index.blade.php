@@ -37,49 +37,34 @@
                                 <tr>
                                     <th class="d-none">#</th>
                                     <th>Image</th>
-                                    <th>Titre</th>
+                                    <th>Libelle</th>
                                     <th>Catégorie</th>
                                     <th>Mot clé</th>
-                                    <th>Visibilité</th>
+                                    <th>Description</th>
+                                    <th>Statut</th>
                                     <th>Date</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @forelse ($pages as $page)
+                                @forelse ($pages as $key => $page)
                                     <tr id="row_{{ $page->id }}">
-                                        {{-- Numéro --}}
-                                        <td class="text-center d-none">{{ $loop->iteration }}</td>
-
-                                        {{-- Image --}}
-                                        <td class="text-center">
-                                            @if ($page->image && file_exists(public_path($page->image)))
-                                                <img src="{{ asset($page->image) }}" alt="Image"
-                                                    class="img-thumbnail rounded"
-                                                    style="width: 50px; height: 50px; object-fit: cover;">
-                                            @else
-                                                <span class="text-muted fst-italic">Aucune</span>
-                                            @endif
+                                        <td class="text-center d-none">{{ ++$key }}</td>
+                                         <td>
+                                            <img class="rounded avatar-sm"
+                                                src="{{ $page->hasMedia('image') ? $page->getFirstMediaUrl('image') : asset('front/images/logo.png') }}"
+                                                width="50px" alt="{{ $page['libelle'] }}">
                                         </td>
-
-                                        {{-- Titre --}}
-                                        <td class="fw-semibold">{{ $page->titre }}</td>
-
-                                        {{-- Catégorie --}}
-                                        <td>{{ $page->categorie->titre ?? '—' }}</td>
-
-                                        {{-- Mot clé --}}
+                                        <td class="fw-semibold">{{ $page->libelle }}</td>
+                                        <td>{{ $page->categorie->libelle ?? '—' }}</td>
                                         <td>{{ $page->mot_cle ?? '—' }}</td>
-
-                                        {{-- Visibilité --}}
+                                        <td>{{ Str::limit($page->description, 50) }}</td>
                                         <td class="text-center">
-                                            @if ($page->visibilite)
-                                                <span
-                                                    class="badge bg-success-subtle text-success border border-success-subtle px-3">Visible</span>
+                                            @if ($page->statut)
+                                                <span class="badge bg-success">Actif</span>
                                             @else
-                                                <span
-                                                    class="badge bg-danger-subtle text-danger border border-danger-subtle px-3">Cachée</span>
+                                                <span class="badge bg-secondary">Inactif</span>
                                             @endif
                                         </td>
 

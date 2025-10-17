@@ -31,14 +31,6 @@
                                    <label for="formFile" class="form-label">Image</label>
                                    <input class="form-control" type="file" id="formFile" name="image"
                                        accept="image/*" required>
-                                   <div class="mt-2 position-relative" style="display: inline-block;">
-                                       <img id="previewImage" src="#" alt="Aperçu"
-                                           style="max-width: 200px; display: none;" />
-                                       <button type="button" id="removeImageBtn" class="btn btn-danger btn-sm"
-                                           style="position: absolute; top: 5px; right: 5px; display: none;">
-                                           <i class="ri-delete-bin-line"></i>
-                                       </button>
-                                   </div>
                                </div>
                            </div>
                        </div>
@@ -52,3 +44,4 @@
            </div>
        </div>
    </div>
+
