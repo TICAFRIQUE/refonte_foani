@@ -14,7 +14,7 @@ use App\Http\Controllers\backend\ModuleController;
 use App\Http\Controllers\backend\ProduitController;
 use App\Http\Controllers\frontend\PanierController;
 use App\Http\Controllers\backend\CandidatController;
-use App\Http\Controllers\Backend\CommandeController;
+use App\Http\Controllers\backend\CommandeController;
 use App\Http\Controllers\backend\CategorieController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\backend\ParametreController;
@@ -28,7 +28,7 @@ use App\Http\Controllers\backend\VilleLivraisonController;
 use App\Http\Controllers\frontend\PageDynamiqueController;
 use App\Http\Controllers\backend\CommuneLivraisonController;
 use App\Http\Controllers\backend\ReservationAdminController;
-use App\Http\Controllers\Backend\CategoriePointVenteController;
+use App\Http\Controllers\backend\CategoriePointVenteController;
 
 
 
