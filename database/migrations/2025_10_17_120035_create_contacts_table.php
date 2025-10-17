@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom_prenoms');
             $table->string('objet');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('telephone');
             $table->text('message');
             $table->boolean('is_read')->default(false);

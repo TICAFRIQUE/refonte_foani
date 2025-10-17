@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\frontend;
 
+use App\Models\Contact;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -34,5 +35,6 @@ class HomeController extends Controller
     {
         return view('frontend.pages.contact');
     }
-    
+
+  
 }

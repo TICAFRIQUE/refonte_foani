@@ -12,7 +12,7 @@ class Contact extends Model
     public $incrementing = false;
     protected $fillable = [
         'nom_prenoms',
-        'bojet',
+        'objet',
         'email',
         'telephone',
         'message',

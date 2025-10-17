@@ -53,7 +53,8 @@
                                         <td>{{ $contact->objet ?? '-' }}</td>
                                         <td>{{ $contact->email }}</td>
                                         <td>{{ $contact->telephone }}</td>
-                                        <td>{{ $contact->message }}</td>
+                                        <td>{{ Str::limit($contact->message, 50, '...') }}</td>
+
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"

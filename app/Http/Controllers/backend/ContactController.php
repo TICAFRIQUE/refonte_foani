@@ -17,8 +17,11 @@ class ContactController extends Controller
     }
 
 
+    // regester of new message
     public function store(Request $request)
     {
+
+
         // 1️⃣ Validation des champs
         $request->validate([
             'nom_prenoms' => 'required|string|max:255',
@@ -26,26 +29,27 @@ class ContactController extends Controller
             'email' => 'required|email|max:255',
             'telephone' => 'required|string|max:20',
             'message' => 'required|string',
-            'is_read' => 'boolean',
-        ]);
-        $request['is_read'] = false;
 
+        ]);
+  
 
         Contact::create([
-            'nom_prenom' => $request->nom_prenom,
+            'nom_prenoms' => $request->nom_prenoms,
+            'objet' => $request->objet,
             'email' => $request->email,
             'telephone' => $request->telephone,
             'message' => $request->message,
-            'is_read' => $request->is_read,
+            'is_read' => false,
         ]);
 
         // 3️⃣ Redirection avec message de succès
-        return redirect()->route('contact.index')
+        return redirect()->route('contact')
             ->with('success', 'Votre message a été enregistré avec succès !');
     }
 
     public function show($id)
     {
+
         $contact = Contact::findOrFail($id);
 
         // Marquer le message comme lu

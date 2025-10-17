@@ -4,6 +4,7 @@
 @section('title', 'Contact')
 
 @section('content')
+
     <div class="container py-5">
         <h2 class="fw-bold mb-4 text-center" style="color:#2a6b2a;">Contactez-nous</h2>
         <div class="row g-4 justify-content-center">
@@ -44,11 +45,15 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
                         <h4 class="fw-bold mb-3" style="color:#2a6b2a;">Formulaire de contact</h4>
-                        <form action="#" method="POST">
+                        <form action="{{ route('contact.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Nom & Prénoms <span class="text-danger">*</span></label>
-                                <input type="text" name="nom" class="form-control" required>
+                                <input type="text" name="nom_prenoms" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Objet <span class="text-danger">*</span></label>
+                                <input type="text" name="objet" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Email <span class="text-danger">*</span></label>
