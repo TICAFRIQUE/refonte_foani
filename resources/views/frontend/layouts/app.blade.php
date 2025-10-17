@@ -91,6 +91,63 @@
         .btn:hover .badge {
             transform: scale(1.2);
         }
+
+        /**LOGO***/
+        /* --- Conteneur du logo --- */
+        .logo-wrapper {
+            width: 90px;
+            /* cercle plus grand pour donner de la présence */
+            height: 90px;
+            overflow: hidden;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* --- Animation au survol --- */
+        .logo-wrapper:hover {
+            transform: scale(1.07);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        /* --- Logo image --- */
+        .logo-image {
+            width: 90%;
+            /* l’image occupe presque tout le cercle */
+            height: 90%;
+            object-fit: contain;
+            /* garde les proportions correctes */
+            border-radius: 50%;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .logo-wrapper {
+                width: 75px;
+                height: 75px;
+            }
+
+            .logo-image {
+                width: 88%;
+                height: 88%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-wrapper {
+                width: 65px;
+                height: 65px;
+            }
+
+            .logo-image {
+                width: 85%;
+                height: 85%;
+            }
+        }
     </style>
 </head>
 
@@ -98,9 +155,15 @@
     <!-- Header & Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background-color:#559e33;">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
-                <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
-                    alt="Foani" height="60" class="me-2">
+            <a class="navbar-brand fw-bold" href="{{ route('accueil') }}    ">
+                {{-- <div id="logo" class="rounded-circle">
+                    <img  src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
+                    alt="Foani" height="60" class="me-2 ">
+                </div> --}}
+                <div id="logo" class="logo-wrapper rounded-circle">
+                    <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
+                        alt="Foani" class="logo-image">
+                </div>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -212,17 +275,13 @@
 
 
     <!-- Bouton remonter en haut & WhatsApp -->
-    <a href="#"
-       id="btnScrollTop"
-       class="btn btn-success rounded-circle shadow position-fixed"
-       style="bottom: 90px; right: 25px; z-index: 999; width: 48px; height: 48px; display: none;">
+    <a href="#" id="btnScrollTop" class="btn btn-success rounded-circle shadow position-fixed"
+        style="bottom: 90px; right: 25px; z-index: 999; width: 48px; height: 48px; display: none;">
         <i class="bi bi-arrow-up fs-4"></i>
     </a>
-    <a href="https://wa.me/2250505969625"
-       target="_blank"
-       id="btnWhatsapp"
-       class="btn btn-success rounded-circle shadow position-fixed"
-       style="bottom: 25px; right: 25px; z-index: 999; width: 48px; height: 48px;">
+    <a href="https://wa.me/2250505969625" target="_blank" id="btnWhatsapp"
+        class="btn btn-success rounded-circle shadow position-fixed"
+        style="bottom: 25px; right: 25px; z-index: 999; width: 48px; height: 48px;">
         <i class="bi bi-whatsapp fs-3"></i>
     </a>
 
@@ -270,7 +329,8 @@
                 <div class="col-md-3">
                     <h5 class="fw-bold mb-3" style="color:#559e33;">SUIVEZ-NOUS</h5>
                     <div class="d-flex align-items-center gap-3 fs-4">
-                        <a target="_blank" href="https://www.facebook.com/foaniservices/?_rdc=1&_rdr#" class="text-dark"><i class="bi bi-facebook"></i></a>
+                        <a target="_blank" href="https://www.facebook.com/foaniservices/?_rdc=1&_rdr#"
+                            class="text-dark"><i class="bi bi-facebook"></i></a>
                         <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
                         <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
                         <a href="#" class="text-dark"><i class="bi bi-youtube"></i></a>
@@ -337,8 +397,12 @@
         });
         btnScrollTop.addEventListener('click', function(e) {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     </script>
 </body>
+
 </html>
