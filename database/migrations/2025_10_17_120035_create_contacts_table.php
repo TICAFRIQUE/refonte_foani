@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('telephone');
             $table->text('message');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

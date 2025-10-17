@@ -26,18 +26,34 @@ class ContactController extends Controller
             'email' => 'required|email|max:255',
             'telephone' => 'required|string|max:20',
             'message' => 'required|string',
+            'is_read' => 'boolean',
         ]);
+        $request['is_read'] = false;
 
-        // 2️⃣ Création du contact
+
         Contact::create([
             'nom_prenom' => $request->nom_prenom,
             'email' => $request->email,
             'telephone' => $request->telephone,
             'message' => $request->message,
+            'is_read' => $request->is_read,
         ]);
 
         // 3️⃣ Redirection avec message de succès
         return redirect()->route('contact.index')
             ->with('success', 'Votre message a été enregistré avec succès !');
+    }
+
+    public function show($id)
+    {
+        $contact = Contact::findOrFail($id);
+
+        // Marquer le message comme lu
+        if (!$contact->is_read) {
+            $contact->is_read = true;
+            $contact->save();
+        }
+
+        return view('backend.pages.contact.partials.show', compact('contact'));
     }
 }

@@ -231,6 +231,8 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     // contact
     Route::prefix('contact')->name('contact.')->controller(ContactController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::get('{$id}', 'show')->name('show');
     });
 });
 
