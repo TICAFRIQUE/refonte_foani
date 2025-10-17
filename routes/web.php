@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\backend\ContactController;
 use App\Models\Page;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SliderController;
@@ -225,6 +226,11 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::prefix('candidats')->name('candidats.')->controller(CandidatController::class)->group(function () {
         Route::get('/', 'index')->name('index');           // liste des candidats
         Route::get('delete/{id}', 'delete')->name('delete'); // suppression
+    });
+
+    // contact
+    Route::prefix('contact')->name('contact.')->controller(ContactController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
     });
 });
 

@@ -89,8 +89,7 @@
                     <div class="collapse menu-dropdown" id="menuPointsVente">
                         <ul class="nav nav-sm flex-column ms-4">
                             <li class="nav-item">
-                                <a href="{{ route('point_vente.index') }}"
-                                    class="nav-link d-flex align-items-center">
+                                <a href="{{ route('point_vente.index') }}" class="nav-link d-flex align-items-center">
                                     <i class="bi bi-list-check me-2"></i> Gestion des points de vente
                                 </a>
                             </li>
@@ -137,6 +136,12 @@
                         </ul>
                     </div>
                 </li>
+                {{-- Form Contact dans le menu --}}
+                <li class="nav-item">
+                    <a href="{{ route('contact.index') }}" class="nav-link">
+                        <i class="ri-mail-line align-middle me-2"></i> Contact
+                    </a>
+                </li>
 
                 {{-- 10. Candidats --}}
                 <li class="nav-item">
@@ -152,7 +157,8 @@
                         role="button" aria-expanded="false" aria-controls="menuPages">
                         <i class="bi bi-file-earmark-fill me-2"></i> GESTION DE PAGE
                     </a>
-                    <div class="collapse menu-dropdown {{ Route::is('pages.*') || Route::is('categorie_page.*') ? 'show' : '' }}" id="menuPages">
+                    <div class="collapse menu-dropdown {{ Route::is('pages.*') || Route::is('categorie_page.*') ? 'show' : '' }}"
+                        id="menuPages">
                         <ul class="nav nav-sm flex-column ms-3">
                             <li class="nav-item">
                                 <a href="{{ route('categorie_page.index') }}"
@@ -161,7 +167,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('pages.index') }}" class="nav-link {{ Route::is('pages.*') ? 'active' : '' }} d-flex align-items-center">
+                                <a href="{{ route('pages.index') }}"
+                                    class="nav-link {{ Route::is('pages.*') ? 'active' : '' }} d-flex align-items-center">
                                     <i class="bi bi-bookmark-fill me-2"></i> Pages
                                 </a>
                             </li>
