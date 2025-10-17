@@ -274,15 +274,26 @@
     @include('sweetalert::alert')
 
 
-    <!-- Bouton remonter en haut & WhatsApp -->
+    <!-- Bouton remonter en haut, WhatsApp & Panier flottant -->
     <a href="#" id="btnScrollTop" class="btn btn-success rounded-circle shadow position-fixed"
-        style="bottom: 90px; right: 25px; z-index: 999; width: 48px; height: 48px; display: none;">
+        style="bottom: 140px; right: 25px; z-index: 999; width: 48px; height: 48px; display: none;">
         <i class="bi bi-arrow-up fs-4"></i>
     </a>
     <a href="https://wa.me/2250505969625" target="_blank" id="btnWhatsapp"
         class="btn btn-success rounded-circle shadow position-fixed"
-        style="bottom: 25px; right: 25px; z-index: 999; width: 48px; height: 48px;">
+        style="bottom: 80px; right: 25px; z-index: 999; width: 48px; height: 48px;">
         <i class="bi bi-whatsapp fs-3"></i>
+    </a>
+    <a href="{{ route('panier.index') }}" id="btnPanier"
+        class="btn btn-warning rounded-circle shadow position-fixed d-flex align-items-center justify-content-center"
+        style="bottom: 25px; right: 25px; z-index: 999; width: 56px; height: 56px;">
+        <span class="position-relative">
+            <i class="bi bi-cart3 fs-3 text-white"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  style="font-size:0.8rem;">
+                {{ $count ?? 0 }}
+            </span>
+        </span>
     </a>
 
     <!-- Footer -->
