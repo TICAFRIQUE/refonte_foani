@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="container py-5">
-        <h2 class="fw-bold mb-4 text-center" style="color:#2a6b2a;">Réserver un produit</h2>
+        <h2 class="fw-bold mb-4 text-center title">Réserver un produit</h2>
         <div class="row justify-content-center">
             @include('frontend.components.message_session')
             

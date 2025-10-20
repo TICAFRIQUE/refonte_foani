@@ -32,6 +32,16 @@
     @stack('styles')
 
     <style>
+        :root {
+            --color-vert: #559e33;
+            --color-vert2: #345e24;
+            --color-rouge: #a61c1c;
+            --color-jaune: #f1c40f;
+        }
+
+        /* Barre de navigation */
+
+
         /* Effets pour les liens de navigation */
         .navbar-nav .nav-link {
             transition: all 0.3s ease;
@@ -148,12 +158,111 @@
                 height: 85%;
             }
         }
+
+        #mobile-bottom-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1050;
+            background: #fff;
+            box-shadow: 0 -2px 12px rgba(44, 62, 80, 0.10);
+            padding: 0.5rem 0;
+            border-top: 2px solid #559e33;
+        }
+
+        .mobile-bar-content {
+            max-width: 480px;
+            margin: 0 auto;
+            gap: 0.5rem;
+        }
+
+        #mobile-bottom-bar .btn {
+            font-size: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            #mobile-bottom-bar {
+                display: none !important;
+            }
+        }
+
+
+        .card {
+            transition: transform 0.3s cubic-bezier(.4, 2, .3, 1), box-shadow 0.3s cubic-bezier(.4, 2, .3, 1);
+            border-radius: 18px;
+            /* border: none; */
+        }
+
+        .card:hover {
+            transform: scale(1.04) translateY(-4px);
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+            border-color: #559e33;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #559e33 60%, #f7c948 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+        }
+
+        .card-text {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-success {
+            background: linear-gradient(90deg, #559e33 80%, #f7c948 100%);
+            border: none;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(90deg, #f7c948 60%, #559e33 100%);
+            transform: scale(1.07);
+            color: #fff;
+        }
+
+        .card-footer {
+            background: none;
+            border-top: none;
+            padding-top: 0;
+        }
+
+        @media (max-width: 767px) {
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .card-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 
 <body>
     <!-- Header & Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm" style="background-color:#559e33;">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{{ route('accueil') }}    ">
                 {{-- <div id="logo" class="rounded-circle">
@@ -176,7 +285,7 @@
 
                     @foreach ($categories_pages->where('slug', '!=', 'activites') as $categorie_page)
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white px-1 {{ Route::is('page.*') ? 'active' : '' }}"
+                            <a class="nav-link dropdown-toggle text-white px-1 {{ Route::is('page.show') ? 'active' : '' }}"
                                 href="#" id="navbar{{ $categorie_page->id }}" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ $categorie_page->libelle }}
@@ -284,17 +393,77 @@
         style="bottom: 80px; right: 25px; z-index: 999; width: 48px; height: 48px;">
         <i class="bi bi-whatsapp fs-3"></i>
     </a>
-    <a href="{{ route('panier.index') }}" id="btnPanier"
-        class="btn btn-warning rounded-circle shadow position-fixed d-flex align-items-center justify-content-center"
+    {{-- <a href="{{ route('panier.index') }}" id="btnPanier"
+        class="btn btn-warning rounded-circle shadow position-fixed d-flex align-items-center justify-content-center mt-4"
         style="bottom: 25px; right: 25px; z-index: 999; width: 56px; height: 56px;">
         <span class="position-relative">
-            <i class="bi bi-cart3 fs-3 text-white"></i>
+            <i class="bi bi-cart fs-3 text-white"></i>
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                  style="font-size:0.8rem;">
+                style="font-size:0.8rem;">
                 {{ $count ?? 0 }}
             </span>
         </span>
-    </a>
+    </a> --}}
+
+    {{-- ...avant </body> --}}
+    <div id="mobile-bottom-bar" class="d-lg-none d-md-none d-block">
+        <div class="mobile-bar-content d-flex justify-content-around align-items-center">
+            {{-- Panier --}}
+            <a href="{{ route('panier.index') }}"
+                class="btn btn-warning rounded-circle position-relative flex-shrink-0" title="Panier">
+                <i class="bi bi-cart fs-3 text-white"></i>
+                <span id="cart-badge-mobile"
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    style="font-size:0.8rem;">
+                    {{ $count ?? 0 }}
+                </span>
+            </a>
+            {{-- Boutique --}}
+            <a href="{{ route('boutique.index') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
+                title="Boutique">
+                <i class="bi bi-shop fs-3"></i>
+            </a>
+            {{-- Connexion ou Profil (menu déroulant si connecté) --}}
+            @guest
+                <a href="{{ route('user.loginForm') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
+                    title="Se connecter">
+                    <i class="bi bi-person"></i>
+                </a>
+            @else
+                <div class="dropup">
+                    <a href="#" class="btn btn-success rounded-circle flex-shrink-0 dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false" title="Mon compte">
+                        <i class="bi bi-person-check"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end mb-2">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('user.profil') }}">
+                                <i class="bi bi-person-circle me-2"></i> Mon profil
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('user.commandes') }}">
+                                <i class="bi bi-bag-check me-2"></i> Mes commandes
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('user.reservations') }}">
+                                <i class="bi bi-calendar-check me-2"></i> Mes réservations
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{{ route('user.logout') }}">
+                                <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @endguest
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer py-4 mt-5" style="background: #f8f9fa;">
@@ -413,6 +582,21 @@
                 behavior: 'smooth'
             });
         });
+    </script>
+    <script>
+        function updateCartBadges(newCount) {
+            // Header
+            let badgeHeader = document.getElementById('cart-badge-header');
+            if (badgeHeader) badgeHeader.textContent = newCount;
+
+            // Flottant bas
+            let badgeBottom = document.getElementById('cart-badge-bottom');
+            if (badgeBottom) badgeBottom.textContent = newCount;
+
+            // Mobile bar
+            let badgeMobile = document.getElementById('cart-badge-mobile');
+            if (badgeMobile) badgeMobile.textContent = newCount;
+        }
     </script>
 </body>
 

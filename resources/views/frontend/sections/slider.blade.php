@@ -14,7 +14,7 @@
         justify-content: center;
         align-items: flex-end;
         text-align: right;
-        background: rgba(42, 107, 42, 0.15);
+        /* background: rgba(42, 107, 42, 0.15); */
     }
 
     .owl-carousel .item {
@@ -39,7 +39,7 @@
             text-align: center !important;
             align-items: center !important;
             justify-content: flex-end !important;
-            background: rgba(42, 107, 42, 0.25);
+            /* background: rgba(42, 107, 42, 0.25); */
             border-radius: 0 0 16px 16px;
         }
 

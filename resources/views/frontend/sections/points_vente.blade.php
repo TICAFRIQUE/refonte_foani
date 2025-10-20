@@ -68,8 +68,8 @@
 @endphp
 
 <section class="container mb-5" id="sectionPointDeVente">
-    <h2 class="text-center mb-4 fw-bold" style="color: var(--color-jaune);">
-        <i class="bi bi-geo-alt-fill me-2" style="color: #559e33;"></i>
+    <h2 class="text-center mb-4 fw-bold title">
+        <i class="bi bi-geo-alt-fill me-2"></i>
         Nos Points de Vente
     </h2>
     <div class="row g-4">

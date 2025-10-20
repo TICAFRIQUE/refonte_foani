@@ -6,13 +6,13 @@
 @section('content')
 
     <div class="container py-5">
-        <h2 class="fw-bold mb-4 text-center" style="color:#559e33;">Contactez-nous</h2>
+        <h2 class="fw-bold mb-4 text-center title">Contactez-nous</h2>
         <div class="row g-4 justify-content-center">
             {{-- Bloc gauche : Nos informations --}}
             <div class="col-lg-6">
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body">
-                        <h4 class="fw-bold mb-3" style="color:#559e33;">Nos informations</h4>
+                        <h4 class="fw-bold mb-3" style="color:#2a6b2a;">Nos informations</h4>
                         <ul class="list-unstyled mb-3">
                             <li class="mb-2">
                                 <i class="bi bi-geo-alt-fill text-success"></i>

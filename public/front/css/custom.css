@@ -1,6 +1,7 @@
 /* Custom Styles for Foani E-commerce code colors */
 :root {
     --color-vert: #559e33;
+    --color-vert2: #345e24;
     --color-rouge: #a61c1c;
     --color-jaune: #f1c40f;
 }
@@ -8,8 +9,12 @@
 body {
     font-family: "Segoe UI", Arial, sans-serif;
     background: #f5f8f5;
-background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 28, 0.08) 56%, rgba(241, 196, 15, 0.07) 100%);
-
+    background: linear-gradient(
+        187deg,
+        rgba(42, 107, 42, 0.07) 21%,
+        rgba(166, 28, 28, 0.08) 56%,
+        rgba(241, 196, 15, 0.07) 100%
+    );
 }
 
 /* Navbar */
@@ -38,6 +43,9 @@ background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 2
 }
 
 /* Categories */
+.title {
+    color: var(--color-vert);
+}
 
 /* Effets d'animation sur les cartes de catégories au survol */
 .category-card {
@@ -48,13 +56,13 @@ background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 2
 }
 
 .category-card:hover {
-     transform: translateY(-8px) scale(1.05) rotate(-1deg); /* Déplacement, zoom et légère rotation */
-    box-shadow: 0 12px 30px rgba(42, 107, 42, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombres multiples */
+    transform: translateY(-8px) scale(1.05) rotate(-1deg); /* Déplacement, zoom et légère rotation */
+    box-shadow: 0 12px 30px rgba(42, 107, 42, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.1); /* Ombres multiples */
     background-color: rgba(255, 251, 0, 0.15); /* Fond léger au survol */
     filter: brightness(1.05) saturate(1.1); /* Légère luminosité et saturation */
     border: 1px solid rgba(42, 107, 42, 0.3); /* Bordure subtile */
 }
-
 
 /* Ajout d'un effet de zoom sur l'image de la catégorie */
 .category-card img {
@@ -81,7 +89,7 @@ background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 2
     border-radius: 20px;
     overflow: hidden; /* Évite le débordement */
     transition: box-shadow 0.3s, transform 0.3s;
-    border-color: #f1c40f!important;
+    border-color: #f1c40f !important;
 }
 
 .product-card:hover {
@@ -193,6 +201,20 @@ background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 2
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+/* Flèches du carousel en vert */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #559e33;
+    border-radius: 50%;
+    background-size: 60% 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 2px 8px rgba(42,107,42,0.12);
+    width: 2.5rem;
+    height: 2.5rem;
+    filter: none !important;
+}
+
 /* Responsive pour mobile */
 @media (max-width: 768px) {
     .carousel-caption-right {
@@ -204,11 +226,11 @@ background: linear-gradient(187deg, rgba(42, 107, 42, 0.07) 21%, rgba(166, 28, 2
         top: auto;
         transform: none;
     }
-    
+
     .carousel-caption-right h1 {
         font-size: 1.8rem;
     }
-    
+
     .carousel-caption-right p {
         font-size: 0.95rem;
     }

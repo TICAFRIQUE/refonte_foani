@@ -3,6 +3,30 @@
 
 @section('title', 'Points de vente - ' . $categorie->libelle)
 
+
+@push('styles')
+    <style>
+        /* === LISTE DE POINTS DE VENTE === */
+.card.shadow-sm.border-0 {
+    border-radius: 0.75rem;
+}
+
+/* Cartes mobiles */
+@media (max-width: 767.98px) {
+    .card-body h6 {
+        font-size: 1rem;
+    }
+    .card-body p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    .card.mb-3 {
+        border-left: 4px solid #2a6b2a;
+    }
+}
+
+    </style>
+@endpush
 @section('content')
     <div class="container py-5">
         <div class="row mb-4">
@@ -11,7 +35,7 @@
                     Points de vente : {{ $categorie->libelle }}
                 </h2>
                 <p class="text-muted mb-0">
-                    Retrouvez nos produits dans nos points de vente 
+                    Retrouvez nos produits dans nos points de vente
                     <strong>{{ $categorie->libelle }}</strong>
                 </p>
             </div>
@@ -21,8 +45,10 @@
                 <div class="col-12">
                     <div class="card shadow-sm border-0">
                         <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0">
+
+                            <!-- Table affichée sur écran moyen et grand -->
+                            <div class="table-responsive d-none d-md-block">
+                                <table class="table table-hover mb-0 align-middle">
                                     <thead class="table-light">
                                         <tr>
                                             <th scope="col" class="border-0">
@@ -31,30 +57,44 @@
                                             <th scope="col" class="border-0">
                                                 <i class="bi bi-geo-alt me-1"></i> Adresse
                                             </th>
-                                            <th scope="col" class="border-0 d-none d-md-table-cell">
+                                            <th scope="col" class="border-0">
                                                 <i class="bi bi-telephone me-1"></i> Contact
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($points_de_vente as $key => $point)
+                                        @foreach ($points_de_vente as $point)
                                             <tr>
-                                                <td class="fw-bold">
-                                                    <div class="d-flex align-items-center">
-                                                        <span>{{ $point->commune->libelle ?? '-' }}</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    {{ $point->quartier ?? '-' }}
-                                                </td>
-                                                <td class="d-none d-md-table-cell">
-                                                    {{ $point->contact ?? '-' }}
-                                                </td>
+                                                <td class="fw-bold">{{ $point->commune->libelle ?? '-' }}</td>
+                                                <td>{{ $point->quartier ?? '-' }}</td>
+                                                <td>{{ $point->contact ?? '-' }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
+
+                            <!-- Cartes affichées uniquement sur mobile -->
+                            <div class="d-block d-md-none p-3">
+                                @foreach ($points_de_vente as $point)
+                                    <div class="card mb-3 border-0 shadow-sm">
+                                        <div class="card-body">
+                                            <h6 class="fw-bold mb-2 text-success">
+                                                <i class="bi bi-shop me-1"></i> {{ $point->commune->libelle ?? '-' }}
+                                            </h6>
+                                            <p class="mb-1 text-muted">
+                                                <i class="bi bi-geo-alt me-1 text-danger"></i>
+                                                {{ $point->quartier ?? '-' }}
+                                            </p>
+                                            <p class="mb-0">
+                                                <i class="bi bi-telephone me-1 text-primary"></i>
+                                                {{ $point->contact ?? '-' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
                         </div>
                     </div>
                 </div>

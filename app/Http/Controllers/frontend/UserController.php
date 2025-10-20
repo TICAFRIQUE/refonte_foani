@@ -53,7 +53,7 @@ class UserController extends Controller
 
         // Valider les données du formulaire
         $request->validate([
-            'email' => 'unique:users',
+            'email' => 'nullable|email|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'phone' => 'required|string|min:10|max:10|unique:users',
             'username' => 'required|string|max:255',

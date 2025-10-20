@@ -4,22 +4,81 @@
 @section('title', 'Validation de commande')
 
 @section('content')
+
+    <style>
+        /* === Bloc panier responsive === */
+        .bloc-panier {
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Titre */
+        .bloc-panier h5 {
+            font-size: 1.25rem;
+        }
+
+        /* Amélioration de la table sur petit écran */
+        @media (max-width: 767.98px) {
+            .bloc-panier {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .bloc-panier table th,
+            .bloc-panier table td {
+                padding: 0.5rem 0.3rem;
+                vertical-align: middle;
+                word-break: break-word;
+            }
+
+            /* Réduction du titre */
+            .bloc-panier h5 {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+
+            /* Espacement des lignes du tableau */
+            .bloc-panier tbody tr {
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            /* Ajustement du footer */
+            .bloc-panier tfoot td {
+                padding-top: 0.6rem;
+                padding-bottom: 0.6rem;
+                font-size: 0.9rem !important;
+            }
+        }
+
+        /* Meilleure apparence sur très petits écrans (≤ 400px) */
+        @media (max-width: 400px) {
+            .bloc-panier table {
+                font-size: 0.8rem;
+            }
+
+            .bloc-panier h5 {
+                font-size: 1rem;
+            }
+        }
+    </style>
     <div class="container py-5">
-        <h2 class="fw-bold mb-4 text-center" style="color: #2a6b2a;">Valider ma commande</h2>
+        <h2 class="fw-bold mb-4 text-center title">Valider ma commande</h2>
         <div class="row justify-content-center g-4">
             <!-- Afficher un message de session -->
             @include('frontend.components.message_session')
+
             <!-- Bloc panier -->
             <div class="col-lg-6">
-                <div class="bg-white p-4 rounded shadow-sm h-100">
-                    <h5 class="mb-3 fw-bold">Résumé de la commande</h5>
+                <div class="bg-white p-4 rounded shadow-sm h-100 bloc-panier">
+                    <h5 class="mb-3 fw-bold text-center text-lg-start">Résumé de la commande</h5>
+
                     <div class="table-responsive mb-3">
-                        <table class="table align-middle">
+                        <table class="table align-middle text-nowrap">
                             <thead class="table-light">
-                                <tr>
+                                <tr class="text-center text-sm-start">
                                     <th>Produit</th>
-                                    <th class="text-center">Quantité</th>
-                                    <th class="text-center">Prix Unitaire</th>
+                                    <th class="text-center">Qté</th>
+                                    <th class="text-center">PU</th>
                                     <th class="text-center">Total</th>
                                 </tr>
                             </thead>
@@ -31,39 +90,39 @@
                                         );
                                     @endphp
                                     <tr>
-                                        <td>
-                                            <span class="fw-bold">{{ $item->libelle }}</span>
+                                        <td class="fw-bold small">{{ $item->libelle }}</td>
+                                        <td class="text-center small">{{ $item->quantite }}</td>
+                                        <td class="text-center small">
+                                            {{ number_format($item->prix_de_vente, 0, ',', ' ') }} FCFA
                                         </td>
-                                        <td class="text-center">{{ $item->quantite }}</td>
-                                        <td class="text-center">{{ number_format($item->prix_de_vente, 0, ',', ' ') }} FCFA
-                                        </td>
-                                        <td class="text-center fw-bold">
+                                        <td class="text-center fw-bold small">
                                             {{ number_format($item->prix_de_vente * $item->quantite, 0, ',', ' ') }} FCFA
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
+
                             <tfoot>
                                 <tr>
-                                    <td colspan="3" class="text-end fw-bold">Sous-Total :</td>
-                                    <td data-totalPanier="{{ $totalPanier }}" class="text-center fw-bold"
-                                        style="font-size:1.2em;">
-                                        {{ number_format($totalPanier, 0, ',', ' ') }}
-                                        FCFA
+                                    <td colspan="3" class="text-end fw-bold small">Sous-Total :</td>
+                                    <td data-totalPanier="{{ $totalPanier }}" class="text-center fw-bold small"
+                                        style="font-size:1.1em;">
+                                        {{ number_format($totalPanier, 0, ',', ' ') }} FCFA
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="text-end fw-bold">Livraison :</td>
-                                    <td class="text-center fw-bold" style="font-size:1.2em;">
+                                    <td colspan="3" class="text-end fw-bold small">Livraison :</td>
+                                    <td class="text-center fw-bold small" style="font-size:1.1em;">
                                         <span id="frais-livraison">0</span> FCFA
                                     </td>
                                 </tr>
-
                             </tfoot>
                         </table>
                     </div>
                 </div>
             </div>
+
+
 
             <!-- Bloc infos utilisateur -->
             <div class="col-lg-6">
@@ -71,7 +130,7 @@
                 <div class="bg-white p-4 rounded shadow-sm h-100">
                     <form action="{{ route('panier.commande.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
-                        <h5 class="mb-3 fw-bold">Informations client</h5>
+                        <h5 class="mb-3 fw-bold">Informations client & livraison</h5>
                         <!-- Afficher les erreurs de validation -->
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -205,7 +264,7 @@
                         this.classList.add('was-validated');
                         return; // Ne lance pas la confirmation si le formulaire est invalide
                     }
-                   
+
                     e.preventDefault();
                     Swal.fire({
                         title: 'Confirmer la commande ?',

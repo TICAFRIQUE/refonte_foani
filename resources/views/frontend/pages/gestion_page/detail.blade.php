@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-9">
             <div class="mb-4 text-center">
-                <h2 class="fw-bold" style="color:#2a6b2a;">{{ $page->libelle }}</h2>
+                <h2 class="fw-bold title">{{ $page->libelle }}</h2>
                 @if($page->mot_cle)
                     <span class="badge bg-success">{{ $page->mot_cle }}</span>
                 @endif

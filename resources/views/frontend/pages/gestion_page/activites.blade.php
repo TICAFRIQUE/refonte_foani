@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="fw-bold mb-4 text-center" style="color:#2a6b2a;">Nos Activités</h2>
+    <h2 class="fw-bold mb-4 text-center title">Nos Activités</h2>
     <div class="row justify-content-center">
         <div class="col-lg-10">
             @forelse($activites as $activite)

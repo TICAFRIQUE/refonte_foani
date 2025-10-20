@@ -33,17 +33,24 @@
         }
 
         .card-img-top {
-            transition: transform 0.4s cubic-bezier(.25,.8,.25,1), box-shadow 0.3s;
+            transition: transform 0.4s cubic-bezier(.25, .8, .25, 1), box-shadow 0.3s;
         }
 
         .card:hover .card-img-top {
             transform: scale(1.08);
-            box-shadow: 0 8px 24px rgba(42,107,42,0.15);
+            box-shadow: 0 8px 24px rgba(42, 107, 42, 0.15);
             z-index: 2;
         }
     </style>
     <div class="container py-5">
-        <h2 class="fw-bold mb-4 text-center" style="color:#2a6b2a;">Nos produits</h2>
+        <h2 class="fw-bold mb-4 text-center title">Nos produits</h2>
+
+        {{-- Afficher la categorie choisie --}}
+        @if (isset($categorie))
+            <div class="mb-4 text-center">
+                <h4 class="fw-semibold">Catégorie : {{ $categorie->libelle }}</h4>
+            </div>
+        @endif
 
         {{-- Catégories scrollables --}}
         <div class="mb-4">
@@ -54,7 +61,7 @@
                 </a>
                 @foreach (\App\Models\Categorie::all() as $cat)
                     <a href="{{ route('boutique.categorie', ['slug' => $cat->slug]) }}"
-                       class="btn btn-outline-success px-4 {{ (isset($categorie) && $categorie->slug == $cat->slug) ? 'active' : '' }}">
+                        class="btn btn-outline-success px-4 {{ isset($categorie) && $categorie->slug == $cat->slug ? 'active' : '' }}">
                         {{ $cat->libelle }}
                     </a>
                 @endforeach
@@ -85,7 +92,8 @@
                                     <i class="bi bi-cart-plus me-2"></i>Ajouter
                                 </button>
                             @else
-                                <a href="{{route('reservation.create' , ['slug'=>$produit->slug])}}" class="btn btn-warning w-100 mt-auto">
+                                <a href="{{ route('reservation.create', ['slug' => $produit->slug]) }}"
+                                    class="btn btn-warning w-100 mt-auto">
                                     <i class="bi bi-clock me-2"></i>Réserver
                                 </a>
                             @endif

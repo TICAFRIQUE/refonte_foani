@@ -38,7 +38,7 @@
 
 
 <section class="container mb-5">
-    <h2 class="text-center mb-4 fw-bold" style="color:#2a6b2a;">Nos Catégories</h2>
+    <h2 class="text-center mb-4 fw-bold title">Nos Catégories</h2>
     <div id="categoriesCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             @foreach ($categories->chunk(4) as $chunkIndex => $chunk)
