@@ -54,6 +54,7 @@ class Commande extends Model
     //scope pour les statuts
     public function scopeStatut($query, $statut)
     {
+        //statut : en_attente, en_cours, livrée, annulée
         return $query->where('statut', $statut);
     }
 

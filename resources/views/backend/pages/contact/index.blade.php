@@ -65,6 +65,14 @@
                                                         <i class="ri-more-fill align-middle"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
+
+                                                        <li>
+                                                            <a href="{{ route('contact.show', $contact->id) }}"
+                                                                class="dropdown-item">
+                                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                Voir
+                                                            </a>
+                                                        </li>
                                                         <li>
                                                             <a href="#" class="dropdown-item remove-item-btn delete"
                                                                 data-id="{{ $contact->id }}">
@@ -73,19 +81,12 @@
                                                                 Supprimer
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a href="{{ route('contact.show', $contact->id) }}"
-                                                                class="dropdown-item">
-                                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                                Voir
-                                                            </a>
-                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         </td>
 
-                                       
+
                                     </tr>
                                 @endforeach
                             </tbody>

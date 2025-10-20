@@ -75,7 +75,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="stock" class="form-label">Stock</label>
+                                        <label for="stock" class="form-label">Stock <small class="text-muted">(Par défaut 10000 , mettre 0 si il n'y a pas de stock)</small></label>
                                         <input type="number" name="stock" id="stock" class="form-control"
                                             value="{{ old('stock', $produit->stock) }}" min="0">
                                         @error('stock')

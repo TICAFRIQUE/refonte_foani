@@ -31,7 +31,7 @@ class ContactController extends Controller
             'message' => 'required',
 
         ]);
-  
+
 
         Contact::create([
             'nom_prenoms' => $request->nom_prenoms,
@@ -59,6 +59,13 @@ class ContactController extends Controller
         }
 
         return view('backend.pages.contact.partials.show', compact('contact'));
+    }
+
+    public function delete($id)
+    {
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+        return response()->json(['message' => 'Message supprimé avec succès', 'status' => 200]);
     }
 
     // supprimer un message

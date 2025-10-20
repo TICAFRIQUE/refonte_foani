@@ -19,8 +19,11 @@
                 @endif
             </div>
             <div class="mb-4">
-                @if($page->getFirstMediaUrl('image'))
+                @if($page->hasMedia('image'))
                     <img src="{{ $page->getFirstMediaUrl('image') }}" alt="{{ $page->libelle }}"
+                        class="img-fluid rounded shadow-sm mb-3 mx-auto d-block" style="max-height:320px;object-fit:cover;">
+                @else
+                    <img src="{{ asset('front/images/default.jpg') }}" alt="Activité"
                         class="img-fluid rounded shadow-sm mb-3 mx-auto d-block" style="max-height:320px;object-fit:cover;">
                 @endif
             </div>

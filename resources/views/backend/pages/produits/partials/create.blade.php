@@ -89,9 +89,9 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="stock" class="form-label">Stock</label>
+                                        <label for="stock" class="form-label">Stock <small class="text-muted">(Par défaut 10000 , mettre 0 si il n'y a pas de stock)</small></label>
                                         <input type="number" name="stock" id="stock" class="form-control"
-                                            value="{{ old('stock', 0) }}" min="0">
+                                            value="{{ old('stock', 10000) }}" min="0">
                                         @error('stock')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror

@@ -19,6 +19,69 @@
         @endslot
     @endcomponent
 
+    {{-- Statistiques par statut --}}
+    @php
+        $stats = [
+            'en_attente' => $commandes->where('statut', 'en_attente')->count(),
+            'en_cours'   => $commandes->where('statut', 'en_cours')->count(),
+            'livrée'     => $commandes->where('statut', 'livrée')->count(),
+            'annulée'    => $commandes->where('statut', 'annulée')->count(),
+        ];
+        $colors = [
+            'en_attente' => 'secondary',
+            'en_cours' => 'warning',
+            'livrée' => 'success',
+            'annulée' => 'danger',
+        ];
+    @endphp
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                @foreach($stats as $statut => $count)
+                    <div class="card border-0 shadow-sm" style="min-width:160px;">
+                        <div class="card-body text-center">
+                            <span class="badge bg-{{ $colors[$statut] ?? 'secondary' }} mb-2" style="font-size:1.1em;">
+                                {{ ucfirst(str_replace('_', ' ', $statut)) }}
+                            </span>
+                            <div class="fw-bold fs-4">{{ $count }}</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    {{-- Filtre par statut et date --}}
+    <div class="row mb-3">
+        <div class="col-lg-8 mx-auto">
+            <form method="GET" action="{{ route('commandes.index') }}" class="row g-2 align-items-end justify-content-center">
+                <div class="col-md-3">
+                    <label for="date_debut" class="form-label mb-0">Date début</label>
+                    <input type="date" id="date_debut" name="date_debut" class="form-control" value="{{ request('date_debut') }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="date_fin" class="form-label mb-0">Date fin</label>
+                    <input type="date" id="date_fin" name="date_fin" class="form-control" value="{{ request('date_fin') }}">
+                </div>
+                <div class="col-md-3 d-flex">
+                    <select name="statut" class="form-select">
+                        <option value="">-- Tous les statuts --</option>
+                        <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En attente</option>
+                        <option value="en_cours" {{ request('statut') == 'en_cours' ? 'selected' : '' }}>En cours</option>
+                        <option value="livrée" {{ request('statut') == 'livrée' ? 'selected' : '' }}>Livrée</option>
+                        <option value="annulée" {{ request('statut') == 'annulée' ? 'selected' : '' }}>Annulée</option>
+                    </select>
+                  
+                </div>
+                <div class="col-md-2 d-flex">
+                    <button class="btn btn-primary w-100" type="submit">
+                        <i class="bi bi-filter"></i> Filtrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow-sm">
@@ -43,14 +106,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $colors = [
-                                        'en_attente' => 'secondary',
-                                        'en_cours' => 'warning',
-                                        'livrée' => 'success',
-                                        'annulée' => 'danger',
-                                    ];
-                                @endphp
                                 @foreach ($commandes as $commande)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
@@ -110,34 +165,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-
-    
-
-    {{-- <script>
-        $(document).ready(function() {
-            const table = $('#commandes-table').DataTable({
-                responsive: true,
-                order: [
-                    [0, 'asc']
-                ],
-                dom: 'Bfrtip',
-                buttons: ['copy', 'excel', 'pdf', 'print'],
-                columnDefs: [{
-                        orderable: false,
-                        targets: [7]
-                    } // actions not orderable
-                ]
-            });
-
-            //supprimer une commande
-            var route = "commandes";
-            delete_row(route);
-
-            //
-
-        });
-    </script> --}}
-
-
-@include('backend.pages.commandes.scripts.new_orders_script')
+    @include('backend.pages.commandes.scripts.new_orders_script')
 @endsection

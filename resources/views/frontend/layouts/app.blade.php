@@ -360,6 +360,10 @@
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
+                                @role('developpeur')
+                                    <li><a class="dropdown-item" href="{{ route('dashboard.index') }}">Admin
+                                            Panel</a></li>
+                                @endrole
                                 <li><a class="dropdown-item" href="{{ route('user.logout') }}">Déconnexion</a></li>
                             </ul>
                         </div>

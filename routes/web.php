@@ -1,17 +1,18 @@
 <?php
 
 
-use App\Http\Controllers\backend\ContactController;
 use App\Models\Page;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\PageController;
 use App\Http\Controllers\backend\RoleController;
 use App\Http\Controllers\backend\AdminController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\UserController;
 use App\Http\Controllers\backend\ModuleController;
+use App\Http\Controllers\backend\SliderController;
+use App\Http\Controllers\backend\ContactController;
 use App\Http\Controllers\backend\ProduitController;
+use App\Http\Controllers\backend\RapportController;
 use App\Http\Controllers\frontend\PanierController;
 use App\Http\Controllers\backend\CandidatController;
 use App\Http\Controllers\backend\CommandeController;
@@ -236,11 +237,17 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('delete/{id}', 'delete')->name('delete'); // suppression
     });
 
-    // contact
+    // messages contact
     Route::prefix('contact')->name('contact.')->controller(ContactController::class)->group(function () {
         Route::get('/', 'index')->name('index');       // Liste des contacts
         Route::post('/', 'store')->name('store');      // Ajouter un contact
         Route::get('/{id}', 'show')->name('show');     // Voir un contact
+        Route::get('delete/{id}', 'delete')->name('delete'); // Supprimer un contact
+    });
+
+    // rapports
+    Route::prefix('rapports')->name('rapports.')->controller(RapportController::class)->group(function () {
+        Route::get('vente', 'rapportVente')->name('vente'); // Rapport de vente
     });
 });
 
@@ -272,7 +279,7 @@ Route::controller(HomeController::class)->group(function () {
 
 //gestion des pages dynamiques
 Route::controller(PageDynamiqueController::class)->group(function () {
-    Route::get('/pages/{slug}', 'pageShow')->name('page.show'); // detail de la page
+    Route::get('/{slug}', 'pageShow')->name('page.show'); // detail de la page
     Route::get('/nos-activites', 'pageActivites')->name('page.activites'); // liste des activites
 });
 

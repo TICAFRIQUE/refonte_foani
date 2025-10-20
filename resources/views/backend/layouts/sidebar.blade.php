@@ -35,7 +35,7 @@
                 <li class="nav-item">
                     <a href="{{ route('commandes.index') }}"
                         class="nav-link menu-link {{ Route::is('commandes.*') ? 'active' : '' }}">
-                        <i class="bi bi-bag-check me-1"></i> COMMANDES
+                        <i class="bi bi-bag-check me-1"></i> Commandes
                     </a>
                 </li>
 
@@ -43,7 +43,7 @@
                 <li class="nav-item">
                     <a href="{{ route('reservations.index') }}"
                         class="nav-link menu-link {{ Route::is('reservations.*') ? 'active' : '' }}">
-                        <i class="bi bi-calendar-check me-1"></i> RESERVATIONS
+                        <i class="bi bi-calendar-check me-1"></i> Reservations
                     </a>
                 </li>
 
@@ -74,7 +74,7 @@
                 {{-- 7. Offres / Promotions --}}
                 <li class="nav-item">
                     <a href="{{ route('offre.index') }}" class="nav-link {{ Route::is('offre.*') ? 'active' : '' }}">
-                        <i class="ri-gift-line me-2"></i> <span>Offres</span>
+                        <i class="ri-gift-line me-2"></i> <span>Type d'Offres</span>
                     </a>
                 </li>
 
@@ -86,29 +86,23 @@
                             <i class="bi bi-shop me-2"></i> <span>Points de vente</span>
                         </div>
                     </a>
-                    <div class="collapse menu-dropdown" id="menuPointsVente">
+                    <div class="collapse menu-dropdown {{ Route::is('categorie_point_de_vente.*') || Route::is('point_vente.*') ? 'show' : '' }}"
+                        id="menuPointsVente">
                         <ul class="nav nav-sm flex-column ms-4">
                             <li class="nav-item">
-                                <a href="{{ route('point_vente.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-list-check me-2"></i> Gestion des points de vente
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="{{ route('categorie_point_de_vente.index') }}"
-                                    class="nav-link d-flex align-items-center">
+                                    class="nav-link {{ Route::is('categorie_point_de_vente.*') ? 'active' : '' }} d-flex align-items-center">
                                     <i class="bi bi-tags-fill me-2"></i> Catégories des points de vente
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('ville.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-geo-alt-fill me-2"></i> Villes
+                                <a href="{{ route('point_vente.index') }}"
+                                    class="nav-link {{ Route::is('point_vente.*') ? 'active' : '' }} d-flex align-items-center">
+                                    <i class="bi bi-list-check me-2"></i> Gestion des points de vente
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="{{ route('commune.index') }}" class="nav-link d-flex align-items-center">
-                                    <i class="bi bi-building-fill me-2"></i> Communes
-                                </a>
-                            </li>
+
+
                         </ul>
                     </div>
                 </li>
@@ -121,24 +115,29 @@
                             <i class="bi bi-truck me-2"></i> <span>Points de livraison</span>
                         </div>
                     </a>
-                    <div class="collapse menu-dropdown" id="menuLivraison">
+                    <div class="collapse menu-dropdown {{ Route::is('ville.*') || Route::is('commune.*') ? 'show' : '' }}"
+                        id="menuLivraison">
                         <ul class="nav nav-sm flex-column ms-4">
                             <li class="nav-item">
-                                <a href="{{ route('ville.index') }}" class="nav-link d-flex align-items-center">
+                                <a href="{{ route('ville.index') }}"
+                                    class="nav-link {{ Route::is('ville.*') ? 'active' : '' }} d-flex align-items-center">
                                     <i class="bi bi-geo-alt-fill me-2"></i> Villes
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('commune.index') }}" class="nav-link d-flex align-items-center">
+                                <a href="{{ route('commune.index') }}"
+                                    class="nav-link {{ Route::is('commune.*') ? 'active' : '' }} d-flex align-items-center">
                                     <i class="bi bi-building-fill me-2"></i> Communes
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
+                {{-- 10. Gestion des messages --}}
                 <li class="nav-item">
-                    <a href="{{ route('contact.index') }}" class="nav-link">
-                        <i class="ri-mail-line align-middle me-2"></i> Contact
+                    <a href="{{ route('contact.index') }}"
+                        class="nav-link {{ Route::is('contact.*') ? 'active' : '' }}">
+                        <i class="ri-mail-line align-middle me-2"></i> Gestion des messages
                         @if ($newMessagesCount > 0)
                             <span class="badge bg-danger ms-1">{{ $newMessagesCount }}</span>
                         @endif
@@ -158,7 +157,7 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center" href="#menuPages" data-bs-toggle="collapse"
                         role="button" aria-expanded="false" aria-controls="menuPages">
-                        <i class="bi bi-file-earmark-fill me-2"></i> GESTION DE PAGE
+                        <i class="bi bi-file-earmark-fill me-2"></i> Gestion des pages
                     </a>
                     <div class="collapse menu-dropdown {{ Route::is('pages.*') || Route::is('categorie_page.*') ? 'show' : '' }}"
                         id="menuPages">
@@ -180,12 +179,19 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('sliders*') ? 'active' : '' }}"
+                    <a class="nav-link menu-link {{ Route::is('sliders.*') ? 'active' : '' }}"
                         href="{{ route('sliders.index') }}">
                         <i class="bi bi-images me-2"></i> <span>Sliders</span>
                     </a>
                 </li>
 
+                {{-- 12. Rapports --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ Route::is('rapports.*') ? 'active' : '' }}"
+                        href="{{ route('rapports.vente') }}">
+                        <i class="ri-file-chart-line me-2"></i> <span>Rapports</span>
+                    </a>
+                </li>
                 {{-- 12. Paramètres --}}
                 @if (Auth::user()->role == 'superadmin' || Auth::user()->role == 'developpeur' || Auth::user()->can('voir-parametre'))
                     <li class="nav-item">
