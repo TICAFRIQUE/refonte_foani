@@ -23,9 +23,9 @@
     @php
         $stats = [
             'en_attente' => $commandes->where('statut', 'en_attente')->count(),
-            'en_cours'   => $commandes->where('statut', 'en_cours')->count(),
-            'livrée'     => $commandes->where('statut', 'livrée')->count(),
-            'annulée'    => $commandes->where('statut', 'annulée')->count(),
+            'en_cours' => $commandes->where('statut', 'en_cours')->count(),
+            'livrée' => $commandes->where('statut', 'livrée')->count(),
+            'annulée' => $commandes->where('statut', 'annulée')->count(),
         ];
         $colors = [
             'en_attente' => 'secondary',
@@ -37,7 +37,7 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex flex-wrap gap-3 justify-content-center">
-                @foreach($stats as $statut => $count)
+                @foreach ($stats as $statut => $count)
                     <div class="card border-0 shadow-sm" style="min-width:160px;">
                         <div class="card-body text-center">
                             <span class="badge bg-{{ $colors[$statut] ?? 'secondary' }} mb-2" style="font-size:1.1em;">
@@ -54,24 +54,28 @@
     {{-- Filtre par statut et date --}}
     <div class="row mb-3">
         <div class="col-lg-8 mx-auto">
-            <form method="GET" action="{{ route('commandes.index') }}" class="row g-2 align-items-end justify-content-center">
+            <form method="GET" action="{{ route('commandes.index') }}"
+                class="row g-2 align-items-end justify-content-center">
                 <div class="col-md-3">
                     <label for="date_debut" class="form-label mb-0">Date début</label>
-                    <input type="date" id="date_debut" name="date_debut" class="form-control" value="{{ request('date_debut') }}">
+                    <input type="date" id="date_debut" name="date_debut" class="form-control"
+                        value="{{ request('date_debut') }}">
                 </div>
                 <div class="col-md-4">
                     <label for="date_fin" class="form-label mb-0">Date fin</label>
-                    <input type="date" id="date_fin" name="date_fin" class="form-control" value="{{ request('date_fin') }}">
+                    <input type="date" id="date_fin" name="date_fin" class="form-control"
+                        value="{{ request('date_fin') }}">
                 </div>
                 <div class="col-md-3 d-flex">
                     <select name="statut" class="form-select">
                         <option value="">-- Tous les statuts --</option>
-                        <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En attente</option>
+                        <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En attente
+                        </option>
                         <option value="en_cours" {{ request('statut') == 'en_cours' ? 'selected' : '' }}>En cours</option>
                         <option value="livrée" {{ request('statut') == 'livrée' ? 'selected' : '' }}>Livrée</option>
                         <option value="annulée" {{ request('statut') == 'annulée' ? 'selected' : '' }}>Annulée</option>
                     </select>
-                  
+
                 </div>
                 <div class="col-md-2 d-flex">
                     <button class="btn btn-primary w-100" type="submit">
@@ -91,7 +95,7 @@
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="commandes-table" class="table table-bordered table-striped dt-responsive nowrap"
+                        <table id="buttons-datatables" class="table table-bordered table-striped dt-responsive nowrap"
                             style="width:100%">
                             <thead class="table-primary">
                                 <tr>
@@ -155,6 +159,7 @@
 @endsection
 
 @section('script')
+    <!-- jQuery et DataTables -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
@@ -165,5 +170,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+    <!-- Initialisation DataTables -->
+    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
     @include('backend.pages.commandes.scripts.new_orders_script')
+
+
+    <script>
+        window.routeName = "commandes";
+    </script>
 @endsection

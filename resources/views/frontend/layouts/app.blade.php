@@ -409,7 +409,7 @@
         </span>
     </a> --}}
 
-    {{-- ...avant </body> --}}
+    {{-- ...MOBILE BAR --}}
     <div id="mobile-bottom-bar" class="d-lg-none d-md-none d-block">
         <div class="mobile-bar-content d-flex justify-content-around align-items-center">
             {{-- Panier --}}

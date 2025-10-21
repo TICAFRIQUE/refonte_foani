@@ -222,7 +222,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('newReservationCount', 'newReservationCount')->name('newReservationCount'); // JSON polling
         Route::post('{reservation}', 'update')->name('update'); // Mise à jour
         Route::get('{reservation}', 'show')->name('show'); // Détail d'une réservation
-        Route::delete('{reservation}', 'delete')->name('delete'); // Suppression
+        Route::delete('{id}', 'delete')->name('delete'); // Suppression
     });
 
     // clients
@@ -279,7 +279,7 @@ Route::controller(HomeController::class)->group(function () {
 
 //gestion des pages dynamiques
 Route::controller(PageDynamiqueController::class)->group(function () {
-    Route::get('/{slug}', 'pageShow')->name('page.show'); // detail de la page
+    Route::get('page/{slug}', 'pageShow')->name('page.show'); // detail de la page
     Route::get('/nos-activites', 'pageActivites')->name('page.activites'); // liste des activites
 });
 

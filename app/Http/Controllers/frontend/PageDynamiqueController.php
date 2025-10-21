@@ -13,11 +13,17 @@ class PageDynamiqueController extends Controller
     public function pageShow($slug)
     {
         try {
-            $page = Page::where('slug', $slug)->firstOrFail();
+
+            if (isset($slug)) {
+                $page = Page::where('slug', $slug)->firstOrFail();
+            }
+
             return view('frontend.pages.gestion_page.detail', compact('page'));
         } catch (\Throwable $th) {
+            return $th->getMessage();
+
             //throw $th;
-            return redirect()->route('accueil')->with('error', 'La page demandée n\'existe pas ou a été supprimée !');
+            // return redirect()->route('accueil')->with('error', 'La page demandée n\'existe pas ou a été supprimée !');
         }
     }
 
@@ -25,14 +31,13 @@ class PageDynamiqueController extends Controller
 
     public function pageActivites()
     {
-      try {
-          $categories_pages = CategoriePage::whereSlug('activites')->active()->first();
-          $activites = Page::where('categorie_page_id', $categories_pages->id)->get();
-          return view('frontend.pages.gestion_page.activites', compact('categories_pages' , 'activites'));
-      } catch (\Throwable $th) {
-          //throw $th;
-          return redirect()->route('accueil')->with('error', 'Une erreur est survenue lors du chargement des activités !');
-      }
+        try {
+            $categories_pages = CategoriePage::whereSlug('activites')->active()->first();
+            $activites = Page::where('categorie_page_id', $categories_pages->id)->get();
+            return view('frontend.pages.gestion_page.activites', compact('categories_pages', 'activites'));
+        } catch (\Throwable $th) {
+            //throw $th;
+            return redirect()->route('accueil')->with('error', 'Une erreur est survenue lors du chargement des activités !');
+        }
     }
-  
 }
