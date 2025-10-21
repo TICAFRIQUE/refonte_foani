@@ -20,7 +20,7 @@ class PointVenteController extends Controller
     {
         try {
             $point_ventes = PointVente::with(['categoriePointVente', 'commune'])->get();
-            $villes = Ville::active()->alphabetique()->get();
+            $villes = Ville::with('communes')->active()->alphabetique()->get();
             $communes = Commune::active()->alphabetique()->get();
             $categories = CategoriePointVente::orderBy('libelle', 'asc')->get();;
 
@@ -35,6 +35,7 @@ class PointVenteController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'commune_id' => 'required',
             'categorie_point_vente_id' => 'required',
@@ -46,16 +47,34 @@ class PointVenteController extends Controller
             'google_map' => 'nullable|url|max:255',
         ]);
 
+        //verifier si la commune existe déjà pour ce point de vente
+        $commune = Commune::where('id', $request->commune_id)
+            ->first();
+
+        $ville = Ville::where('id', $request->commune_id)
+            ->first();
+
+        //on verfie si commune_id est commune ou ville
+        $ville_id = null;
+        $commune_id = null;
+
+        if ($commune) {
+            $commune_id = $commune->id;
+            $ville_id = $commune->ville_id;
+        } elseif ($ville) {
+            $ville_id = $ville->id;
+            $commune_id = null;
+        } else {
+            return back()->with('error', 'La commune ou la ville sélectionnée n\'existe pas.')->withInput();
+        }
 
 
         try {
 
-
-
-
             PointVente::create([
                 'categorie_point_vente_id' => $request->categorie_point_vente_id,
-                'commune_id' => $request->commune_id,
+                'commune_id' => $commune_id,
+                'ville_id' => $ville_id,
                 'quartier' => convertToMajuscule::toUpperNoAccent($request->quartier),
                 'responsable' => $request->responsable,
                 'contact' => $request->contact,
@@ -89,6 +108,27 @@ class PointVenteController extends Controller
             'google_map' => 'nullable|url|max:255',
         ]);
 
+        //verifier si la commune existe deja pour ce point de vente
+        $commune = Commune::where('id', $request->commune_id)
+            ->first();
+
+        $ville = Ville::where('id', $request->commune_id)
+            ->first();
+
+        //on verfie si commune_id est commune ou ville
+        $ville_id = null;
+        $commune_id = null;
+
+        if ($commune) {
+            $commune_id = $commune->id;
+            $ville_id = $commune->ville_id;
+        } elseif ($ville) {
+            $ville_id = $ville->id;
+            $commune_id = null;
+        } else {
+            return back()->with('error', 'La commune ou la ville sélectionnée n\'existe pas.')->withInput();
+        }
+
 
 
         try {
@@ -98,7 +138,8 @@ class PointVenteController extends Controller
 
             $villePointVente->update([
                 'categorie_point_vente_id' => $request->categorie_point_vente_id,
-                'commune_id' => $request->commune_id,
+                'commune_id' => $commune_id,
+                'ville_id' => $ville_id,
                 'quartier' => convertToMajuscule::toUpperNoAccent($request->quartier),
                 'responsable' => $request->responsable,
                 'contact' => $request->contact,

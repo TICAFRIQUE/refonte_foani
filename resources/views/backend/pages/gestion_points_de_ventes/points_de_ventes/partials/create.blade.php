@@ -14,7 +14,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('point_vente.store') }}" method="POST">
+            <form action="{{ route('point_vente.store') }}" method="POST" class=" needs-validation" novalidate>
                 @csrf
 
                 <div class="modal-header">
@@ -24,18 +24,6 @@
 
                 <div class="modal-body">
                     <div class="row g-3">
-
-                        {{-- Ligne 1 : Commune + Catégorie --}}
-                        <div class="col-md-6">
-                            <label class="form-label">Commune</label>
-                            <select name="commune_id" class="form-select" required>
-                                <option value="">-- Sélectionner --</option>
-                                @foreach ($communes as $commune)
-                                    <option value="{{ $commune->id }}">{{ $commune->libelle }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Catégorie</label>
                             <select name="categorie_point_vente_id" class="form-select" required>
@@ -46,6 +34,23 @@
                             </select>
                         </div>
 
+
+                        <div class="col-md-6">
+                            <label class="form-label">Commune / Ville</label>
+                            <select name="commune_id" class="form-select" required>
+                                <option value="">-- Sélectionner --</option>
+                                @foreach ($villes as $ville)
+                                    <option style="font-weight:800" value="{{ $ville->id }}">{{ $ville->libelle }}
+                                    </option>
+                                    @foreach ($ville->communes as $commune)
+                                        <option value="{{ $commune->id }}">-- {{ $commune->libelle }}</option>
+                                    @endforeach
+                                @endforeach
+                            </select>
+                        </div>
+
+
+
                         {{-- Ligne 2 : Quartier + Responsable --}}
                         <div class="col-md-6">
                             <label class="form-label">Quartier</label>
@@ -54,7 +59,7 @@
 
                         <div class="col-md-6">
                             <label class="form-label">Responsable</label>
-                            <input type="text" name="responsable" class="form-control" required>
+                            <input type="text" name="responsable" class="form-control">
                         </div>
 
                         {{-- Ligne 3 : Contact + Autre contact --}}
@@ -85,8 +90,8 @@
                 </div>
 
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary w-75">Ajouter</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Ajouter</button>
                 </div>
             </form>
         </div>

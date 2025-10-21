@@ -13,6 +13,7 @@ class PointVente extends Model
     public $incrementing = false;  // decrementer l'incrementation automatique de l'id
     protected $fillable = [
         'categorie_point_vente_id',
+        'ville_id',
         'commune_id',
         'quartier',
         'contact',
@@ -42,5 +43,10 @@ class PointVente extends Model
     public function commune()
     {
         return $this->belongsTo(Commune::class, 'commune_id');
+    }
+    // un point de vente appartient à une ville
+    public function ville()
+    {
+        return $this->belongsTo(Ville::class, 'ville_id');
     }
 }

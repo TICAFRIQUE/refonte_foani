@@ -431,13 +431,13 @@
             @guest
                 <a href="{{ route('user.loginForm') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
                     title="Se connecter">
-                    <i class="bi bi-person"></i>
+                    <i class="bi bi-person fs-3"></i>
                 </a>
             @else
                 <div class="dropup">
                     <a href="#" class="btn btn-success rounded-circle flex-shrink-0 dropdown-toggle"
                         data-bs-toggle="dropdown" aria-expanded="false" title="Mon compte">
-                        <i class="bi bi-person-check"></i>
+                        <i class="bi bi-person-check fs-3"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end mb-2">
                         <li>
@@ -524,7 +524,8 @@
             </div>
             <hr>
             <div class="text-center text-muted small">
-                &copy; {{ date('Y') }} Foani. Tous droits réservés.
+                &copy; {{ date('Y') }} Foani. Tous droits réservés. Développé par <a href="https://www.ticafrique.ci"
+                    target="_blank" class="text-decoration-none text-muted">TICAFRIQUE</a>.
             </div>
         </div>
     </footer>

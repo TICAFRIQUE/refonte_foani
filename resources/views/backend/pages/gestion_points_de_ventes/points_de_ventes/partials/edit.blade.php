@@ -14,7 +14,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('point_vente.update', $pv->id) }}" method="POST">
+            <form action="{{ route('point_vente.update', $pv->id) }}" method="POST" class=" needs-validation" novalidate>
                 @csrf
 
                 <div class="modal-header">
@@ -30,11 +30,15 @@
                             <label class="form-label">Commune</label>
                             <select name="commune_id" class="form-select" required>
                                 <option value="">-- Sélectionner --</option>
-                                @foreach ($communes as $commune)
-                                    <option value="{{ $commune->id }}"
-                                        {{ $pv->commune_id == $commune->id ? 'selected' : '' }}>
-                                        {{ $commune->libelle }}
+                                @foreach ($villes as $ville)
+                                    <option style="font-weight:800" value="{{ $ville->id }}"
+                                        {{ $pv->ville_id == $ville->id ? 'selected' : '' }}>{{ $ville->libelle }}
                                     </option>
+                                    @foreach ($ville->communes as $commune)
+                                        <option value="{{ $commune->id }}"
+                                            {{ $pv->commune_id == $commune->id ? 'selected' : '' }}>--
+                                            {{ $commune->libelle }}</option>
+                                    @endforeach
                                 @endforeach
                             </select>
                         </div>
@@ -62,7 +66,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Responsable</label>
                             <input type="text" name="responsable" value="{{ $pv->responsable }}"
-                                class="form-control" required>
+                                class="form-control">
                         </div>
 
                         {{-- Ligne 3 : Contact + Autre contact --}}
@@ -95,8 +99,8 @@
                 </div>
 
                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary w-75">Modifier</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Modifier</button>
                 </div>
             </form>
 

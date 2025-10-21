@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('point_ventes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('categorie_point_vente_id')->nullable()->constrained('categorie_point_ventes')->onUpdate('cascade')->onDelete('cascade'); // 
+            $table->foreignId('ville_id')->nullable()->constrained('villes')->onUpdate('cascade')->onDelete('cascade'); // clé étrangère vers villes
             $table->foreignId('commune_id')->nullable()->constrained('communes')->onUpdate('cascade')->onDelete('cascade'); // clé étrangère vers communes
             $table->string('quartier')->nullable();
             $table->string('contact')->nullable();

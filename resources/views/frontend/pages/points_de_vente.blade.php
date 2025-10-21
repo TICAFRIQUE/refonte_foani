@@ -65,7 +65,7 @@
                                     <tbody>
                                         @foreach ($points_de_vente as $point)
                                             <tr>
-                                                <td class="fw-bold">{{ $point->commune->libelle ?? '-' }}</td>
+                                                <td class="fw-bold">{{ $point->commune->libelle ?? $point->ville->libelle }}</td>
                                                 <td>{{ $point->quartier ?? '-' }}</td>
                                                 <td>{{ $point->contact ?? '-' }}</td>
                                             </tr>

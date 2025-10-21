@@ -40,7 +40,7 @@
                                 <tr>
                                     <th>#</th>
 
-                                    <th>Commune</th>
+                                    <th>Commune / Ville</th>
                                     <th>Quartier</th>
                                     <th>Responsable</th>
                                     <th>Categorie</th>
@@ -56,7 +56,7 @@
                                     <tr id="row_{{ $pv->id }}">
                                         <td>{{ $loop->iteration }}</td>
 
-                                        <td>{{ $pv->commune->libelle ?? '-' }}</td>
+                                        <td>{{ $pv->commune->libelle ??  $pv->ville->libelle }}</td>
                                         <td>{{ $pv->quartier ?? '-' }}</td>
                                         <td>{{ $pv->responsable ?? '-' }}</td>
                                         <td>{{ $pv->categoriePointVente->libelle ?? '-' }}</td>
