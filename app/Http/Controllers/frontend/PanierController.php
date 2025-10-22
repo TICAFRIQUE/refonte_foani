@@ -199,6 +199,12 @@ class PanierController extends Controller
             //le numero de telephone doit contenir 10 chiffres minimum
             'phone.min' => 'Le numéro de téléphone doit contenir au moins 10 chiffres.',
             'phone.max' => 'Le numéro de téléphone ne doit pas dépasser 10 chiffres.',
+            'quartier.required' => 'Le quartier est obligatoire.',
+            'frais_livraison.required' => 'Le frais de livraison est obligatoire.',
+            'sous_total.required' => 'Le sous-total est obligatoire.',
+            'total_general.required' => 'Le total general est obligatoire.',
+            'total_general.min' => 'Le total general doit etre au moins 10 000 FCFA.',
+            'sous_total.min' => 'Le sous-total doit etre au moins 10 000 FCFA.',
         ]);
 
         // 🛒 Vérification du panier en session
