@@ -14,9 +14,11 @@ class BoutiqueController extends Controller
     {
         try {
             $categorieSlug = $request->categorie;
+            $recherche = $request->recherche;
             $categorie = null;
             $query = Produit::with('categorie')->active();
 
+            // Filtre par catégorie
             if ($categorieSlug) {
                 $categorie = Categorie::where('slug', $categorieSlug)->first();
                 if ($categorie) {
@@ -24,9 +26,20 @@ class BoutiqueController extends Controller
                 }
             }
 
+            // Filtre par recherche
+            if ($recherche) {
+                $query->where(function($q) use ($recherche) {
+                    $q->where('libelle', 'LIKE', '%' . $recherche . '%')
+                      ->orWhere('description', 'LIKE', '%' . $recherche . '%')
+                      ->orWhereHas('categorie', function($catQuery) use ($recherche) {
+                          $catQuery->where('libelle', 'LIKE', '%' . $recherche . '%');
+                      });
+                });
+            }
+
             $produits = $query->paginate(16);
 
-            return view('frontend.pages.boutique', compact('produits', 'categorie'));
+            return view('frontend.pages.boutique', compact('produits', 'categorie', 'recherche'));
         } catch (\Throwable $th) {
             return redirect()->route('accueil')->with('error', 'Une erreur est survenue. Veuillez réessayer plus tard.');
         }
@@ -37,12 +50,22 @@ class BoutiqueController extends Controller
     {
         try {
             $categorie = Categorie::where('slug', $slug)->firstOrFail();
-            $produits = Produit::with('categorie')
+            $recherche = request('recherche');
+            $query = Produit::with('categorie')
                 ->where('categorie_id', $categorie->id)
-                ->active()
-                ->paginate(16);
+                ->active();
 
-            return view('frontend.pages.boutique', compact('produits', 'categorie'));
+            // Filtre par recherche dans la catégorie
+            if ($recherche) {
+                $query->where(function($q) use ($recherche) {
+                    $q->where('libelle', 'LIKE', '%' . $recherche . '%')
+                      ->orWhere('description', 'LIKE', '%' . $recherche . '%');
+                });
+            }
+
+            $produits = $query->paginate(16);
+
+            return view('frontend.pages.boutique', compact('produits', 'categorie', 'recherche'));
         } catch (\Throwable $th) {
             return redirect()->route('accueil')->with('error', 'Catégorie introuvable.');
         }

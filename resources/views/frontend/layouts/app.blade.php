@@ -46,6 +46,7 @@
         .navbar-nav .nav-link {
             transition: all 0.3s ease;
             position: relative;
+            /* font-size: 14px */
         }
 
         /* Effet au survol */
@@ -257,6 +258,273 @@
                 font-size: 1.2rem;
             }
         }
+
+        /* Barre de recherche navbar */
+        .navbar-search-container {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        .navbar-search-form .form-control {
+            border: none;
+            border-radius: 25px 0 0 25px;
+            width: 250px;
+            padding: 10px 15px;
+            background: #f8f9fa;
+        }
+
+        .navbar-search-form .form-control:focus {
+            box-shadow: none;
+            background: white;
+            border: 2px solid #2a6b2a;
+        }
+
+        .navbar-search-btn {
+            border-radius: 0;
+            border: none;
+            padding: 10px 15px;
+        }
+
+        .navbar-search-container .btn-outline-secondary {
+            border-radius: 0 25px 25px 0;
+            border: none;
+            padding: 10px 15px;
+        }
+
+        /* Mobile search */
+        .mobile-search-container {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            animation: slideInUp 0.3s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 991px) {
+            .navbar-search-container {
+                display: none !important;
+            }
+        }
+
+        /* Icône de recherche améliorée */
+        .btn-search-toggle {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.25));
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1001;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .btn-search-toggle::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-search-toggle:hover {
+            transform: translateY(-2px) scale(1.05);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.35));
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.15),
+                0 0 20px rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-search-toggle:hover::before {
+            opacity: 1;
+        }
+
+        .btn-search-toggle:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-search-toggle i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-search-toggle:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Conteneur de recherche amélioré */
+        .navbar-search-container {
+            position: absolute;
+            top: 50%;
+            right: 54px;
+            /* Décalé pour laisser place à l'icône */
+            transform: translateY(-50%);
+            z-index: 1000;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border-radius: 30px;
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.15),
+                0 4px 20px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            animation: slideInRight 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        /* Formulaire en ligne */
+        .navbar-search-form {
+            display: flex !important;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Input de recherche */
+        .navbar-search-form .form-control {
+            border: none;
+            border-radius: 30px 0 0 30px;
+            width: 280px;
+            padding: 14px 20px;
+            background: transparent;
+            font-size: 0.95rem;
+            color: #333;
+            transition: all 0.3s ease;
+            margin: 0;
+            flex: 1;
+        }
+
+        .navbar-search-form .form-control:focus {
+            box-shadow: none;
+            background: rgba(255, 255, 255, 0.9);
+            outline: none;
+            width: 320px;
+        }
+
+        .navbar-search-form .form-control::placeholder {
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        /* Bouton de soumission */
+        .btn-search-submit {
+            background: linear-gradient(135deg, #2a6b2a, #1e5a1e);
+            border: none;
+            padding: 14px 18px;
+            color: white;
+            transition: all 0.3s ease;
+            border-radius: 0 30px 30px 0;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        .btn-search-submit:hover {
+            background: linear-gradient(135deg, #1e5a1e, #164a16);
+            transform: scale(1.05);
+            color: white;
+        }
+
+        .btn-search-submit i {
+            font-size: 1rem;
+        }
+
+        /* Supprimer les marges des input-group */
+        .navbar-search-form .input-group {
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .navbar-search-form .form-control {
+                width: 240px;
+            }
+
+            .navbar-search-form .form-control:focus {
+                width: 270px;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .navbar-search-container {
+                display: none !important;
+            }
+        }
+
+        /* Animation au focus */
+        .navbar-search-form .form-control:focus + .btn-search-submit {
+            background: linear-gradient(135deg, #559e33, #2a6b2a);
+            box-shadow: 0 0 15px rgba(42, 107, 42, 0.3);
+        }
+
+        /* States actifs */
+        .btn-search-toggle.active {
+            background: linear-gradient(135deg, #2a6b2a, #1e5a1e);
+            border-color: #2a6b2a;
+            color: white;
+        }
+
+        .btn-search-toggle.active:hover {
+            background: linear-gradient(135deg, #1e5a1e, #164a16);
+        }
+
+        /* Animation de fermeture */
+        .navbar-search-container.closing {
+            animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        @keyframes slideOutRight {
+            0% {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-50%) translateX(30px) scale(0.9);
+            }
+        }
     </style>
 </head>
 
@@ -264,11 +532,7 @@
     <!-- Header & Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ route('accueil') }}    ">
-                {{-- <div id="logo" class="rounded-circle">
-                    <img  src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
-                    alt="Foani" height="60" class="me-2 ">
-                </div> --}}
+            <a class="navbar-brand fw-bold" href="{{ route('accueil') }}">
                 <div id="logo" class="logo-wrapper rounded-circle">
                     <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
                         alt="Foani" class="logo-image">
@@ -278,10 +542,9 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav ms-3 me-auto mb-2 mb-lg-0 fw-bold">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-bold">
                     <li class="nav-item"><a class="nav-link text-white {{ Route::is('accueil') ? 'active' : '' }}"
-                            href="{{ route('accueil') }}"> <i class="bi bi-house-door-fill"></i> ACCUEIL</a></li>
-
+                            href="{{ route('accueil') }}"> ACCUEIL</a></li>
 
                     @foreach ($categories_pages->where('slug', '!=', 'activites') as $categorie_page)
                         <li class="nav-item dropdown">
@@ -302,7 +565,7 @@
 
                     <li class="nav-item"><a
                             class="nav-link text-white {{ Route::is('page.activites') ? 'active' : '' }}"
-                            href="{{ route('page.activites') }}">NOS
+                            href="{{ route('page.activites') }}">
                             ACTIVITES</a></li>
 
                     <li class="nav-item dropdown">
@@ -325,10 +588,32 @@
 
                     <li class="nav-item"><a
                             class="nav-link text-white {{ Route::is('boutique.index') ? 'active' : '' }}"
+
                             href="{{ route('boutique.index') }}">BOUTIQUE</a></li>
                     <li class="nav-item"><a class="nav-link text-white {{ Route::is('contact') ? 'active' : '' }}"
                             href="{{ route('contact') }}">CONTACT</a></li>
                 </ul>
+
+                {{-- Barre de recherche dans la navbar avec toggle --}}
+                <div class="d-none d-lg-flex me-3 position-relative">
+                    {{-- Icône de recherche --}}
+                    <button class="btn btn-search-toggle rounded-circle" id="searchToggleBtn" type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+
+                    {{-- Barre de recherche (cachée par défaut) --}}
+                    <div class="navbar-search-container" id="navbarSearchContainer" style="display: none;">
+                        <form method="GET" action="{{ route('boutique.index') }}" class="navbar-search-form d-flex">
+                            <input type="text" name="recherche" class="form-control navbar-search-input"
+                                placeholder="Rechercher un produit..."
+                                value="{{ request('recherche') }}" id="navbarSearchInput">
+                            <button class="btn btn-search-submit" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="d-flex align-items-center gap-3">
                     <a href="{{ route('panier.index') }}"
                         class="btn btn-outline-light rounded-circle position-relative">
@@ -338,14 +623,21 @@
                         </span>
                     </a>
 
-
                     @guest
-                        <a href="{{ route('user.loginForm') }}" class="btn btn-outline-light rounded-pill px-3"> <i
-                                class="bi bi-person"></i>
-                            Se connecter</a>
-                        <a href="{{ route('user.registerForm') }}" class="btn btn-outline-light rounded-pill px-3"> <i
-                                class="bi bi-person-plus"></i>
-                            S'inscrire</a>
+                        <div class="dropdown">
+                            <a class="btn btn-outline-light dropdown-toggle fw-bold" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> Mon Compte
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ route('user.loginForm') }}">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ route('user.registerForm') }}">
+                                    <i class="bi bi-person-plus me-2"></i> Créer un compte
+                                </a></li>
+                            </ul>
+                        </div>
                     @else
                         <div class="dropdown">
                             <a class="btn btn-outline-light dropdown-toggle fw-bold" href="#" role="button"
@@ -364,7 +656,7 @@
                                     <li><a class="dropdown-item" href="{{ route('dashboard.index') }}">Admin
                                             Panel</a></li>
                                 @endrole
-                                <li><a class="dropdown-item" href="{{ route('user.logout') }}">Déconnexion</a></li>
+                                <li><a class="dropdown-item" href="{{ route('user.logout') }}">Déconnexion</a></li>
                             </ul>
                         </div>
                     @endguest
@@ -411,7 +703,32 @@
 
     {{-- ...MOBILE BAR --}}
     <div id="mobile-bottom-bar" class="d-lg-none d-md-none d-block">
+        {{-- Barre de recherche mobile (toggle) --}}
+        <div id="mobile-search-bar" class="mobile-search-container" style="display: none;">
+            <div class="p-3 bg-white border-top">
+                <form method="GET" action="{{ route('boutique.index') }}">
+                    <div class="input-group">
+                        <input type="text" name="recherche" class="form-control"
+                            placeholder="Rechercher un produit..."
+                            value="{{ request('recherche') }}">
+                        <button class="btn btn-success" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        <button class="btn btn-outline-secondary" type="button" onclick="toggleMobileSearch()">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="mobile-bar-content d-flex justify-content-around align-items-center">
+            {{-- Bouton de recherche --}}
+            <button class="btn btn-outline-success rounded-circle flex-shrink-0"
+                onclick="toggleMobileSearch()" title="Rechercher">
+                <i class="bi bi-search fs-3"></i>
+            </button>
+
             {{-- Panier --}}
             <a href="{{ route('panier.index') }}"
                 class="btn btn-warning rounded-circle position-relative flex-shrink-0" title="Panier">
@@ -422,11 +739,13 @@
                     {{ $count ?? 0 }}
                 </span>
             </a>
+
             {{-- Boutique --}}
             <a href="{{ route('boutique.index') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
                 title="Boutique">
                 <i class="bi bi-shop fs-3"></i>
             </a>
+
             {{-- Connexion ou Profil (menu déroulant si connecté) --}}
             @guest
                 <a href="{{ route('user.loginForm') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
@@ -601,6 +920,146 @@
             // Mobile bar
             let badgeMobile = document.getElementById('cart-badge-mobile');
             if (badgeMobile) badgeMobile.textContent = newCount;
+        }
+    </script>
+    <script>
+        // Toggle barre de recherche desktop amélioré
+        document.getElementById('searchToggleBtn').addEventListener('click', function(e) {
+            e.stopPropagation(); // Empêche la propagation du clic
+            const container = document.getElementById('navbarSearchContainer');
+            const input = document.getElementById('navbarSearchInput');
+            const toggleBtn = this;
+
+            if (container.style.display === 'none' || container.style.display === '') {
+                // Afficher la barre et cacher l'icône
+                container.style.display = 'block';
+                container.classList.remove('closing');
+                toggleBtn.style.opacity = '0';
+                toggleBtn.style.visibility = 'hidden';
+                toggleBtn.classList.add('active');
+                
+                setTimeout(() => {
+                    input.focus();
+                    input.select(); // Sélectionne le texte existant
+                }, 150);
+            } else {
+                closeSearchBar();
+            }
+        });
+
+        // Fonction pour fermer la barre de recherche avec animation
+        function closeSearchBar() {
+            const container = document.getElementById('navbarSearchContainer');
+            const toggleBtn = document.getElementById('searchToggleBtn');
+
+            container.classList.add('closing');
+            
+            setTimeout(() => {
+                container.style.display = 'none';
+                container.classList.remove('closing');
+                toggleBtn.classList.remove('active');
+                
+                // Réafficher l'icône avec animation
+                toggleBtn.style.opacity = '1';
+                toggleBtn.style.visibility = 'visible';
+            }, 300);
+        }
+
+        // Empêcher TOUS les clics dans le container de recherche de se propager
+        document.getElementById('navbarSearchContainer').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Gestion spécifique du formulaire de recherche DESKTOP
+        const searchForm = document.querySelector('.navbar-search-form');
+        const searchSubmitBtn = document.querySelector('.btn-search-submit');
+
+        // Empêcher la propagation sur le formulaire et ajouter scroll=true
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Récupérer la valeur de recherche
+            const searchValue = document.getElementById('navbarSearchInput').value;
+            
+            // Construire l'URL avec le paramètre scroll=true
+            let url = '{{ route("boutique.index") }}';
+            if (searchValue.trim()) {
+                url += '?recherche=' + encodeURIComponent(searchValue) + '&scroll=true';
+            } else {
+                url += '?scroll=true';
+            }
+            
+            // Rediriger vers la boutique
+            window.location.href = url;
+        });
+
+        // Empêcher la propagation sur le bouton de soumission
+        searchSubmitBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Le formulaire va gérer la soumission
+        });
+
+        // Empêcher la propagation sur l'input
+        document.getElementById('navbarSearchInput').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Gestion du formulaire de recherche MOBILE
+        const mobileSearchForm = document.querySelector('#mobile-search-bar form');
+        if (mobileSearchForm) {
+            mobileSearchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Récupérer la valeur de recherche mobile
+                const mobileSearchValue = this.querySelector('input[name="recherche"]').value;
+                
+                // Construire l'URL avec le paramètre scroll=true
+                let url = '{{ route("boutique.index") }}';
+                if (mobileSearchValue.trim()) {
+                    url += '?recherche=' + encodeURIComponent(mobileSearchValue) + '&scroll=true';
+                } else {
+                    url += '?scroll=true';
+                }
+                
+                // Rediriger vers la boutique
+                window.location.href = url;
+            });
+        }
+
+        // Fermer la barre de recherche en cliquant ailleurs
+        document.addEventListener('click', function(e) {
+            const container = document.getElementById('navbarSearchContainer');
+            const toggleBtn = document.getElementById('searchToggleBtn');
+
+            // Vérifier si le clic est en dehors du container ET du bouton toggle
+            if (!container.contains(e.target) && !toggleBtn.contains(e.target)) {
+                if (container.style.display === 'block') {
+                    closeSearchBar();
+                }
+            }
+        });
+
+        // Fermer avec la touche Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const container = document.getElementById('navbarSearchContainer');
+
+                if (container.style.display === 'block') {
+                    closeSearchBar();
+                }
+            }
+        });
+
+        // Toggle barre de recherche mobile
+        function toggleMobileSearch() {
+            const searchBar = document.getElementById('mobile-search-bar');
+            if (searchBar.style.display === 'none' || searchBar.style.display === '') {
+                searchBar.style.display = 'block';
+                setTimeout(() => searchBar.querySelector('input').focus(), 100);
+            } else {
+                searchBar.style.display = 'none';
+            }
         }
     </script>
 </body>
