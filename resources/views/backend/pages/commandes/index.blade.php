@@ -21,11 +21,12 @@
 
     {{-- Statistiques par statut --}}
     @php
+        $_commandes = App\Models\Commande::all();
         $stats = [
-            'en_attente' => $commandes->where('statut', 'en_attente')->count(),
-            'en_cours' => $commandes->where('statut', 'en_cours')->count(),
-            'livrée' => $commandes->where('statut', 'livrée')->count(),
-            'annulée' => $commandes->where('statut', 'annulée')->count(),
+            'en_attente' => $_commandes->where('statut', 'en_attente')->count(),
+            'en_cours' => $_commandes->where('statut', 'en_cours')->count(),
+            'livrée' => $_commandes->where('statut', 'livrée')->count(),
+            'annulée' => $_commandes->where('statut', 'annulée')->count(),
         ];
         $colors = [
             'en_attente' => 'secondary',
@@ -39,12 +40,14 @@
             <div class="d-flex flex-wrap gap-3 justify-content-center">
                 @foreach ($stats as $statut => $count)
                     <div class="card border-0 shadow-sm" style="min-width:160px;">
-                        <div class="card-body text-center">
-                            <span class="badge bg-{{ $colors[$statut] ?? 'secondary' }} mb-2" style="font-size:1.1em;">
-                                {{ ucfirst(str_replace('_', ' ', $statut)) }}
-                            </span>
-                            <div class="fw-bold fs-4">{{ $count }}</div>
-                        </div>
+                        <a href="{{ route('commandes.index', ['statut' => $statut]) }}">
+                            <div class="card-body text-center">
+                                <span class="badge bg-{{ $colors[$statut] ?? 'secondary' }} mb-2" style="font-size:1.1em;">
+                                    {{ ucfirst(str_replace('_', ' ', $statut)) }}
+                                </span>
+                                <div class="fw-bold fs-4">{{ $count }}</div>
+                            </div>
+                        </a>
                     </div>
                 @endforeach
             </div>
