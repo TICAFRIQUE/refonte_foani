@@ -31,8 +31,11 @@
         </head>
         <body>
             <div class="header">
-                <div class="logo">FOANI</div>
-                <p>Restaurant & Livraison</p>
+                <div class="logo">
+                      <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
+                        alt="Foani" class="logo-image" style="height:50px; vertical-align: middle;">
+                    </div>
+              
                 <p>Email: info@foani.ci | Tél: (+225) 05 05 96 96 25</p>
             </div>
 
