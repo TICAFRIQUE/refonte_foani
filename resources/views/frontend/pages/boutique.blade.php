@@ -1,7 +1,13 @@
 {{-- filepath: c:\laragon\www\foani\resources\views\frontend\pages\boutique.blade.php --}}
 @extends('frontend.layouts.app')
 
-@section('title', 'Boutique')
+@section('title', 'Boutique Foani | Volaille & Œufs Frais en Ligne Côte d\'Ivoire')
+@section('meta_description', 'Achetez en ligne vos volailles et œufs frais chez Foani. Large choix de produits de qualité premium, livraison rapide en Côte d\'Ivoire. Commandez maintenant!')
+@section('meta_keywords', 'boutique en ligne volaille, acheter œufs frais, commande volaille Côte d\'Ivoire, livraison poulets, e-commerce aviculture')
+
+@section('og_title', 'Boutique Foani - Commandez Volaille & Œufs Frais en Ligne')
+@section('og_description', 'Commandez facilement vos volailles et œufs frais sur la boutique en ligne Foani. Produits de qualité, livraison rapide en Côte d\'Ivoire.')
+@section('og_type', 'product.group')
 
 @section('content')
     <style>

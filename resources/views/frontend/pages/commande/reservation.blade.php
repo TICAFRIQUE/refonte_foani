@@ -14,8 +14,9 @@
                     <form action="{{ route('reservation.store' , $produit->id) }}" method="POST" class="needs-validation" novalidate>
                         @csrf
 
-                        <h5 class="mb-3 fw-bold">Informations client</h5>
-                        <div class="row g-3 mb-3">
+                        <h5 class=" fw-bold">Informations client </h5>
+                        <small class="text-muted fs-6 mb-3"><i class="bi bi-info-circle"></i> Vous pouvez modifier ces informations si besoin</small>
+                        <div class="row g-3 my-3">
                             <div class="col-md-4">
                                 <label class="form-label">Nom & Prénoms <span class="text-danger">*</span></label>
                                 <input type="text" name="nom" value="{{ Auth::user()->username }}"

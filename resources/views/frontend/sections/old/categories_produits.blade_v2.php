@@ -10,6 +10,7 @@
                     <div class="category-banner-overlay">
                         <div class="category-banner-content text-center text-white">
                             <h3 class="fw-bold mb-3">{{ $categorie->libelle }}</h3>
+                            {{-- <p class="mb-3">{{ $categorie->produits()->count() }} produit(s) disponible(s)</p> --}}
                             <a href="{{ route('boutique.categorie', ['slug' => $categorie->slug]) }}" 
                                class="btn btn-light btn-lg fw-bold">
                                 <i class="bi bi-arrow-right me-2"></i>Découvrir
@@ -32,31 +33,9 @@
                         </a>
                     </div>
 
-                    @php
-                        $produits = $categorie->produits->take(4);
-                        $nombreProduits = $produits->count();
-                        
-                        // Déterminer la classe de colonne selon le nombre de produits
-                        switch($nombreProduits) {
-                            case 1:
-                                $colClass = 'col-12';
-                                break;
-                            case 2:
-                                $colClass = 'col-6';
-                                break;
-                            case 3:
-                                $colClass = 'col-4';
-                                break;
-                            case 4:
-                            default:
-                                $colClass = 'col-lg-3 col-md-6 col-6';
-                                break;
-                        }
-                    @endphp
-
                     <div class="row g-3">
-                        @forelse($produits as $produit)
-                            <div class="{{ $colClass }}">
+                        @forelse($categorie->produits->take(4) as $produit)
+                            <div class="col-6 col-lg-3">
                                 <div class="card product-card shadow-sm position-relative h-100">
                                     {{-- Badge en haut à droite --}}
                                     @if ($produit->stock > 0)
@@ -68,6 +47,12 @@
                                     <div class="product-image-wrapper position-relative overflow-hidden">
                                         <img src="{{ $produit->getFirstMediaUrl('image_principale') ?: asset('front/images/produits/poulet.png') }}"
                                             class="card-img-top product-image" alt="{{ $produit->libelle }}">
+                                        {{-- <div class="product-overlay">
+                                            <a href="{{ route('produit.show', ['slug' => $produit->slug]) }}" 
+                                               class="btn btn-light btn-sm">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div> --}}
                                     </div>
                                     
                                     <div class="card-body text-center p-3">
@@ -159,7 +144,6 @@
         border-radius: 15px;
         transition: all 0.3s ease;
         overflow: hidden;
-        min-height: 280px; /* Hauteur minimale pour consistency */
     }
 
     .product-card:hover {
@@ -211,12 +195,6 @@
         
         .product-image-wrapper {
             height: 120px;
-        }
-
-        /* Force les produits uniques à ne pas être trop larges sur mobile */
-        .col-12 .product-card {
-            max-width: 400px;
-            margin: 0 auto;
         }
     }
 </style>

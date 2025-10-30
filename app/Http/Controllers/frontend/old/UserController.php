@@ -24,7 +24,6 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-
         // Valider les données du formulaire
         $request->validate(
             [
@@ -44,16 +43,7 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Authentication passed...
-            $request->session()->regenerate();
-
-            $redirectUrl = session()->pull('redirect_after_login', '/');
-
-            // ✅ Empêche les redirections externes
-            if (!str_starts_with($redirectUrl, url('/'))) {
-                $redirectUrl = '/';
-            }
-
-            return redirect($redirectUrl)->with('success', 'Connexion réussie !');
+            return redirect()->intended('/panier')->with('success', 'Connexion réussie ! vous pouvez valider votre commande.');
         }
 
         return back()->withErrors('Numéro de téléphone ou mot de passe incorrect.')->withInput();
@@ -82,7 +72,7 @@ class UserController extends Controller
 
         try {
             // Créer un nouvel utilisateur
-            $user = User::create([
+            $user = \App\Models\User::create([
                 'phone' => trim($request->phone),
                 'username' => $request->username,
                 'email' => $request->email,
@@ -96,16 +86,8 @@ class UserController extends Controller
             // Connecter automatiquement l'utilisateur après l'inscription
             Auth::login($user);
 
-            $request->session()->regenerate();
-
-            $redirectUrl = session()->pull('redirect_after_login', '/');
-
-            // ✅ Empêche les redirections externes
-            if (!str_starts_with($redirectUrl, url('/'))) {
-                $redirectUrl = '/';
-            }
-
-            return redirect($redirectUrl)->with('success', 'Inscription réussie !');
+            // Rediriger vers une page spécifique après l'inscription
+            return redirect('/panier')->with('success', 'Inscription réussie !');
         } catch (\Throwable $th) {
             return back()->withErrors('Une erreur est survenue lors de l\'inscription : ' . $th->getMessage());
         }

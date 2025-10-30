@@ -6,11 +6,73 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description"
-        content="Foani - Boutique en ligne de volaille et œufs frais. Découvrez nos produits de qualité, directement de la ferme à votre table. Commandez maintenant!">
-    <meta name="keywords" content="Foani, volaille, œufs, boutique en ligne, produits frais, ferme, livraison">
-    <meta name="author" content="Foani">
-    <title>Foani - Boutique Volaille & Œufs</title>
+    
+    {{-- SEO Meta Tags --}}
+    <meta name="description" content="@yield('meta_description', 'Foani - Spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Découvrez nos produits de qualité premium : poulets, œufs, et volailles diverses. Livraison rapide et fraîcheur garantie.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'Foani, volaille Côte d\'Ivoire, œufs frais, poulets, aviculture, ferme, livraison volaille, boutique en ligne, produits frais, élevage, volaille premium, œufs bio, poussins, alimentation volaille')">
+    <meta name="author" content="Foani - Aviculture Côte d'Ivoire">
+    <meta name="robots" content="@yield('meta_robots', 'index, follow')">
+    
+    {{-- Open Graph Meta Tags --}}
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:title" content="@yield('og_title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire')">
+    <meta property="og:description" content="@yield('og_description', 'Découvrez Foani, votre spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits de qualité premium, livraison rapide et fraîcheur garantie.')">
+    <meta property="og:image" content="@yield('og_image', asset('images/foani-og-image.jpg'))">
+    <meta property="og:url" content="@yield('og_url', url()->current())">
+    <meta property="og:site_name" content="Foani">
+    <meta property="og:locale" content="fr_CI">
+    
+    {{-- Twitter Card Meta Tags --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('twitter_title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire')">
+    <meta name="twitter:description" content="@yield('twitter_description', 'Découvrez Foani, votre spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits de qualité premium, livraison rapide et fraîcheur garantie.')">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('images/foani-twitter-image.jpg'))">
+    <meta name="twitter:site" content="@FoaniCI">
+    <meta name="twitter:creator" content="@FoaniCI">
+    
+    {{-- Additional SEO Meta Tags --}}
+    <meta name="geo.region" content="CI">
+    <meta name="geo.placename" content="Côte d'Ivoire">
+    <meta name="geo.position" content="7.539989;-5.54708">
+    <meta name="ICBM" content="7.539989, -5.54708">
+    
+    {{-- Business/Local SEO --}}
+    <meta name="business:contact_data:locality" content="Abidjan">
+    <meta name="business:contact_data:region" content="Côte d'Ivoire">
+    <meta name="business:contact_data:country_name" content="Côte d'Ivoire">
+    <meta name="business:contact_data:phone_number" content="+225 05 05 96 96 25">
+    <meta name="business:contact_data:email" content="info@foani.ci">
+    
+    {{-- Mobile Specific --}}
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Foani">
+    <meta name="msapplication-TileColor" content="#559e33">
+    <meta name="theme-color" content="#559e33">
+    
+    {{-- Canonical URL --}}
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+    
+    {{-- Dynamic Title --}}
+    <title>@yield('title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire | Boutique en ligne')</title>
+
+    {{-- Favicons --}}
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/favicon/apple-touch-icon.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('images/favicon/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/favicon/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{asset('images/favicon/site.webmanifest')}}">
+    
+    {{-- Preconnect for performance --}}
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    {{-- DNS Prefetch --}}
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -30,6 +92,40 @@
     <link rel="stylesheet" href="{{ asset('front/css/carousel-animate.css') }}">
 
     @stack('styles')
+
+    {{-- Structured Data JSON-LD --}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Foani",
+        "description": "Spécialiste de la volaille et des œufs frais en Côte d'Ivoire",
+        "url": "{{ url('/') }}",
+        "logo": "{{ asset('front/images/logo.png') }}",
+        "telephone": "+225 05 05 96 96 25",
+        "email": "info@foani.ci",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "CI",
+            "addressLocality": "Abidjan",
+            "addressRegion": "Côte d'Ivoire"
+        },
+        "sameAs": [
+            "https://www.facebook.com/foaniservices",
+            "https://wa.me/2250505969625"
+        ],
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "{{ route('boutique.index') }}?recherche={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    @yield('structured_data')
 
     <style>
         :root {
@@ -104,6 +200,7 @@
         }
 
         /**LOGO***/
+
         /* --- Conteneur du logo --- */
         .logo-wrapper {
             width: 90px;
@@ -493,7 +590,7 @@
         }
 
         /* Animation au focus */
-        .navbar-search-form .form-control:focus + .btn-search-submit {
+        .navbar-search-form .form-control:focus+.btn-search-submit {
             background: linear-gradient(135deg, #559e33, #2a6b2a);
             box-shadow: 0 0 15px rgba(42, 107, 42, 0.3);
         }
@@ -588,7 +685,6 @@
 
                     <li class="nav-item"><a
                             class="nav-link text-white {{ Route::is('boutique.index') ? 'active' : '' }}"
-
                             href="{{ route('boutique.index') }}">BOUTIQUE</a></li>
                     <li class="nav-item"><a class="nav-link text-white {{ Route::is('contact') ? 'active' : '' }}"
                             href="{{ route('contact') }}">CONTACT</a></li>
@@ -603,10 +699,11 @@
 
                     {{-- Barre de recherche (cachée par défaut) --}}
                     <div class="navbar-search-container" id="navbarSearchContainer" style="display: none;">
-                        <form method="GET" action="{{ route('boutique.index') }}" class="navbar-search-form d-flex">
+                        <form method="GET" action="{{ route('boutique.index') }}"
+                            class="navbar-search-form d-flex">
                             <input type="text" name="recherche" class="form-control navbar-search-input"
-                                placeholder="Rechercher un produit..."
-                                value="{{ request('recherche') }}" id="navbarSearchInput">
+                                placeholder="Rechercher un produit..." value="{{ request('recherche') }}"
+                                id="navbarSearchInput">
                             <button class="btn btn-search-submit" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>
@@ -631,11 +728,11 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('user.loginForm') }}">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
-                                </a></li>
+                                        <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
+                                    </a></li>
                                 <li><a class="dropdown-item" href="{{ route('user.registerForm') }}">
-                                    <i class="bi bi-person-plus me-2"></i> Créer un compte
-                                </a></li>
+                                        <i class="bi bi-person-plus me-2"></i> Créer un compte
+                                    </a></li>
                             </ul>
                         </div>
                     @else
@@ -709,8 +806,7 @@
                 <form method="GET" action="{{ route('boutique.index') }}">
                     <div class="input-group">
                         <input type="text" name="recherche" class="form-control"
-                            placeholder="Rechercher un produit..."
-                            value="{{ request('recherche') }}">
+                            placeholder="Rechercher un produit..." value="{{ request('recherche') }}">
                         <button class="btn btn-success" type="submit">
                             <i class="bi bi-search"></i>
                         </button>
@@ -723,9 +819,15 @@
         </div>
 
         <div class="mobile-bar-content d-flex justify-content-around align-items-center">
+
+             {{-- Accueil --}}
+            <a href="{{ route('accueil') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
+                title="Accueil">
+                <i class="bi bi-house fs-3"></i>
+            </a>
             {{-- Bouton de recherche --}}
-            <button class="btn btn-outline-success rounded-circle flex-shrink-0"
-                onclick="toggleMobileSearch()" title="Rechercher">
+            <button class="btn btn-outline-success rounded-circle flex-shrink-0" onclick="toggleMobileSearch()"
+                title="Rechercher">
                 <i class="bi bi-search fs-3"></i>
             </button>
 
@@ -843,8 +945,9 @@
             </div>
             <hr>
             <div class="text-center text-muted small">
-                &copy; {{ date('Y') }} Foani. Tous droits réservés. Développé par <a href="https://www.ticafrique.ci"
-                    target="_blank" class="text-decoration-none text-muted">TICAFRIQUE</a>.
+                &copy; {{ date('Y') }} Foani. Tous droits réservés. Développé par <a
+                    href="https://www.ticafrique.ci" target="_blank"
+                    class="text-decoration-none text-muted">TICAFRIQUE</a>.
             </div>
         </div>
     </footer>
@@ -937,7 +1040,7 @@
                 toggleBtn.style.opacity = '0';
                 toggleBtn.style.visibility = 'hidden';
                 toggleBtn.classList.add('active');
-                
+
                 setTimeout(() => {
                     input.focus();
                     input.select(); // Sélectionne le texte existant
@@ -953,12 +1056,12 @@
             const toggleBtn = document.getElementById('searchToggleBtn');
 
             container.classList.add('closing');
-            
+
             setTimeout(() => {
                 container.style.display = 'none';
                 container.classList.remove('closing');
                 toggleBtn.classList.remove('active');
-                
+
                 // Réafficher l'icône avec animation
                 toggleBtn.style.opacity = '1';
                 toggleBtn.style.visibility = 'visible';
@@ -978,18 +1081,18 @@
         searchForm.addEventListener('submit', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
+
             // Récupérer la valeur de recherche
             const searchValue = document.getElementById('navbarSearchInput').value;
-            
+
             // Construire l'URL avec le paramètre scroll=true
-            let url = '{{ route("boutique.index") }}';
+            let url = '{{ route('boutique.index') }}';
             if (searchValue.trim()) {
                 url += '?recherche=' + encodeURIComponent(searchValue) + '&scroll=true';
             } else {
                 url += '?scroll=true';
             }
-            
+
             // Rediriger vers la boutique
             window.location.href = url;
         });
@@ -1010,18 +1113,18 @@
         if (mobileSearchForm) {
             mobileSearchForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 // Récupérer la valeur de recherche mobile
                 const mobileSearchValue = this.querySelector('input[name="recherche"]').value;
-                
+
                 // Construire l'URL avec le paramètre scroll=true
-                let url = '{{ route("boutique.index") }}';
+                let url = '{{ route('boutique.index') }}';
                 if (mobileSearchValue.trim()) {
                     url += '?recherche=' + encodeURIComponent(mobileSearchValue) + '&scroll=true';
                 } else {
                     url += '?scroll=true';
                 }
-                
+
                 // Rediriger vers la boutique
                 window.location.href = url;
             });

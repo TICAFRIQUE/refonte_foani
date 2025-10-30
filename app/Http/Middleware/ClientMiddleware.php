@@ -21,6 +21,13 @@ class ClientMiddleware
             return $next($request);
         }
 
+        // ✅ Ne pas sauvegarder /login ou /register
+        $current = $request->fullUrl();
+        if (!str_contains($current, '/login') && !str_contains($current, '/register')) {
+            session(['redirect_after_login' => $current]);
+            session()->save(); // Forcer la sauvegarde
+        }
+
         return redirect()->route('user.loginForm')
             ->with('error', 'Veuillez vous connecter pour passer vos commandes.');
     }
