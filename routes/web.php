@@ -300,6 +300,12 @@ Route::controller(PanierController::class)->group(function () {
     Route::post('/commande-store', 'commandeStore')->name('panier.commande.store')->middleware('client'); // route de validation de la commande
 });
 
+// Route pour récupérer le nombre d'articles dans le panier
+Route::get('/panier/count', function () {
+    $count = session('panier') ? array_sum(array_column(session('panier'), 'quantite')) : 0;
+    return response()->json(['count' => $count]);
+})->name('panier.count');
+
 //Reservation
 Route::controller(ReservationController::class)->group(function () {
     Route::get('/reservation/{slug}', 'create')->name('reservation.create')->middleware('client');

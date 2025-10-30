@@ -1,12 +1,15 @@
 {{-- filepath: c:\laragon\www\foani\resources\views\frontend\pages\boutique.blade.php --}}
 @extends('frontend.layouts.app')
 
-@section('title', 'Boutique Foani | Volaille & Œufs Frais en Ligne Côte d\'Ivoire')
-@section('meta_description', 'Achetez en ligne vos volailles et œufs frais chez Foani. Large choix de produits de qualité premium, livraison rapide en Côte d\'Ivoire. Commandez maintenant!')
-@section('meta_keywords', 'boutique en ligne volaille, acheter œufs frais, commande volaille Côte d\'Ivoire, livraison poulets, e-commerce aviculture')
+@section('title', 'Boutique Foani | ' . ($categorie->libelle ?? 'Tous les produits'))
+@section('meta_description', 'Achetez en ligne vos volailles et œufs frais chez Foani. Large choix de produits de
+    qualité premium, livraison rapide en Côte d\'Ivoire. Commandez maintenant!')
+@section('meta_keywords', 'boutique en ligne volaille, acheter œufs frais, commande volaille Côte d\'Ivoire, livraison
+    poulets, e-commerce aviculture')
 
 @section('og_title', 'Boutique Foani - Commandez Volaille & Œufs Frais en Ligne')
-@section('og_description', 'Commandez facilement vos volailles et œufs frais sur la boutique en ligne Foani. Produits de qualité, livraison rapide en Côte d\'Ivoire.')
+@section('og_description', 'Commandez facilement vos volailles et œufs frais sur la boutique en ligne Foani. Produits de
+    qualité, livraison rapide en Côte d\'Ivoire.')
 @section('og_type', 'product.group')
 
 @section('content')
@@ -56,7 +59,7 @@
             color: #2a6b2a;
             font-weight: 600;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 
+            box-shadow:
                 0 4px 15px rgba(0, 0, 0, 0.08),
                 0 2px 8px rgba(42, 107, 42, 0.05);
             position: relative;
@@ -72,11 +75,10 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.4), 
-                transparent
-            );
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.4),
+                    transparent);
             transition: left 0.5s ease;
         }
 
@@ -86,7 +88,7 @@
 
         .category-filter-card:hover {
             transform: translateY(-3px);
-            box-shadow: 
+            box-shadow:
                 0 8px 25px rgba(0, 0, 0, 0.12),
                 0 4px 15px rgba(42, 107, 42, 0.1);
             border-color: rgba(42, 107, 42, 0.2);
@@ -97,7 +99,7 @@
             background: linear-gradient(145deg, #2a6b2a, #236b23);
             color: white;
             border-color: #2a6b2a;
-            box-shadow: 
+            box-shadow:
                 0 6px 20px rgba(42, 107, 42, 0.3),
                 0 3px 12px rgba(42, 107, 42, 0.2);
         }
@@ -111,7 +113,7 @@
             background: linear-gradient(135deg, #f8f9fa, #ffffff);
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.05),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
@@ -178,6 +180,7 @@
         }
 
         @media (max-width: 768px) {
+
             .search-form .form-control,
             .search-btn {
                 padding: 10px 15px;
@@ -188,17 +191,16 @@
 
     <div class="container py-5">
         <h2 class="fw-bold mb-4 text-center title">Nos produits</h2>
-        
+
         {{-- Barre de recherche --}}
         <div class="mb-4">
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-8">
                     <form method="GET" action="{{ route('boutique.index') }}" class="search-form" id="search-form">
                         <div class="input-group shadow-sm">
-                            <input type="text" name="recherche" class="form-control search-input" 
-                                   placeholder="Rechercher un produit..." 
-                                   value="{{ $recherche ?? '' }}">
-                            @if(isset($categorie))
+                            <input type="text" name="recherche" class="form-control search-input"
+                                placeholder="Rechercher un produit..." value="{{ $recherche ?? '' }}">
+                            @if (isset($categorie))
                                 <input type="hidden" name="categorie" value="{{ $categorie->slug }}">
                             @endif
                             <button class="btn btn-success search-btn" type="submit">
@@ -208,12 +210,12 @@
                     </form>
                 </div>
             </div>
-            @if($recherche)
+            @if ($recherche)
                 <div class="text-center mt-3">
                     <span class="badge bg-light text-dark fs-6">
                         Résultats pour : <strong>"{{ $recherche }}"</strong>
-                        <a href="{{ isset($categorie) ? route('boutique.categorie', $categorie->slug) : route('boutique.index') }}" 
-                           class="text-danger ms-2">
+                        <a href="{{ isset($categorie) ? route('boutique.categorie', $categorie->slug) : route('boutique.index') }}"
+                            class="text-danger ms-2">
                             <i class="bi bi-x"></i>
                         </a>
                     </span>
@@ -264,7 +266,7 @@
         <div id="produits-section">
             <div class="row g-4">
                 @forelse($produits as $produit)
-                    <div class="col-md-4 col-lg-3">
+                    <div class="col-md-4 col-lg-3 {{ $produits->count() == 1 ? 'col-12 col-lg-12' : '' }}">
                         <div class="card h-100 shadow-sm position-relative">
                             {{-- Badge en haut à droite --}}
                             @if ($produit->stock > 0)
@@ -281,13 +283,15 @@
                                     {{ number_format($produit->prix_de_vente, 0, ',', ' ') }} FCFA
                                 </p>
                                 @if ($produit->stock > 0)
-                                    <button class="btn btn-add w-100 btn-ajouter-panier mt-auto" data-id="{{ $produit->id }}">
+                                    <button class="btn btn-add w-100 btn-ajouter-panier mt-auto"
+                                        data-id="{{ $produit->id }}">
                                         <i class="bi bi-cart-plus me-2"></i>Ajouter
                                     </button>
                                 @else
                                     <a href="{{ route('reservation.create', ['slug' => $produit->slug]) }}"
                                         class="btn btn-warning w-100 mt-auto">
-                                        <i class="bi bi-clock me-2"></i>Réserver
+                                        <i
+                                            class="bi bi-clock me-2"></i>{{ Auth::check() ? 'Réserver' : 'Réserver (connexion requise)' }}
                                     </a>
                                 @endif
                             </div>
@@ -310,57 +314,57 @@
 @endsection
 
 @push('scripts')
-<script>
-$(document).ready(function() {
-    // Fonction pour scroller vers les produits
-    function scrollToProduits() {
-        setTimeout(function() {
-            $('html, body').animate({
-                scrollTop: $('#produits-section').offset().top - 150
-            }, 100, 'easeInOutCubic');
-        }, 100);
-    }
+    <script>
+        $(document).ready(function() {
+            // Fonction pour scroller vers les produits
+            function scrollToProduits() {
+                setTimeout(function() {
+                    $('html, body').animate({
+                        scrollTop: $('#produits-section').offset().top - 150
+                    }, 100, 'easeInOutCubic');
+                }, 100);
+            }
 
-    // Auto-scroll vers les produits après sélection d'une catégorie
-    $('.category-link').on('click', function(e) {
-        e.preventDefault();
-        const href = $(this).attr('href');
-        
-        // Ajouter un paramètre pour indiquer qu'on doit scroller
-        if (href.indexOf('?') > -1) {
-            window.location.href = href + '&scroll=true';
-        } else {
-            window.location.href = href + '?scroll=true';
-        }
-    });
+            // Auto-scroll vers les produits après sélection d'une catégorie
+            $('.category-link').on('click', function(e) {
+                e.preventDefault();
+                const href = $(this).attr('href');
 
-    // Auto-scroll vers les produits après recherche
-    $('#search-form').on('submit', function(e) {
-        e.preventDefault();
-        const formData = $(this).serialize();
-        const action = $(this).attr('action');
-        
-        // Ajouter le paramètre scroll à la requête
-        const url = action + '?' + formData + '&scroll=true';
-        window.location.href = url;
-    });
+                // Ajouter un paramètre pour indiquer qu'on doit scroller
+                if (href.indexOf('?') > -1) {
+                    window.location.href = href + '&scroll=true';
+                } else {
+                    window.location.href = href + '?scroll=true';
+                }
+            });
 
-    // Vérifier si on doit scroller au chargement de la page
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('scroll') === 'true') {
-        scrollToProduits();
-        
-        // Nettoyer l'URL après le scroll
-        const url = new URL(window.location);
-        url.searchParams.delete('scroll');
-        window.history.replaceState({}, document.title, url.toString());
-    }
+            // Auto-scroll vers les produits après recherche
+            $('#search-form').on('submit', function(e) {
+                e.preventDefault();
+                const formData = $(this).serialize();
+                const action = $(this).attr('action');
 
-    // Ajouter l'easing personnalisé
-    $.easing.easeInOutCubic = function (x, t, b, c, d) {
-        if ((t/=d/2) < 1) return c/2*t*t*t + b;
-        return c/2*((t-=2)*t*t + 2) + b;
-    };
-});
-</script>
+                // Ajouter le paramètre scroll à la requête
+                const url = action + '?' + formData + '&scroll=true';
+                window.location.href = url;
+            });
+
+            // Vérifier si on doit scroller au chargement de la page
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('scroll') === 'true') {
+                scrollToProduits();
+
+                // Nettoyer l'URL après le scroll
+                const url = new URL(window.location);
+                url.searchParams.delete('scroll');
+                window.history.replaceState({}, document.title, url.toString());
+            }
+
+            // Ajouter l'easing personnalisé
+            $.easing.easeInOutCubic = function(x, t, b, c, d) {
+                if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
+                return c / 2 * ((t -= 2) * t * t + 2) + b;
+            };
+        });
+    </script>
 @endpush

@@ -263,6 +263,27 @@
     <script>
         $(function() {
 
+            // === Fonction pour mettre à jour le badge du panier ===
+            function updateCartBadge() {
+                $.ajax({
+                    url: '/panier/count',
+                    method: 'GET',
+                    success: function(response) {
+                        // Mettre à jour tous les badges du panier (desktop et mobile)
+                        $('#cart-badge').text(response.count);
+                        $('#cart-badge-mobile').text(response.count);
+                        $('.bi-cart').next('span.badge').text(response.count);
+                        $('i.bi-cart').siblings('.badge').text(response.count);
+
+                        // Alternative: sélecteur plus général
+                        $('[id*="cart-badge"], .cart-count, .panier-count').text(response.count);
+                    },
+                    error: function() {
+                        console.log('Erreur lors de la mise à jour du badge panier');
+                    }
+                });
+            }
+
             // === Recalcul du total général ===
             function updateTotalGeneral() {
                 let total = 0;
@@ -297,6 +318,8 @@
                     },
                     success: function() {
                         card.css('opacity', 1);
+                        // Mettre à jour le badge après modification
+                        updateCartBadge();
                     },
                     error: function() {
                         alert("Erreur lors de la mise à jour du panier.");
@@ -370,10 +393,14 @@
                                     $(this).remove();
                                     updateTotalGeneral();
 
+                                    // Mettre à jour le badge après suppression
+                                    updateCartBadge();
+
                                     // Si le panier est vide → recharge
-                                    if ($('#panier-content').children('.card')
-                                        .length === 0) {
-                                        location.reload();
+                                    if ($('#panier-content .card').length ===
+                                        0) {
+                                        setTimeout(() => location.reload(),
+                                        500);
                                     }
                                 });
                                 Swal.fire('Supprimé !',
