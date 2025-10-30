@@ -10,6 +10,7 @@
                     <div class="category-banner-overlay">
                         <div class="category-banner-content text-center text-white">
                             <h3 class="fw-bold mb-3">{{ $categorie->libelle }}</h3>
+                            {{-- <p class="mb-3">{{ $categorie->produits()->count() }} produit(s) disponible(s)</p> --}}
                             <a href="{{ route('boutique.categorie', ['slug' => $categorie->slug]) }}" 
                                class="btn btn-light btn-lg fw-bold">
                                 <i class="bi bi-arrow-right me-2"></i>Découvrir
@@ -32,31 +33,9 @@
                         </a>
                     </div>
 
-                    @php
-                        $produits = $categorie->produits->take(4);
-                        $nombreProduits = $produits->count();
-                        
-                        // Déterminer la classe de colonne selon le nombre de produits
-                        switch($nombreProduits) {
-                            case 1:
-                                $colClass = 'col-12 col-md-12'; // Mobile: 12, Desktop: 12
-                                break;
-                            case 2:
-                                $colClass = 'col-6 col-md-6'; // Mobile: 6, Desktop: 6
-                                break;
-                            case 3:
-                                $colClass = 'col-6 col-md-4'; // Mobile: 6, Desktop: 4
-                                break;
-                            case 4:
-                            default:
-                                $colClass = 'col-6 col-md-6 col-lg-3'; // Mobile: 6, Tablet: 6, Desktop: 3
-                                break;
-                        }
-                    @endphp
-
                     <div class="row g-3">
-                        @forelse($produits as $produit)
-                            <div class="{{ $colClass }}">
+                        @forelse($categorie->produits->take(4) as $produit)
+                            <div class="col-6 col-lg-3">
                                 <div class="card product-card shadow-sm position-relative h-100">
                                     {{-- Badge en haut à droite --}}
                                     @if ($produit->stock > 0)
@@ -68,6 +47,12 @@
                                     <div class="product-image-wrapper position-relative overflow-hidden">
                                         <img src="{{ $produit->getFirstMediaUrl('image_principale') ?: asset('front/images/produits/poulet.png') }}"
                                             class="card-img-top product-image" alt="{{ $produit->libelle }}">
+                                        {{-- <div class="product-overlay">
+                                            <a href="{{ route('produit.show', ['slug' => $produit->slug]) }}" 
+                                               class="btn btn-light btn-sm">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div> --}}
                                     </div>
                                     
                                     <div class="card-body text-center p-3">
@@ -83,8 +68,7 @@
                                             <a href="{{ route('reservation.create', ['slug' => $produit->slug]) }}"
                                                 class="btn btn-warning btn-sm w-100">
                                                 <i class="bi bi-clock me-1"></i>
-                                                <span class="d-none d-md-inline">{{Auth::check() ? 'Réserver' : 'Réserver (connexion requise)'}}</span>
-                                                <span class="d-md-none">Réserver</span>
+                                                {{Auth::check() ? 'Réserver' : 'Réserver (connexion requise)'}}
                                             </a>
                                         @endif
                                     </div>
@@ -160,7 +144,6 @@
         border-radius: 15px;
         transition: all 0.3s ease;
         overflow: hidden;
-        min-height: 280px;
     }
 
     .product-card:hover {
@@ -199,7 +182,7 @@
         opacity: 1;
     }
 
-    /* Responsive Mobile */
+    /* Responsive */
     @media (max-width: 768px) {
         .category-banner {
             min-height: 250px;
@@ -212,46 +195,6 @@
         
         .product-image-wrapper {
             height: 120px;
-        }
-
-        .product-card {
-            min-height: 240px;
-        }
-
-        /* Limiter la largeur du produit unique sur mobile */
-        .col-12 .product-card {
-            max-width: 350px;
-            margin: 0 auto;
-        }
-
-        /* Optimisation des textes sur mobile */
-        .product-card .card-title {
-            font-size: 0.9rem;
-            line-height: 1.2;
-        }
-
-        .product-card .card-text {
-            font-size: 0.9rem;
-        }
-
-        .product-card .btn {
-            font-size: 0.85rem;
-            padding: 6px 10px;
-        }
-    }
-
-    /* Responsive Tablette */
-    @media (min-width: 769px) and (max-width: 991px) {
-        .category-banner {
-            min-height: 350px;
-        }
-        
-        .product-image-wrapper {
-            height: 130px;
-        }
-        
-        .product-card {
-            min-height: 260px;
         }
     }
 </style>
