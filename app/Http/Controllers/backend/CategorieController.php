@@ -47,12 +47,17 @@ class CategorieController extends Controller
                 'position' => $data_count + 1,
             ]);
 
-            // Gestion de l'image 
+            // Gestion de l'image miniature
             if ($request->hasFile('image')) {
                 $categorie->addMediaFromRequest('image')
                     ->toMediaCollection('image');
             }
 
+            // Gestion de l'image bannière
+            if ($request->hasFile('image_banniere')) {
+                $categorie->addMediaFromRequest('image_banniere')
+                    ->toMediaCollection('image_banniere');
+            }
 
             return redirect()->route('categorie.index')
                 ->with('success', 'La catégorie a été ajoutée avec succès.');
@@ -86,7 +91,7 @@ class CategorieController extends Controller
             $validated['libelle'] = convertToMajuscule::toUpperNoAccent($request->libelle);
 
             $categorie->update($validated);
-            // Gestion de l'image 
+            // Gestion de l'image miniature
             if ($request->hasFile('image')) {
                 //supprimer limage associee
                 if ($categorie->hasMedia('image')) {
@@ -95,6 +100,16 @@ class CategorieController extends Controller
                 $categorie->addMediaFromRequest('image')
                     ->toMediaCollection('image');
             }
+            // Gestion de l'image bannière
+            if ($request->hasFile('image_banniere')) {
+                //supprimer limage associee
+                if ($categorie->hasMedia('image_banniere')) {
+                    $categorie->clearMediaCollection('image_banniere');
+                }
+                $categorie->addMediaFromRequest('image_banniere')
+                    ->toMediaCollection('image_banniere');
+            }
+
 
 
             // Alert::success('Succès', 'La catégorie a été mise à jour avec succès.');
@@ -116,6 +131,9 @@ class CategorieController extends Controller
             $categorie = Categorie::findOrFail($id);
             if ($categorie->hasMedia('image')) {
                 $categorie->clearMediaCollection('image');
+            }
+            if ($categorie->hasMedia('image_banniere')) {
+                $categorie->clearMediaCollection('image_banniere');
             }
 
             //mettre a jour la position des autres categories

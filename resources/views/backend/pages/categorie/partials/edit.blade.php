@@ -59,33 +59,65 @@
 
                          </div>
 
-                         <div class="col-md-12">
+                         <div class="row">
+                             <div class="col-md-6">
 
-                             <!--Image dejà existante-->
-                             @php $image = $categorie->getFirstMedia('image'); @endphp
-                             @if ($image)
+                                 <!--Image dejà existante-->
+                                 @php $image = $categorie->getFirstMedia('image'); @endphp
+                                 @if ($image)
+                                     <div class="mb-3">
+                                         <label class="form-label">Image actuelle</label>
+                                         <div>
+                                             <img src="{{ $categorie->getFirstMediaUrl('image') }}"
+                                                 alt="{{ $categorie->libelle }}" style="max-width: 200px;">
+                                         </div>
+                                     </div>
+                                 @endif
                                  <div class="mb-3">
-                                     <label class="form-label">Image actuelle</label>
-                                     <div>
-                                         <img src="{{ $categorie->getFirstMediaUrl('image') }}"
-                                             alt="{{ $categorie->libelle }}" style="max-width: 200px;">
+                                     <label for="formFile" class="form-label">Image</label>
+                                     <input class="form-control" type="file" id="formFile" name="image"
+                                         accept="image/*">
+                                     <div class="mt-2 position-relative" style="display: inline-block;">
+                                         <img id="previewImage" src="#" alt="Aperçu"
+                                             style="max-width: 200px; display: none;" />
+                                         <button type="button" id="removeImageBtn" class="btn btn-danger btn-sm"
+                                             style="position: absolute; top: 5px; right: 5px; display: none;">
+                                             <i class="ri-delete-bin-line"></i>
+                                         </button>
                                      </div>
                                  </div>
-                             @endif
-                             <div class="mb-3">
-                                 <label for="formFile" class="form-label">Image</label>
-                                 <input class="form-control" type="file" id="formFile" name="image"
-                                     accept="image/*">
-                                 <div class="mt-2 position-relative" style="display: inline-block;">
-                                     <img id="previewImage" src="#" alt="Aperçu"
-                                         style="max-width: 200px; display: none;" />
-                                     <button type="button" id="removeImageBtn" class="btn btn-danger btn-sm"
-                                         style="position: absolute; top: 5px; right: 5px; display: none;">
-                                         <i class="ri-delete-bin-line"></i>
-                                     </button>
+                             </div>
+
+                             <div class="col-md-6">
+
+                                 <!--Image dejà existante-->
+                                 @php $image_banniere = $categorie->getFirstMedia('image_banniere'); @endphp
+                                 @if ($image_banniere)
+                                     <div class="mb-3">
+                                         <label class="form-label">Image banniere actuelle</label>
+                                         <div>
+                                             <img src="{{ $categorie->getFirstMediaUrl('image_banniere') }}"
+                                                 alt="{{ $categorie->libelle }}" style="max-width: 200px;">
+                                         </div>
+                                     </div>
+                                 @endif
+                                 <div class="mb-3">
+                                     <label for="formFile" class="form-label">Image bannière</label>
+                                     <input class="form-control" type="file" id="formFile" name="image_banniere"
+                                         accept="image/*">
+                                     <div class="mt-2 position-relative" style="display: inline-block;">
+                                         <img id="previewImage" src="#" alt="Aperçu"
+                                             style="max-width: 200px; display: none;" />
+                                         <button type="button" id="removeImageBtn" class="btn btn-danger btn-sm"
+                                             style="position: absolute; top: 5px; right: 5px; display: none;">
+                                             <i class="ri-delete-bin-line"></i>
+                                         </button>
+                                     </div>
                                  </div>
                              </div>
                          </div>
+
+
 
                          <div class="d-flex justify-content-end">
                              <button type="button" class="btn btn-secondary me-2"

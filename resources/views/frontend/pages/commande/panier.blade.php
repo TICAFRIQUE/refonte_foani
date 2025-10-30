@@ -292,6 +292,10 @@
                     total += ligneTotal;
                 });
                 $('#total-general').text(new Intl.NumberFormat('fr-FR').format(total) + ' FCFA');
+                // Si le total est égal à 0, rafraîchir la page
+                if (total === 0) {
+                    setTimeout(() => location.reload(), 500);
+                }
             }
 
             // === Met à jour la ligne + total global + AJAX ===
@@ -400,7 +404,7 @@
                                     if ($('#panier-content .card').length ===
                                         0) {
                                         setTimeout(() => location.reload(),
-                                        500);
+                                            500);
                                     }
                                 });
                                 Swal.fire('Supprimé !',

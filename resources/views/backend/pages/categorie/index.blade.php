@@ -37,23 +37,31 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Image</th>
+                                    <th>Banniere</th>
                                     <th>Libellé</th>
                                     <th>Slug</th>
                                     <th>Description</th>
                                     <th>Statut</th>
-                                    <th>ordre</th>
+                                    {{-- <th>ordre</th> --}}
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($categories as $key => $categorie)
+                                @foreach ($categories as $position => $categorie)
                                     <tr id="row_{{ $categorie['id'] }}">
+                                        <td class="text-center badge bg-info fw-bold text-white"> {{ ++$position }} </td>
                                         <td>
                                             <img class="rounded avatar-sm"
                                                 src="{{ $categorie->hasMedia('image') ? $categorie->getFirstMediaUrl('image') : asset('front/images/logo.png') }}"
                                                 width="50px" alt="{{ $categorie['libelle'] }}">
                                         </td>
-                                        <td> {{ ++$key }} </td>
+                                        <td>
+                                            <img class="img-fluid"
+                                                src="{{ $categorie->hasMedia('image_banniere') ? $categorie->getFirstMediaUrl('image_banniere') : '' }}"
+                                               alt="{{ $categorie['libelle'] }}">
+                                        </td>
+
+
                                         <td>{{ $categorie->libelle }}</td>
                                         <td>{{ $categorie->slug }}</td>
                                         <td>{{ Str::limit($categorie->description, 50) }}</td>
@@ -64,8 +72,8 @@
                                                 <span class="badge bg-secondary">Inactif</span>
                                             @endif
                                         </td>
-                                        <td class="text-center badge bg-info fw-bold text-white">{{ $categorie->position }}
-                                        </td>
+                                        {{-- <td class="text-center badge bg-info fw-bold text-white">{{ $categorie->position }}
+                                        </td> --}}
                                         <td>
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-soft-secondary btn-sm dropdown" type="button"

@@ -6,7 +6,8 @@
                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                </div>
                <div class="modal-body">
-                   <form action="{{ route('categorie.store') }}" class="needs-validation" method="POST" enctype="multipart/form-data" novalidate> >
+                   <form action="{{ route('categorie.store') }}" class="needs-validation" method="POST"
+                       enctype="multipart/form-data" novalidate> >
                        @csrf
                        <div class="mb-3">
                            <label for="libelle" class="form-label">Libellé</label>
@@ -17,20 +18,28 @@
                            <textarea name="description" id="description" rows="3" class="form-control"></textarea>
                        </div>
                        <div class="row">
-                           <div class="col-lg-3">
+
+                           <div class="col-md-5">
+                               <div class="mb-3">
+                                   <label for="formFile" class="form-label">Image </label>
+                                   <input class="form-control" type="file" id="formFile" name="image"
+                                       accept="image/*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-5">
+                               <div class="mb-3">
+                                   <label for="formFile" class="form-label">Image banniere </label>
+                                   <input class="form-control" type="file" id="formFileBanniere"
+                                       name="image_banniere" accept="image/*" required>
+                               </div>
+                           </div>
+                           <div class="col-lg-2">
                                <div class="mb-3">
                                    <label for="statut" class="form-label">Statut</label>
                                    <select name="statut" id="statut" class="form-select">
                                        <option value="1">Actif</option>
                                        <option value="0">Inactif</option>
                                    </select>
-                               </div>
-                           </div>
-                           <div class="col-md-9">
-                               <div class="mb-3">
-                                   <label for="formFile" class="form-label">Image</label>
-                                   <input class="form-control" type="file" id="formFile" name="image"
-                                       accept="image/*" required>
                                </div>
                            </div>
                        </div>
@@ -44,4 +53,3 @@
            </div>
        </div>
    </div>
-
