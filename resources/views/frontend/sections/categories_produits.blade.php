@@ -36,7 +36,7 @@
                     <div class="row g-3">
                         @forelse($categorie->produits->take(4) as $produit)
                       
-                            <div class="col-6  {{$categorie->produits->count() == 1 ? 'col-lg-12' : ' col-lg-3'}}">
+                            <div class=" {{$categorie->produits->count() == 1 ? 'col-12 col-lg-12' : 'col-6  col-lg-3'}}">
                                 <div class="card product-card shadow-sm position-relative h-100">
                                     {{-- Badge en haut à droite --}}
                                     @if ($produit->stock > 0)
