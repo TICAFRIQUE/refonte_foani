@@ -39,17 +39,17 @@
                         // Déterminer la classe de colonne selon le nombre de produits
                         switch($nombreProduits) {
                             case 1:
-                                $colClass = 'col-12';
+                                $colClass = 'col-12 col-md-12'; // Mobile: 12, Desktop: 12
                                 break;
                             case 2:
-                                $colClass = 'col-6';
+                                $colClass = 'col-6 col-md-6'; // Mobile: 6, Desktop: 6
                                 break;
                             case 3:
-                                $colClass = 'col-4';
+                                $colClass = 'col-6 col-md-4'; // Mobile: 6, Desktop: 4
                                 break;
                             case 4:
                             default:
-                                $colClass = 'col-lg-3 col-md-6 col-6';
+                                $colClass = 'col-6 col-md-6 col-lg-3'; // Mobile: 6, Tablet: 6, Desktop: 3
                                 break;
                         }
                     @endphp
@@ -83,7 +83,8 @@
                                             <a href="{{ route('reservation.create', ['slug' => $produit->slug]) }}"
                                                 class="btn btn-warning btn-sm w-100">
                                                 <i class="bi bi-clock me-1"></i>
-                                                {{Auth::check() ? 'Réserver' : 'Réserver (connexion requise)'}}
+                                                <span class="d-none d-md-inline">{{Auth::check() ? 'Réserver' : 'Réserver (connexion requise)'}}</span>
+                                                <span class="d-md-none">Réserver</span>
                                             </a>
                                         @endif
                                     </div>
@@ -159,7 +160,7 @@
         border-radius: 15px;
         transition: all 0.3s ease;
         overflow: hidden;
-        min-height: 280px; /* Hauteur minimale pour consistency */
+        min-height: 280px;
     }
 
     .product-card:hover {
@@ -198,7 +199,7 @@
         opacity: 1;
     }
 
-    /* Responsive */
+    /* Responsive Mobile */
     @media (max-width: 768px) {
         .category-banner {
             min-height: 250px;
@@ -213,10 +214,44 @@
             height: 120px;
         }
 
-        /* Force les produits uniques à ne pas être trop larges sur mobile */
+        .product-card {
+            min-height: 240px;
+        }
+
+        /* Limiter la largeur du produit unique sur mobile */
         .col-12 .product-card {
-            max-width: 400px;
+            max-width: 350px;
             margin: 0 auto;
+        }
+
+        /* Optimisation des textes sur mobile */
+        .product-card .card-title {
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+
+        .product-card .card-text {
+            font-size: 0.9rem;
+        }
+
+        .product-card .btn {
+            font-size: 0.85rem;
+            padding: 6px 10px;
+        }
+    }
+
+    /* Responsive Tablette */
+    @media (min-width: 769px) and (max-width: 991px) {
+        .category-banner {
+            min-height: 350px;
+        }
+        
+        .product-image-wrapper {
+            height: 130px;
+        }
+        
+        .product-card {
+            min-height: 260px;
         }
     }
 </style>
