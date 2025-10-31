@@ -12,13 +12,11 @@
                     </h5>
                     <div class="video-container position-relative mb-3">
                         <div class="ratio ratio-16x9 rounded-3 shadow-sm overflow-hidden">
-                            <iframe src="https://www.youtube.com/embed/0Z2W1GitgBE?start=3" 
-                                    title="Spot Foani" 
-                                    allowfullscreen
-                                    loading="lazy"
-                                    class="rounded-3"></iframe>
+                            <iframe src="https://www.youtube.com/embed/0Z2W1GitgBE?start=3" title="Spot Foani"
+                                allowfullscreen loading="lazy" class="rounded-3"></iframe>
                         </div>
-                        <div class="video-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                        <div
+                            class="video-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
                             <div class="play-button bg-white rounded-circle p-3 shadow">
                                 <i class="bi bi-play-fill text-success fs-4"></i>
                             </div>
@@ -142,32 +140,34 @@
                     <h5 class="footer-title fw-bold mb-4 position-relative">
                         <i class="bi bi-share me-2"></i>SUIVEZ-NOUS
                     </h5>
-                    
+
                     {{-- Réseaux sociaux --}}
                     <div class="social-media mb-4">
                         <div class="row g-2">
                             <div class="col-6">
-                                <a href="https://www.facebook.com/foaniservices" target="_blank" 
-                                   class="social-link facebook d-flex align-items-center p-3 rounded-3 text-decoration-none">
+                                <a href="https://www.facebook.com/foaniservices" target="_blank"
+                                    class="social-link facebook d-flex align-items-center p-3 rounded-3 text-decoration-none">
                                     <i class="bi bi-facebook fs-4 me-2"></i>
                                     <span class="small fw-semibold">Facebook</span>
                                 </a>
                             </div>
                             <div class="col-6">
-                                <a href="https://wa.me/2250505969625" target="_blank" 
-                                   class="social-link whatsapp d-flex align-items-center p-3 rounded-3 text-decoration-none">
+                                <a href="https://wa.me/2250505969625" target="_blank"
+                                    class="social-link whatsapp d-flex align-items-center p-3 rounded-3 text-decoration-none">
                                     <i class="bi bi-whatsapp fs-4 me-2"></i>
                                     <span class="small fw-semibold">WhatsApp</span>
                                 </a>
                             </div>
                             <div class="col-6">
-                                <a href="#" class="social-link instagram d-flex align-items-center p-3 rounded-3 text-decoration-none">
+                                <a href="#"
+                                    class="social-link instagram d-flex align-items-center p-3 rounded-3 text-decoration-none">
                                     <i class="bi bi-instagram fs-4 me-2"></i>
                                     <span class="small fw-semibold">Instagram</span>
                                 </a>
                             </div>
                             <div class="col-6">
-                                <a href="#" class="social-link youtube d-flex align-items-center p-3 rounded-3 text-decoration-none">
+                                <a href="#"
+                                    class="social-link youtube d-flex align-items-center p-3 rounded-3 text-decoration-none">
                                     <i class="bi bi-youtube fs-4 me-2"></i>
                                     <span class="small fw-semibold">YouTube</span>
                                 </a>
@@ -193,6 +193,7 @@
                     </div> --}}
                 </div>
             </div>
+            
         </div>
 
         {{-- Section Points de vente rapides --}}
@@ -206,8 +207,9 @@
                         $points_de_vente_footer = \App\Models\CategoriePointVente::active()->take(6)->get();
                     @endphp
                     @foreach ($points_de_vente_footer as $point)
-                        <a href="{{ route('points_de_vente', ['slug' => $point->slug]) }}" 
-                           class="badge bg-light text-dark text-decoration-none px-3 py-2 rounded-pill border">
+                        <a href="{{ route('points_de_vente', ['slug' => $point->slug]) }}"
+                            
+                            class="badge bg-light text-dark text-decoration-none px-3 py-2 rounded-pill border">
                             <i class="bi bi-shop me-1"></i>{{ $point->libelle }}
                         </a>
                     @endforeach
@@ -219,10 +221,9 @@
         <div class="row mt-4 pt-4 border-top">
             <div class="col-lg-6 text-center text-lg-start">
                 <div class="d-flex align-items-center justify-content-center justify-content-lg-start mb-2 mb-lg-0">
-                    <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}" 
-                         alt="Foani" 
-                         class="footer-logo me-3 rounded-circle" 
-                         style="width: 40px; height: 40px; object-fit: contain;">
+                    <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
+                        alt="Foani" class="footer-logo me-3 rounded-circle"
+                        style="width: 40px; height: 40px; object-fit: contain;">
                     <div>
                         <div class="fw-bold text-success">FOANI</div>
                         <div class="small text-secondary">Spécialiste Volaille & Œufs</div>
@@ -235,9 +236,9 @@
                         &copy; {{ date('Y') }} <strong class="text-dark">Foani</strong>. Tous droits réservés.
                     </p>
                     <p class="mb-0 small text-secondary">
-                        Développé avec ❤️ par 
-                        <a href="https://www.ticafrique.ci" target="_blank" 
-                           class="text-decoration-none fw-semibold text-success">TICAFRIQUE</a>
+                        Développé avec ❤️ par
+                        <a href="https://www.ticafrique.ci" target="_blank"
+                            class="text-decoration-none fw-semibold text-success">TICAFRIQUE</a>
                     </p>
                 </div>
             </div>
@@ -276,7 +277,7 @@
         position: relative;
         padding-bottom: 10px;
         font-weight: 800 !important;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
     .footer-title::after {
@@ -298,7 +299,7 @@
         transition: all 0.3s ease;
         font-size: 0.95rem;
         font-weight: 500;
-        text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
     }
 
     .footer-link:hover {
@@ -333,14 +334,14 @@
         color: #1a1a1a !important;
         font-weight: 700 !important;
         font-size: 0.95rem;
-        text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
     }
 
     .contact-details p {
         color: #2c3e50 !important;
         font-weight: 500;
         line-height: 1.4;
-        text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
     }
 
     .contact-icon {
@@ -366,7 +367,7 @@
         color: #2c3e50 !important;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         min-height: 60px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         font-weight: 600;
     }
 
@@ -420,7 +421,7 @@
     .play-button {
         transition: all 0.3s ease;
         transform: scale(0.8);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     .video-container:hover .play-button {
@@ -460,7 +461,7 @@
         font-weight: 600 !important;
         color: #2c3e50 !important;
         background: #ffffff !important;
-        border: 2px solid #e9ecef !important;
+        border: 2px solid #ff00bb !important;
     }
 
     .points-vente-quick .badge:hover {
@@ -499,18 +500,22 @@
     /* Responsive - Optimisé pour mobile */
     @media (max-width: 768px) {
         .footer {
-            padding: 2rem 0 !important; /* Réduction du padding */
-            margin-top: 2rem !important; /* Réduction de la marge */
+            padding: 2rem 0 !important;
+            /* Réduction du padding */
+            margin-top: 2rem !important;
+            /* Réduction de la marge */
         }
 
         .footer-section {
-            margin-bottom: 1.5rem !important; /* Moins d'espace entre sections */
+            margin-bottom: 1.5rem !important;
+            /* Moins d'espace entre sections */
         }
 
         .footer-title {
             font-size: 1rem;
             text-align: center;
-            margin-bottom: 1rem !important; /* Réduction des marges */
+            margin-bottom: 1rem !important;
+            /* Réduction des marges */
         }
 
         .footer-title::after {
@@ -519,21 +524,28 @@
         }
 
         .social-link {
-            min-height: 45px !important; /* Réduction hauteur */
+            min-height: 45px !important;
+            /* Réduction hauteur */
             font-size: 0.8rem;
-            padding: 0.5rem !important; /* Padding réduit */
+            padding: 0.5rem !important;
+            /* Padding réduit */
         }
 
         .contact-item {
-            flex-direction: row !important; /* Garder horizontal */
-            text-align: left !important; /* Alignement gauche */
-            padding: 8px !important; /* Padding réduit */
-            margin-bottom: 0.8rem !important; /* Espacement réduit */
+            flex-direction: row !important;
+            /* Garder horizontal */
+            text-align: left !important;
+            /* Alignement gauche */
+            padding: 8px !important;
+            /* Padding réduit */
+            margin-bottom: 0.8rem !important;
+            /* Espacement réduit */
         }
 
         .contact-icon {
             margin-bottom: 0 !important;
-            width: 30px !important; /* Icônes plus petites */
+            width: 30px !important;
+            /* Icônes plus petites */
             height: 30px !important;
         }
 
@@ -542,25 +554,30 @@
         }
 
         .newsletter-section {
-            padding: 1rem !important; /* Padding réduit */
+            padding: 1rem !important;
+            /* Padding réduit */
             margin-bottom: 1rem !important;
         }
 
         .video-container {
-            margin-bottom: 1rem !important; /* Réduction marge vidéo */
+            margin-bottom: 1rem !important;
+            /* Réduction marge vidéo */
         }
 
         .news-links a {
-            margin-bottom: 0.5rem !important; /* Espacement réduit */
+            margin-bottom: 0.5rem !important;
+            /* Espacement réduit */
         }
 
         /* Réduction des gaps et marges générales */
         .row.g-5 {
-            gap: 1rem !important; /* Gap réduit */
+            gap: 1rem !important;
+            /* Gap réduit */
         }
 
         .row.mt-5 {
-            margin-top: 2rem !important; /* Marges réduites */
+            margin-top: 2rem !important;
+            /* Marges réduites */
         }
 
         .row.mt-4 {
@@ -582,7 +599,8 @@
 
     @media (max-width: 576px) {
         .footer {
-            padding: 1.5rem 0 !important; /* Encore moins de padding */
+            padding: 1.5rem 0 !important;
+            /* Encore moins de padding */
         }
 
         .footer-section {
@@ -590,7 +608,8 @@
         }
 
         .row.g-5 {
-            gap: 0.8rem !important; /* Gap encore plus réduit */
+            gap: 0.8rem !important;
+            /* Gap encore plus réduit */
         }
 
         .contact-item {
