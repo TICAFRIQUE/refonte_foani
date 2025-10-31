@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     {{-- SEO Meta Tags --}}
     <meta name="description" content="@yield('meta_description', 'Foani - Spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Découvrez nos produits de qualité premium : poulets, œufs, et volailles diverses. Livraison rapide et fraîcheur garantie.')">
     <meta name="keywords" content="@yield('meta_keywords', 'Foani, volaille Côte d\'Ivoire, œufs frais, poulets, aviculture, ferme, livraison volaille, boutique en ligne, produits frais, élevage, volaille premium, œufs bio, poussins, alimentation volaille')">
     <meta name="author" content="Foani - Aviculture Côte d'Ivoire">
     <meta name="robots" content="@yield('meta_robots', 'index, follow')">
-    
+
     {{-- Open Graph Meta Tags --}}
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@yield('og_title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire')">
@@ -21,7 +21,7 @@
     <meta property="og:url" content="@yield('og_url', url()->current())">
     <meta property="og:site_name" content="Foani">
     <meta property="og:locale" content="fr_CI">
-    
+
     {{-- Twitter Card Meta Tags --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('twitter_title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire')">
@@ -29,20 +29,20 @@
     <meta name="twitter:image" content="@yield('twitter_image', asset('images/foani-twitter-image.jpg'))">
     <meta name="twitter:site" content="@FoaniCI">
     <meta name="twitter:creator" content="@FoaniCI">
-    
+
     {{-- Additional SEO Meta Tags --}}
     <meta name="geo.region" content="CI">
     <meta name="geo.placename" content="Côte d'Ivoire">
     <meta name="geo.position" content="7.539989;-5.54708">
     <meta name="ICBM" content="7.539989, -5.54708">
-    
+
     {{-- Business/Local SEO --}}
     <meta name="business:contact_data:locality" content="Abidjan">
     <meta name="business:contact_data:region" content="Côte d'Ivoire">
     <meta name="business:contact_data:country_name" content="Côte d'Ivoire">
     <meta name="business:contact_data:phone_number" content="+225 05 05 96 96 25">
     <meta name="business:contact_data:email" content="info@foani.ci">
-    
+
     {{-- Mobile Specific --}}
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -50,29 +50,29 @@
     <meta name="apple-mobile-web-app-title" content="Foani">
     <meta name="msapplication-TileColor" content="#559e33">
     <meta name="theme-color" content="#559e33">
-    
+
     {{-- Canonical URL --}}
     <link rel="canonical" href="@yield('canonical', url()->current())">
-    
+
     {{-- Dynamic Title --}}
     <title>@yield('title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire | Boutique en ligne')</title>
 
     {{-- Favicons --}}
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/favicon/apple-touch-icon.png')}}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('images/favicon/favicon-32x32.png')}}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/favicon/favicon-16x16.png')}}">
-    <link rel="manifest" href="{{asset('images/favicon/site.webmanifest')}}">
-    
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('images/favicon/site.webmanifest') }}">
+
     {{-- Preconnect for performance --}}
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
+
     {{-- DNS Prefetch --}}
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-    
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -256,7 +256,7 @@
                 height: 85%;
             }
         }
-
+/* 
         #mobile-bottom-bar {
             position: fixed;
             left: 0;
@@ -283,7 +283,7 @@
             #mobile-bottom-bar {
                 display: none !important;
             }
-        }
+        } */
 
 
         .card {
@@ -299,7 +299,7 @@
         }
 
         .card-title {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -799,96 +799,7 @@
     </a> --}}
 
     {{-- ...MOBILE BAR --}}
-    <div id="mobile-bottom-bar" class="d-lg-none d-md-none d-block">
-        {{-- Barre de recherche mobile (toggle) --}}
-        <div id="mobile-search-bar" class="mobile-search-container" style="display: none;">
-            <div class="p-3 bg-white border-top">
-                <form method="GET" action="{{ route('boutique.index') }}">
-                    <div class="input-group">
-                        <input type="text" name="recherche" class="form-control"
-                            placeholder="Rechercher un produit..." value="{{ request('recherche') }}">
-                        <button class="btn btn-success" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                        <button class="btn btn-outline-secondary" type="button" onclick="toggleMobileSearch()">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="mobile-bar-content d-flex justify-content-around align-items-center">
-
-             {{-- Accueil --}}
-            <a href="{{ route('accueil') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
-                title="Accueil">
-                <i class="bi bi-house fs-3"></i>
-            </a>
-            {{-- Bouton de recherche --}}
-            <button class="btn btn-outline-success rounded-circle flex-shrink-0" onclick="toggleMobileSearch()"
-                title="Rechercher">
-                <i class="bi bi-search fs-3"></i>
-            </button>
-
-            {{-- Panier --}}
-            <a href="{{ route('panier.index') }}"
-                class="btn btn-warning rounded-circle position-relative flex-shrink-0" title="Panier">
-                <i class="bi bi-cart fs-3 text-white"></i>
-                <span id="cart-badge-mobile"
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    style="font-size:0.8rem;">
-                    {{ $count ?? 0 }}
-                </span>
-            </a>
-
-            {{-- Boutique --}}
-            <a href="{{ route('boutique.index') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
-                title="Boutique">
-                <i class="bi bi-shop fs-3"></i>
-            </a>
-
-            {{-- Connexion ou Profil (menu déroulant si connecté) --}}
-            @guest
-                <a href="{{ route('user.loginForm') }}" class="btn btn-outline-success rounded-circle flex-shrink-0"
-                    title="Se connecter">
-                    <i class="bi bi-person fs-3"></i>
-                </a>
-            @else
-                <div class="dropup">
-                    <a href="#" class="btn btn-success rounded-circle flex-shrink-0 dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false" title="Mon compte">
-                        <i class="bi bi-person-check fs-3"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end mb-2">
-                        <li>
-                            <a class="dropdown-item" href="{{ route('user.profil') }}">
-                                <i class="bi bi-person-circle me-2"></i> Mon profil
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('user.commandes') }}">
-                                <i class="bi bi-bag-check me-2"></i> Mes commandes
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('user.reservations') }}">
-                                <i class="bi bi-calendar-check me-2"></i> Mes réservations
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item text-danger" href="{{ route('user.logout') }}">
-                                <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            @endguest
-        </div>
-    </div>
+    @include('frontend.components.mobile_navBar')
 
     <!-- Footer -->
     <footer class="footer py-4 mt-5" style="background: #f8f9fa;">
