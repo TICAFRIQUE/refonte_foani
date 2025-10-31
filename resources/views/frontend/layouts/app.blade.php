@@ -799,69 +799,10 @@
     </a> --}}
 
     {{-- ...MOBILE BAR --}}
-    @include('frontend.components.mobile_navBar')
+    @include('frontend.components.mobile_navBarV1')
 
     <!-- Footer -->
-    <footer class="footer py-4 mt-5" style="background: #f8f9fa;">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <h5 class="fw-bold mb-3" style="color:#559e33;">ACTUALITÉS</h5>
-                    <div class="ratio ratio-16x9 rounded shadow-sm mb-2">
-                        <iframe src="https://www.youtube.com/embed/0Z2W1GitgBE?start=3" title="Spot Foani"
-                            allowfullscreen></iframe>
-                    </div>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-dark text-decoration-none">Spot Foani</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5 class="fw-bold mb-3" style="color:#559e33;">INFORMATION</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ route('page.activites') }}" class="text-dark text-decoration-none">Nos
-                                Activités</a></li>
-                        <li><a href="{{ route('boutique.index') }}"
-                                class="text-dark text-decoration-none">Boutique</a></li>
-                        <li><a href="#" class="text-dark text-decoration-none">Entreprise</a></li>
-                        <li><a href="{{ route('contact') }}" class="text-dark text-decoration-none">Contact</a></li>
-                        {{-- <li><a href="https://webmail.foani.ci" target="_blank" class="text-dark text-decoration-none">Webmail</a></li> --}}
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5 class="fw-bold mb-3" style="color:#559e33;">CONTACT</h5>
-                    <ul class="list-unstyled">
-                        <li class="text-dark"><i class="bi bi-telephone me-2"></i>Standard : <a
-                                href="tel:+2250505969625" class="text-dark text-decoration-none">(+225) 05 05 96 96
-                                25</a></li>
-                        <li class="text-dark"><i class="bi bi-envelope me-2"></i>E-mail : <a
-                                href="mailto:info@foani.ci" class="text-dark text-decoration-none">info@foani.ci</a>
-                        </li>
-                        <li><a href="{{ route('boutique.index') }}" class="text-dark text-decoration-none"><i
-                                    class="bi bi-shop me-2"></i>Notre boutique</a></li>
-                        <li><a href="#sectionPointDeVente" class="text-dark text-decoration-none"><i
-                                    class="bi bi-geo-alt me-2"></i>Nos points de vente</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5 class="fw-bold mb-3" style="color:#559e33;">SUIVEZ-NOUS</h5>
-                    <div class="d-flex align-items-center gap-3 fs-4">
-                        <a target="_blank" href="https://www.facebook.com/foaniservices/?_rdc=1&_rdr#"
-                            class="text-dark"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="text-dark"><i class="bi bi-youtube"></i></a>
-                        <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="text-center text-muted small">
-                &copy; {{ date('Y') }} Foani. Tous droits réservés. Développé par <a
-                    href="https://www.ticafrique.ci" target="_blank"
-                    class="text-decoration-none text-muted">TICAFRIQUE</a>.
-            </div>
-        </div>
-    </footer>
+  @include('frontend.layouts.footer')
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -38,9 +38,7 @@
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
-    } 
-        
-    */
+    } */
 
     /* Styles des boutons améliorés */
     #mobile-bottom-bar .btn {
@@ -229,53 +227,62 @@
     <div class="mobile-bar-content d-flex justify-content-around align-items-center">
 
         {{-- Accueil --}}
-        <a href="{{ route('accueil') }}" 
-           class="btn btn-outline-success rounded-circle flex-shrink-0 {{ request()->routeIs('accueil') || request()->routeIs('home') ? 'active' : '' }}" 
-           title="Accueil">
+        <a href="{{ route('accueil') }}"
+            class="btn btn-outline-success rounded-circle flex-shrink-0 {{ request()->routeIs('accueil') || request()->routeIs('home') ? 'active' : '' }}"
+            title="Accueil">
             <i class="bi bi-house fs-3"></i>
         </a>
 
         {{-- Bouton de recherche --}}
-        <button class="btn btn-outline-success rounded-circle flex-shrink-0" 
-                id="search-toggle-btn"
-                onclick="toggleMobileSearch()"
-                title="Rechercher">
+        <button class="btn btn-outline-success rounded-circle flex-shrink-0" id="search-toggle-btn"
+            onclick="toggleMobileSearch()" title="Rechercher">
             <i class="bi bi-search fs-3"></i>
         </button>
 
         {{-- Panier --}}
-        <a href="{{ route('panier.index') }}" 
-           class="btn btn-warning rounded-circle position-relative flex-shrink-0 {{ request()->routeIs('panier.*') ? 'active' : '' }}"
-           title="Panier">
+        <a href="{{ route('panier.index') }}"
+            class="btn btn-warning rounded-circle position-relative flex-shrink-0 {{ request()->routeIs('panier.*') ? 'active' : '' }}"
+            title="Panier">
             <i class="bi bi-cart fs-3 text-white"></i>
-            @if(($count ?? 0) > 0)
-                <span id="cart-badge-mobile"
-                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                      style="font-size:0.8rem;">
-                    {{ $count ?? 0 }}
-                </span>
-            @endif
+
+            <span id="cart-badge-mobile"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                style="font-size:0.8rem;">
+                {{ $count ?? 0 }}
+            </span>
+
+        </a>
+
+        {{-- Panier --}}
+        <a href="{{ route('panier.index') }}" class="btn btn-warning rounded-circle position-relative flex-shrink-0"
+            title="Panier">
+            <i class="bi bi-cart fs-3 text-white"></i>
+            <span id="cart-badge-mobile"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                style="font-size:0.8rem;">
+                {{ $count ?? 0 }}
+            </span>
         </a>
 
         {{-- Boutique --}}
-        <a href="{{ route('boutique.index') }}" 
-           class="btn btn-outline-success rounded-circle flex-shrink-0 {{ request()->routeIs('boutique.*') && !request()->routeIs('panier.*') ? 'active' : '' }}"
-           title="Boutique">
+        <a href="{{ route('boutique.index') }}"
+            class="btn btn-outline-success rounded-circle flex-shrink-0 {{ request()->routeIs('boutique.*') && !request()->routeIs('panier.*') ? 'active' : '' }}"
+            title="Boutique">
             <i class="bi bi-shop fs-3"></i>
         </a>
 
         {{-- Connexion ou Profil (menu déroulant si connecté) --}}
         @guest
-            <a href="{{ route('user.loginForm') }}" 
-               class="btn btn-outline-success rounded-circle flex-shrink-0 {{ request()->routeIs('user.loginForm') || request()->routeIs('user.registerForm') ? 'active' : '' }}"
-               title="Se connecter">
+            <a href="{{ route('user.loginForm') }}"
+                class="btn btn-outline-success rounded-circle flex-shrink-0 {{ request()->routeIs('user.loginForm') || request()->routeIs('user.registerForm') ? 'active' : '' }}"
+                title="Se connecter">
                 <i class="bi bi-person fs-3"></i>
             </a>
         @else
             <div class="dropup">
-                <a href="#" 
-                   class="btn btn-success rounded-circle flex-shrink-0 dropdown-toggle {{ request()->routeIs('user.*') && !request()->routeIs('user.loginForm') && !request()->routeIs('user.registerForm') ? 'active' : '' }}"
-                   data-bs-toggle="dropdown" aria-expanded="false" title="Mon compte">
+                <a href="#"
+                    class="btn btn-success rounded-circle flex-shrink-0 dropdown-toggle {{ request()->routeIs('user.*') && !request()->routeIs('user.loginForm') && !request()->routeIs('user.registerForm') ? 'active' : '' }}"
+                    data-bs-toggle="dropdown" aria-expanded="false" title="Mon compte">
                     <i class="bi bi-person-check fs-3"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end mb-2">
@@ -307,51 +314,3 @@
         @endguest
     </div>
 </div>
-
-<script>
-    function toggleMobileSearch() {
-        const searchBar = document.getElementById('mobile-search-bar');
-        const searchBtn = document.getElementById('search-toggle-btn');
-        
-        if (searchBar.style.display === 'none') {
-            searchBar.style.display = 'block';
-            setTimeout(() => searchBar.classList.add('show'), 10);
-            searchBtn.classList.add('active');
-        } else {
-            searchBar.classList.remove('show');
-            setTimeout(() => searchBar.style.display = 'none', 300);
-            searchBtn.classList.remove('active');
-        }
-    }
-
-    // Fermer la recherche si on clique ailleurs
-    document.addEventListener('click', function(event) {
-        const searchBar = document.getElementById('mobile-search-bar');
-        const searchBtn = document.getElementById('search-toggle-btn');
-        const mobileBar = document.getElementById('mobile-bottom-bar');
-        
-        if (!mobileBar.contains(event.target) && searchBar.style.display !== 'none') {
-            searchBar.classList.remove('show');
-            setTimeout(() => searchBar.style.display = 'none', 300);
-            searchBtn.classList.remove('active');
-        }
-    });
-
-    // Fonction pour mettre à jour le badge panier
-    function updateCartBadge(count) {
-        const badge = document.getElementById('cart-badge-mobile');
-        if (badge) {
-            if (count > 0) {
-                badge.textContent = count;
-                badge.setAttribute('data-count', count);
-                badge.style.display = 'flex';
-            } else {
-                badge.style.display = 'none';
-                badge.setAttribute('data-count', '0');
-            }
-        }
-    }
-
-    // Exposer la fonction globalement
-    window.updateMobileCartBadge = updateCartBadge;
-</script>

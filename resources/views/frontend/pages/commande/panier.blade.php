@@ -482,7 +482,7 @@
                                     <h3>Votre panier est vide</h3>
                                     <p>Découvrez nos délicieux produits et commencez vos achats !</p>
                                     <a href="{{ route('boutique.index') }}" class="btn btn-shop">
-                                        <i class="bi bi-shop me-2"></i>Découvrir nos produits
+                                        <i class="bi bi-shop me-2 text-white"></i>Découvrir nos produits
                                     </a>
                                 </div>
                             </div>

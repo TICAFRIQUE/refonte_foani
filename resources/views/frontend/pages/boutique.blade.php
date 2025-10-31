@@ -263,6 +263,7 @@
 
         .product-title {
             font-size: 1rem;
+            text-align: center;
             font-weight: 600;
             color: #333;
             margin-bottom: 8px;
@@ -275,6 +276,7 @@
 
         .product-price {
             font-size: 1.1rem;
+            text-align: center;
             font-weight: 700;
             color: var(--color-vert);
             margin-bottom: 12px;
@@ -398,9 +400,9 @@
                 padding: 12px;
             }
 
-            .product-title {
+            /* .product-title {
                 font-size: 0.9rem;
-            }
+            } */
 
             .product-price {
                 font-size: 1rem;
