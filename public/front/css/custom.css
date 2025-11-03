@@ -204,7 +204,7 @@ body {
 /* Flèches du carousel en vert */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    background-color: #559e33;
+    background-color: #0e0e0e;
     border-radius: 50%;
     background-size: 60% 60%;
     background-position: center;

@@ -1,4 +1,4 @@
-{{-- filepath: c:\laragon\www\foani\resources\views\frontend\sections\old\categories_liste.blade.php --}}
+{{-- filepath: c:\laragon\www\foani\resources\views\frontend\sections\categories_liste.blade.php --}}
 @push('styles')
     <style>
         /* Isolation des styles pour les catégories */
@@ -29,7 +29,7 @@
         }
 
         .categories-card {
-            padding: 25px;
+            padding: 10px;
             background: linear-gradient(145deg, #ffffff, #f8fafa);
             border-radius: 20px;
             border: 1px solid rgba(42, 107, 42, 0.1);
@@ -163,7 +163,13 @@
             text-shadow: 0 2px 4px rgba(247, 201, 72, 0.2);
         }
 
-        /* Navigation carousel */
+        /* Conteneur du carousel avec positionnement relatif */
+        #categoriesCarousel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Navigation carousel - Centrage vertical */
         .categories-prev,
         .categories-next {
             background: rgba(42, 107, 42, 0.8) !important;
@@ -172,13 +178,36 @@
             height: 45px !important;
             border: 2px solid rgba(255, 255, 255, 0.3) !important;
             transition: all 0.3s ease !important;
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 10 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .categories-prev {
+            left: -20px !important;
+        }
+
+        .categories-next {
+            right: -20px !important;
         }
 
         .categories-prev:hover,
         .categories-next:hover {
             background: var(--color-vert) !important;
             border-color: white !important;
-            transform: scale(1.1) !important;
+            transform: translateY(-50%) scale(1.1) !important;
+        }
+
+        /* Icônes de navigation */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 20px !important;
+            height: 20px !important;
+            filter: invert(1) !important;
         }
 
         /* Animation d'apparition */
@@ -227,7 +256,15 @@
             }
 
             .categories-card {
-                padding: 22px;
+                padding: 15px;
+            }
+
+            .categories-prev {
+                left: -15px !important;
+            }
+
+            .categories-next {
+                right: -15px !important;
             }
         }
 
@@ -257,7 +294,7 @@
             }
 
             .categories-card {
-                padding: 20px;
+                padding: 10px;
             }
 
             .categories-card:hover {
@@ -268,6 +305,20 @@
             .categories-next {
                 width: 40px !important;
                 height: 40px !important;
+            }
+
+            .categories-prev {
+                left: -10px !important;
+            }
+
+            .categories-next {
+                right: -10px !important;
+            }
+
+            .carousel-control-prev-icon,
+            .carousel-control-next-icon {
+                width: 16px !important;
+                height: 16px !important;
             }
         }
 
@@ -291,11 +342,31 @@
             }
 
             .categories-card {
-                padding: 18px;
+                padding: 10px;
             }
 
             .categories-name {
                 font-size: 0.9rem !important;
+            }
+
+            .categories-prev,
+            .categories-next {
+                width: 35px !important;
+                height: 35px !important;
+            }
+
+            .categories-prev {
+                left: -5px !important;
+            }
+
+            .categories-next {
+                right: -5px !important;
+            }
+
+            .carousel-control-prev-icon,
+            .carousel-control-next-icon {
+                width: 14px !important;
+                height: 14px !important;
             }
         }
 
@@ -342,11 +413,11 @@
 
         <button class="carousel-control-prev categories-prev" type="button" data-bs-target="#categoriesCarousel"
             data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" style="filter:invert(1);"></span>
+            <span class="carousel-control-prev-icon"></span>
         </button>
         <button class="carousel-control-next categories-next" type="button" data-bs-target="#categoriesCarousel"
             data-bs-slide="next">
-            <span class="carousel-control-next-icon" style="filter:invert(1);"></span>
+            <span class="carousel-control-next-icon"></span>
         </button>
     </div>
 </section>

@@ -444,7 +444,8 @@
                 <img src="{{ $slider->getFirstMediaUrl('image') ?: asset('front/images/sliders/default.jpg') }}"
                     alt="{{ $slider->libelle }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
 
-                <div class="main-slider-caption-center">
+                @if (isset($slider->btn_nom) || isset($slider->libelle) || isset($slider->description) || isset($slider->url))
+                    <div class="main-slider-caption-center">
                     {{-- <h1 class="slide-title">{{ $slider->libelle }}</h1>
                     <p class="slide-description">{{ $slider->description ?? 'Découvrez nos produits de qualité' }}</p> --}}
                     <a href="{{ $slider->url ?? route('boutique.index') }}" class="btn btn-cta-slider slide-button">
@@ -452,6 +453,7 @@
                         {{ $slider->btn_nom ?? 'Commander maintenant' }}
                     </a>
                 </div>
+                @endif
 
                 {{-- Barre de progression --}}
                 <div class="slide-progress"></div>

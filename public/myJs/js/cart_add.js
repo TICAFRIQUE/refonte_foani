@@ -17,14 +17,14 @@ $(function() {
                 let alert = $(`
                     <div class="alert alert-success alert-dismissible fade show position-fixed w-100 text-center" 
                          style="top: 0; left: 0; z-index: 2000;">
-                        <strong>Ajouté au panier !</strong> Le produit a bien été ajouté à votre panier.
+                        Le produit a bien été ajouté à votre panier.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                     </div>
                 `);
                 $('body').append(alert);
                 setTimeout(function() {
-                    alert.fadeOut(500, function() { $(this).remove(); });
-                }, 2000);
+                    alert.fadeOut(300, function() { $(this).remove(); });
+                }, 500);
 
                 // Met à jour le badge panier
                 $('.bi-cart').next('span.badge').text(response.count);
