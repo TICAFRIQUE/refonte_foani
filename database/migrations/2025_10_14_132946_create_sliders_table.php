@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable(); // texte descriptif
             $table->string('image')->nullable(); // chemin de l’image stockée
              $table->boolean('visible')->default(true); // cacher ou voir
+            $table->integer('position')->nullable();
             $table->timestamps();
         });
     }

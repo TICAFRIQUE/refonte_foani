@@ -25,7 +25,7 @@ class HomeController extends Controller
             }])->active()->position()->get();
 
             //recuperer les sliders visibles
-            $sliders = Slider::where('visible', true)->get();
+            $sliders = Slider::where('visible', true)->orderBy('position', 'asc')->get();
 
             // dd($sliders->toArray());
 

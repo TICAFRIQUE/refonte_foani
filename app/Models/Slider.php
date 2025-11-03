@@ -19,6 +19,7 @@ class Slider extends Model implements HasMedia
         'url',
         'btn_nom',
         'description',
+        'position',
         'image',
         'visible',
     ];

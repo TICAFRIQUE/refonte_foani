@@ -36,9 +36,9 @@ class SliderController extends Controller
             ]);
 
             // Vérifier si un slider du même libellé existe déjà
-            if (Slider::where('libelle', $validated['libelle'])->exists()) {
-                return redirect()->back()->with('error', 'Un slider avec ce libellé existe déjà.')->withInput();
-            }
+            // if (Slider::where('libelle', $validated['libelle'])->exists()) {
+            //     return redirect()->back()->with('error', 'Un slider avec ce libellé existe déjà.')->withInput();
+            // }
 
 
             // Assurer que 'visible' a une valeur même si non cochée
