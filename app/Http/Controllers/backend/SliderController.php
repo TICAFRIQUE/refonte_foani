@@ -27,7 +27,7 @@ class SliderController extends Controller
     {
         try {
             $validated = $request->validate([
-                'libelle' => 'string|max:255',
+                'libelle' => 'nullable|string|max:255',
                 'url' => 'nullable|url|max:255',
                 'btn_nom' => 'nullable|string|max:100',
                 'description' => 'nullable|string|max:500',
@@ -67,7 +67,7 @@ class SliderController extends Controller
             $slider = Slider::findOrFail($id);
 
             $validated = $request->validate([
-                'libelle' => 'string|max:255',
+                'libelle' => 'nullable|string|max:255',
                 'url' => 'nullable|url|max:255',
                 'btn_nom' => 'nullable|string|max:100',
                 'description' => 'nullable|string|max:500',
