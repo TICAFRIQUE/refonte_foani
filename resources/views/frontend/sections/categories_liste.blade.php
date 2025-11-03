@@ -40,6 +40,8 @@
                 0 4px 12px rgba(42, 107, 42, 0.05);
             transform: translateY(0);
             overflow: hidden;
+            min-width: 0; /* Pour flexbox */
+            flex-shrink: 0; /* Empêche la compression */
         }
 
         .categories-card::before {
@@ -163,51 +165,156 @@
             text-shadow: 0 2px 4px rgba(247, 201, 72, 0.2);
         }
 
-        /* Conteneur du carousel avec positionnement relatif */
-        #categoriesCarousel {
+        /* Scroll horizontal infini */
+        .categories-scroll-container {
             position: relative;
             overflow: hidden;
+            margin: 0 50px; /* Espace pour les boutons */
         }
 
-        /* Navigation carousel - Centrage vertical */
-        .categories-prev,
-        .categories-next {
+        .categories-scroll-wrapper {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s ease;
+            will-change: transform;
+        }
+
+        .categories-item {
+            flex: 0 0 auto;
+            width: calc(25% - 15px); /* 4 colonnes sur desktop */
+        }
+
+        /* Navigation */
+        .categories-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
             background: rgba(42, 107, 42, 0.8) !important;
             border-radius: 50% !important;
             width: 45px !important;
             height: 45px !important;
             border: 2px solid rgba(255, 255, 255, 0.3) !important;
             transition: all 0.3s ease !important;
-            position: absolute !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
             z-index: 10 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
+            cursor: pointer;
+            opacity: 1 !important; /* Toujours visibles pour le scroll infini */
         }
 
-        .categories-prev {
-            left: -20px !important;
+        .categories-nav-prev {
+            left: -20px;
         }
 
-        .categories-next {
-            right: -20px !important;
+        .categories-nav-next {
+            right: -20px;
         }
 
-        .categories-prev:hover,
-        .categories-next:hover {
+        .categories-nav-btn:hover {
             background: var(--color-vert) !important;
             border-color: white !important;
             transform: translateY(-50%) scale(1.1) !important;
         }
 
-        /* Icônes de navigation */
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            width: 20px !important;
-            height: 20px !important;
-            filter: invert(1) !important;
+        .categories-nav-btn i {
+            font-size: 18px;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .categories-title {
+                font-size: 2rem !important;
+            }
+
+            .categories-item {
+                width: calc(33.333% - 13px); /* 3 colonnes sur tablette */
+            }
+
+            .categories-scroll-container {
+                margin: 0 40px;
+            }
+
+            .categories-nav-btn {
+                width: 40px !important;
+                height: 40px !important;
+            }
+
+            .categories-nav-prev {
+                left: -15px;
+            }
+
+            .categories-nav-next {
+                right: -15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .categories-title {
+                font-size: 1.7rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .categories-item {
+                width: calc(50% - 10px); /* 2 colonnes sur mobile */
+            }
+
+            .categories-scroll-container {
+                margin: 0 35px;
+            }
+
+            .categories-nav-btn {
+                width: 35px !important;
+                height: 35px !important;
+            }
+
+            .categories-nav-btn i {
+                font-size: 16px;
+            }
+
+            .categories-nav-prev {
+                left: -10px;
+            }
+
+            .categories-nav-next {
+                right: -10px;
+            }
+
+            .categories-card {
+                padding: 10px;
+            }
+
+            .categories-card:hover {
+                transform: translateY(-8px) scale(1.01);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .categories-title {
+                font-size: 1.5rem !important;
+            }
+
+            .categories-scroll-container {
+                margin: 0 30px;
+            }
+
+            .categories-nav-btn {
+                width: 30px !important;
+                height: 30px !important;
+            }
+
+            .categories-nav-btn i {
+                font-size: 14px;
+            }
+
+            .categories-nav-prev {
+                left: -5px;
+            }
+
+            .categories-nav-next {
+                right: -5px;
+            }
         }
 
         /* Animation d'apparition */
@@ -227,149 +334,6 @@
             animation: categoriesAppear 0.6s ease forwards;
         }
 
-        /* Délai d'apparition pour chaque carte */
-        .categories-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .categories-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .categories-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .categories-card:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .categories-title {
-                font-size: 2rem !important;
-            }
-
-            .categories-image-container {
-                width: 110px;
-                height: 110px;
-            }
-
-            .categories-card {
-                padding: 15px;
-            }
-
-            .categories-prev {
-                left: -15px !important;
-            }
-
-            .categories-next {
-                right: -15px !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .categories-title {
-                font-size: 1.7rem !important;
-                margin-bottom: 1.5rem !important;
-            }
-
-            .categories-image-container {
-                width: 100px;
-                height: 100px;
-                border-radius: 12px;
-            }
-
-            .categories-image {
-                border-radius: 9px;
-            }
-
-            .categories-overlay {
-                border-radius: 9px;
-            }
-
-            .categories-name {
-                font-size: 1rem !important;
-                margin-top: 12px !important;
-            }
-
-            .categories-card {
-                padding: 10px;
-            }
-
-            .categories-card:hover {
-                transform: translateY(-8px) scale(1.01);
-            }
-
-            .categories-prev,
-            .categories-next {
-                width: 40px !important;
-                height: 40px !important;
-            }
-
-            .categories-prev {
-                left: -10px !important;
-            }
-
-            .categories-next {
-                right: -10px !important;
-            }
-
-            .carousel-control-prev-icon,
-            .carousel-control-next-icon {
-                width: 16px !important;
-                height: 16px !important;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .categories-title {
-                font-size: 1.5rem !important;
-            }
-
-            .categories-image-container {
-                width: 90px;
-                height: 90px;
-                border-radius: 10px;
-            }
-
-            .categories-image {
-                border-radius: 7px;
-            }
-
-            .categories-overlay {
-                border-radius: 7px;
-            }
-
-            .categories-card {
-                padding: 10px;
-            }
-
-            .categories-name {
-                font-size: 0.9rem !important;
-            }
-
-            .categories-prev,
-            .categories-next {
-                width: 35px !important;
-                height: 35px !important;
-            }
-
-            .categories-prev {
-                left: -5px !important;
-            }
-
-            .categories-next {
-                right: -5px !important;
-            }
-
-            .carousel-control-prev-icon,
-            .carousel-control-next-icon {
-                width: 14px !important;
-                height: 14px !important;
-            }
-        }
-
         /* États de focus pour l'accessibilité */
         .categories-card a:focus {
             outline: 2px solid var(--color-vert);
@@ -385,39 +349,192 @@
 
 <section class="categories-section container mb-5">
     <h2 class="text-center mb-4 fw-bold title categories-title">Nos Catégories</h2>
-    <div id="categoriesCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            @foreach ($categories->chunk(4) as $chunkIndex => $chunk)
-                <div class="carousel-item {{ $chunkIndex == 0 ? 'active' : '' }}">
-                    <div class="row justify-content-center g-4">
-                        @foreach ($chunk as $categorie)
-                            <div class="col-6 col-md-3">
-                                <div class="categories-card text-center">
-                                    <a href="{{ route('boutique.categorie', ['slug' => $categorie->slug]) }}"
-                                        class="text-decoration-none text-dark d-block">
-                                        <div class="categories-image-container position-relative mb-3">
-                                            <img src="{{ $categorie->getFirstMediaUrl('image') ?: asset('front/images/logo.png') }}"
-                                                class="categories-image" alt="{{ $categorie->libelle }}">
-                                            <div class="categories-overlay"></div>
-                                        </div>
-                                        <h5 class="categories-name fw-bold mb-0">{{ $categorie->libelle }}</h5>
-                                        {{-- <small class="text-muted">{{ $categorie->produits()->count() }} produit(s)</small> --}}
-                                    </a>
-                                </div>
+    
+    <div class="categories-scroll-container">
+        <div class="categories-scroll-wrapper" id="categoriesWrapper">
+            {{-- Première série des catégories --}}
+            @foreach ($categories as $categorie)
+                <div class="categories-item">
+                    <div class="categories-card text-center">
+                        <a href="{{ route('boutique.categorie', ['slug' => $categorie->slug]) }}"
+                            class="text-decoration-none text-dark d-block">
+                            <div class="categories-image-container position-relative mb-3">
+                                <img src="{{ $categorie->getFirstMediaUrl('image') ?: asset('front/images/logo.png') }}"
+                                    class="categories-image" alt="{{ $categorie->libelle }}">
+                                <div class="categories-overlay"></div>
                             </div>
-                        @endforeach
+                            <h5 class="categories-name fw-bold mb-0">{{ $categorie->libelle }}</h5>
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+            
+            {{-- Duplication pour le scroll infini --}}
+            @foreach ($categories as $categorie)
+                <div class="categories-item">
+                    <div class="categories-card text-center">
+                        <a href="{{ route('boutique.categorie', ['slug' => $categorie->slug]) }}"
+                            class="text-decoration-none text-dark d-block">
+                            <div class="categories-image-container position-relative mb-3">
+                                <img src="{{ $categorie->getFirstMediaUrl('image') ?: asset('front/images/logo.png') }}"
+                                    class="categories-image" alt="{{ $categorie->libelle }}">
+                                <div class="categories-overlay"></div>
+                            </div>
+                            <h5 class="categories-name fw-bold mb-0">{{ $categorie->libelle }}</h5>
+                        </a>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <button class="carousel-control-prev categories-prev" type="button" data-bs-target="#categoriesCarousel"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next categories-next" type="button" data-bs-target="#categoriesCarousel"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
+        <div class="categories-nav-btn categories-nav-prev" id="prevBtn">
+            <i class="bi bi-chevron-left"></i>
+        </div>
+        <div class="categories-nav-btn categories-nav-next" id="nextBtn">
+            <i class="bi bi-chevron-right"></i>
+        </div>
     </div>
 </section>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wrapper = document.getElementById('categoriesWrapper');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (!wrapper || !prevBtn || !nextBtn) return;
+
+            const originalItemsCount = {{ count($categories) }};
+            const totalItems = originalItemsCount * 2; // Puisqu'on a dupliqué
+            let currentIndex = 0;
+            let isTransitioning = false;
+
+            // Calculer le nombre d'éléments visibles selon la largeur d'écran
+            function getVisibleItems() {
+                if (window.innerWidth >= 992) return 4; // Desktop
+                if (window.innerWidth >= 768) return 3; // Tablette
+                return 2; // Mobile
+            }
+
+            function getItemWidth() {
+                return wrapper.children[0].offsetWidth + 20; // largeur + gap
+            }
+
+            function updatePosition(withTransition = true) {
+                if (withTransition) {
+                    wrapper.style.transition = 'transform 0.5s ease';
+                } else {
+                    wrapper.style.transition = 'none';
+                }
+                
+                const moveDistance = getItemWidth() * currentIndex;
+                wrapper.style.transform = `translateX(-${moveDistance}px)`;
+            }
+
+            function scrollNext() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+
+                currentIndex++;
+                updatePosition();
+
+                // Si on atteint la fin de la première série, on revient au début
+                if (currentIndex >= originalItemsCount) {
+                    setTimeout(() => {
+                        currentIndex = 0;
+                        updatePosition(false); // Sans transition pour un retour instantané
+                        setTimeout(() => {
+                            isTransitioning = false;
+                        }, 50);
+                    }, 500); // Après la transition
+                } else {
+                    setTimeout(() => {
+                        isTransitioning = false;
+                    }, 500);
+                }
+            }
+
+            function scrollPrev() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+
+                if (currentIndex <= 0) {
+                    // Si on est au début, on va à la fin de la première série
+                    currentIndex = originalItemsCount;
+                    updatePosition(false); // Sans transition
+                    setTimeout(() => {
+                        currentIndex = originalItemsCount - 1;
+                        updatePosition();
+                        setTimeout(() => {
+                            isTransitioning = false;
+                        }, 500);
+                    }, 50);
+                } else {
+                    currentIndex--;
+                    updatePosition();
+                    setTimeout(() => {
+                        isTransitioning = false;
+                    }, 500);
+                }
+            }
+
+            // Event listeners
+            nextBtn.addEventListener('click', scrollNext);
+            prevBtn.addEventListener('click', scrollPrev);
+
+            // Auto-scroll infini
+            let autoScrollInterval = setInterval(scrollNext, 3000);
+
+            // Arrêter l'auto-scroll au hover et le reprendre
+            wrapper.addEventListener('mouseenter', () => {
+                clearInterval(autoScrollInterval);
+            });
+
+            wrapper.addEventListener('mouseleave', () => {
+                autoScrollInterval = setInterval(scrollNext, 3000);
+            });
+
+            // Responsive - recalculer lors du redimensionnement
+            window.addEventListener('resize', function() {
+                updatePosition(false);
+            });
+
+            // Initialisation
+            updatePosition(false);
+
+            // Support du touch sur mobile
+            let startX = 0;
+            let isDragging = false;
+
+            wrapper.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+                clearInterval(autoScrollInterval);
+            });
+
+            wrapper.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+            });
+
+            wrapper.addEventListener('touchend', (e) => {
+                if (!isDragging) return;
+                
+                const endX = e.changedTouches[0].clientX;
+                const diffX = startX - endX;
+
+                if (Math.abs(diffX) > 50) { // Seuil de swipe
+                    if (diffX > 0) {
+                        scrollNext();
+                    } else {
+                        scrollPrev();
+                    }
+                }
+
+                isDragging = false;
+                autoScrollInterval = setInterval(scrollNext, 3000);
+            });
+        });
+    </script>
+@endpush
