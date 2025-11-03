@@ -34,8 +34,8 @@
     .owl-carousel .item img {
         width: 100%;
         height: auto;
-        max-height: 400px;
-        object-fit: contain;
+        /* max-height: 400px; */
+        object-fit: cover;
         object-position: center;
         display: block;
         transition: transform 0.8s ease;

@@ -53,7 +53,7 @@
                     rgba(42, 107, 42, 0.02),
                     rgba(247, 201, 72, 0.02),
                     rgba(255, 255, 255, 0.05));
-            border-radius: 20px;
+            /* border-radius: 20px; */
             opacity: 0;
             transition: opacity 0.4s ease;
             z-index: 1;
@@ -94,7 +94,7 @@
             width: 120px;
             height: 120px;
             margin: 0 auto;
-            border-radius: 50%;
+            /* border-radius: 50%; */
             overflow: hidden;
             position: relative;
             box-shadow:
@@ -118,8 +118,8 @@
         .categories-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
+            /* object-fit: cover; */
+            /* border-radius: 50%; */
             transition: all 0.4s ease;
             filter: brightness(0.98) contrast(1.02);
         }

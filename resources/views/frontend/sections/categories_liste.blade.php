@@ -1,7 +1,319 @@
-{{-- filepath: c:\laragon\www\foani\resources\views\frontend\sections\categories_liste.blade.php --}}
+{{-- filepath: c:\laragon\www\foani\resources\views\frontend\sections\old\categories_liste.blade.php --}}
+@push('styles')
+    <style>
+        /* Isolation des styles pour les catégories */
+        .categories-section {
+            position: relative;
+            z-index: 1;
+        }
 
-<section class="container mb-5">
-    <h2 class="text-center mb-4 fw-bold title">Nos Catégories</h2>
+        .categories-title {
+            color: var(--color-vert) !important;
+            font-size: 2.2rem !important;
+            margin-bottom: 2rem !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .categories-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-vert), var(--color-jaune));
+            border-radius: 2px;
+        }
+
+        .categories-card {
+            padding: 25px;
+            background: linear-gradient(145deg, #ffffff, #f8fafa);
+            border-radius: 20px;
+            border: 1px solid rgba(42, 107, 42, 0.1);
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.08),
+                0 4px 12px rgba(42, 107, 42, 0.05);
+            transform: translateY(0);
+            overflow: hidden;
+        }
+
+        .categories-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                    rgba(42, 107, 42, 0.02),
+                    rgba(247, 201, 72, 0.02),
+                    rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .categories-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s ease;
+            z-index: 2;
+        }
+
+        .categories-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.12),
+                0 10px 20px rgba(42, 107, 42, 0.1),
+                0 5px 15px rgba(247, 201, 72, 0.08);
+            background: linear-gradient(145deg, #ffffff, #f0f8f0);
+            border-color: rgba(42, 107, 42, 0.2);
+        }
+
+        .categories-card:hover::before {
+            opacity: 1;
+        }
+
+        .categories-card:hover::after {
+            transform: rotate(45deg) translateX(100%);
+        }
+
+        /* Format carré/rectangulaire pour les images */
+        .categories-image-container {
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+            border-radius: 15px; /* Coins arrondis au lieu de rond */
+            overflow: hidden;
+            position: relative;
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.1),
+                0 4px 10px rgba(42, 107, 42, 0.08);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: linear-gradient(145deg, #f8f9fa, #ffffff);
+            border: 3px solid rgba(42, 107, 42, 0.1);
+            z-index: 3;
+        }
+
+        .categories-card:hover .categories-image-container {
+            transform: scale(1.1) rotateY(5deg);
+            box-shadow:
+                0 15px 30px rgba(0, 0, 0, 0.15),
+                0 8px 16px rgba(42, 107, 42, 0.12),
+                0 4px 8px rgba(247, 201, 72, 0.1);
+            border-color: var(--color-jaune);
+        }
+
+        .categories-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Garde le cover pour bien remplir */
+            border-radius: 12px; /* Coins arrondis assortis */
+            transition: all 0.4s ease;
+            filter: brightness(0.98) contrast(1.02);
+        }
+
+        .categories-card:hover .categories-image {
+            transform: scale(1.1) rotate(3deg);
+            filter: brightness(1.05) contrast(1.08) saturate(1.1);
+        }
+
+        .categories-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg,
+                    rgba(42, 107, 42, 0.1),
+                    rgba(247, 201, 72, 0.1),
+                    rgba(255, 255, 255, 0.05));
+            border-radius: 12px; /* Même arrondi que l'image */
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .categories-card:hover .categories-overlay {
+            opacity: 1;
+        }
+
+        .categories-name {
+            color: var(--color-vert) !important;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            margin-top: 15px !important;
+            font-weight: 700 !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 3;
+        }
+
+        .categories-card:hover .categories-name {
+            color: var(--color-jaune) !important;
+            transform: translateY(-3px);
+            text-shadow: 0 2px 4px rgba(247, 201, 72, 0.2);
+        }
+
+        /* Navigation carousel */
+        .categories-prev,
+        .categories-next {
+            background: rgba(42, 107, 42, 0.8) !important;
+            border-radius: 50% !important;
+            width: 45px !important;
+            height: 45px !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .categories-prev:hover,
+        .categories-next:hover {
+            background: var(--color-vert) !important;
+            border-color: white !important;
+            transform: scale(1.1) !important;
+        }
+
+        /* Animation d'apparition */
+        @keyframes categoriesAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .categories-card {
+            animation: categoriesAppear 0.6s ease forwards;
+        }
+
+        /* Délai d'apparition pour chaque carte */
+        .categories-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .categories-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .categories-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .categories-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .categories-title {
+                font-size: 2rem !important;
+            }
+
+            .categories-image-container {
+                width: 110px;
+                height: 110px;
+            }
+
+            .categories-card {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .categories-title {
+                font-size: 1.7rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .categories-image-container {
+                width: 100px;
+                height: 100px;
+                border-radius: 12px;
+            }
+
+            .categories-image {
+                border-radius: 9px;
+            }
+
+            .categories-overlay {
+                border-radius: 9px;
+            }
+
+            .categories-name {
+                font-size: 1rem !important;
+                margin-top: 12px !important;
+            }
+
+            .categories-card {
+                padding: 20px;
+            }
+
+            .categories-card:hover {
+                transform: translateY(-8px) scale(1.01);
+            }
+
+            .categories-prev,
+            .categories-next {
+                width: 40px !important;
+                height: 40px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .categories-title {
+                font-size: 1.5rem !important;
+            }
+
+            .categories-image-container {
+                width: 90px;
+                height: 90px;
+                border-radius: 10px;
+            }
+
+            .categories-image {
+                border-radius: 7px;
+            }
+
+            .categories-overlay {
+                border-radius: 7px;
+            }
+
+            .categories-card {
+                padding: 18px;
+            }
+
+            .categories-name {
+                font-size: 0.9rem !important;
+            }
+        }
+
+        /* États de focus pour l'accessibilité */
+        .categories-card a:focus {
+            outline: 2px solid var(--color-vert);
+            outline-offset: 3px;
+        }
+
+        /* Micro-interactions */
+        .categories-card:active {
+            transform: translateY(-8px) scale(0.98);
+        }
+    </style>
+@endpush
+
+<section class="categories-section container mb-5">
+    <h2 class="text-center mb-4 fw-bold title categories-title">Nos Catégories</h2>
     <div id="categoriesCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             @foreach ($categories->chunk(4) as $chunkIndex => $chunk)
@@ -9,16 +321,15 @@
                     <div class="row justify-content-center g-4">
                         @foreach ($chunk as $categorie)
                             <div class="col-6 col-md-3">
-                                <div class="category-card text-center">
+                                <div class="categories-card text-center">
                                     <a href="{{ route('boutique.categorie', ['slug' => $categorie->slug]) }}"
                                         class="text-decoration-none text-dark d-block">
-                                        <div class="image-container position-relative mb-3">
+                                        <div class="categories-image-container position-relative mb-3">
                                             <img src="{{ $categorie->getFirstMediaUrl('image') ?: asset('front/images/logo.png') }}"
-                                                class="category-image"
-                                                alt="{{ $categorie->libelle }}">
-                                            <div class="image-overlay"></div>
+                                                class="categories-image" alt="{{ $categorie->libelle }}">
+                                            <div class="categories-overlay"></div>
                                         </div>
-                                        <h5 class="category-name fw-bold mb-0">{{ $categorie->libelle }}</h5>
+                                        <h5 class="categories-name fw-bold mb-0">{{ $categorie->libelle }}</h5>
                                         {{-- <small class="text-muted">{{ $categorie->produits()->count() }} produit(s)</small> --}}
                                     </a>
                                 </div>
@@ -29,203 +340,13 @@
             @endforeach
         </div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#categoriesCarousel" data-bs-slide="prev">
+        <button class="carousel-control-prev categories-prev" type="button" data-bs-target="#categoriesCarousel"
+            data-bs-slide="prev">
             <span class="carousel-control-prev-icon" style="filter:invert(1);"></span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#categoriesCarousel" data-bs-slide="next">
+        <button class="carousel-control-next categories-next" type="button" data-bs-target="#categoriesCarousel"
+            data-bs-slide="next">
             <span class="carousel-control-next-icon" style="filter:invert(1);"></span>
         </button>
     </div>
 </section>
-
-@push('styles')
-<style>
-    .category-card {
-        padding: 25px;
-        background: linear-gradient(145deg, #ffffff, #f0f2f5);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        position: relative;
-        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.1),
-            0 4px 16px rgba(0, 0, 0, 0.05),
-            inset 0 1px 0 rgba(255, 255, 255, 0.6),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.05);
-        transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-    }
-
-    .category-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(42, 107, 42, 0.02), rgba(247, 201, 72, 0.02));
-        border-radius: 20px;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .category-card:hover {
-        transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateY(-12px);
-        box-shadow: 
-            0 20px 50px rgba(0, 0, 0, 0.15),
-            0 10px 25px rgba(42, 107, 42, 0.1),
-            0 5px 15px rgba(247, 201, 72, 0.1),
-            inset 0 2px 0 rgba(255, 255, 255, 0.8),
-            inset 0 -2px 0 rgba(0, 0, 0, 0.1);
-        background: linear-gradient(145deg, #ffffff, #f8f9fa);
-    }
-
-    .category-card:hover::before {
-        opacity: 1;
-    }
-
-    .image-container {
-        width: 120px;
-        height: 120px;
-        margin: 0 auto;
-        border-radius: 50%;
-        overflow: hidden;
-        position: relative;
-        box-shadow: 
-            0 8px 20px rgba(0, 0, 0, 0.15),
-            0 4px 10px rgba(42, 107, 42, 0.1),
-            inset 0 2px 4px rgba(255, 255, 255, 0.3);
-        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        background: linear-gradient(145deg, #ffffff, #f0f2f5);
-    }
-
-    .category-card:hover .image-container {
-        transform: scale(1.08) translateZ(20px);
-        box-shadow: 
-            0 15px 35px rgba(0, 0, 0, 0.2),
-            0 8px 20px rgba(42, 107, 42, 0.15),
-            0 4px 12px rgba(247, 201, 72, 0.1),
-            inset 0 3px 6px rgba(255, 255, 255, 0.4);
-    }
-
-    .category-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-        transition: all 0.4s ease;
-        filter: brightness(0.95) contrast(1.05);
-    }
-
-    .category-card:hover .category-image {
-        transform: scale(1.1);
-        filter: brightness(1.1) contrast(1.1) saturate(1.2);
-    }
-
-    .image-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, 
-            rgba(42, 107, 42, 0.1), 
-            rgba(247, 201, 72, 0.1),
-            rgba(255, 255, 255, 0.1)
-        );
-        border-radius: 50%;
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .category-card:hover .image-overlay {
-        opacity: 1;
-    }
-
-    .category-name {
-        color: #2a6b2a;
-        transition: all 0.3s ease;
-        font-size: 1.1rem;
-        margin-top: 12px;
-        font-weight: 600;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    }
-
-    .category-card:hover .category-name {
-        color: #f7c948;
-        transform: translateY(-2px);
-        text-shadow: 0 2px 4px rgba(247, 201, 72, 0.3);
-    }
-
-    .text-muted {
-        transition: all 0.3s ease;
-    }
-
-    .category-card:hover .text-muted {
-        color: #6c757d !important;
-        transform: translateY(-1px);
-    }
-
-    /* Animation pour l'apparition */
-    @keyframes categoryAppear {
-        from {
-            opacity: 0;
-            transform: perspective(1000px) rotateX(-30deg) translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: perspective(1000px) rotateX(0deg) translateY(0px);
-        }
-    }
-
-    .category-card {
-        animation: categoryAppear 0.6s ease forwards;
-    }
-
-    /* Délai d'apparition pour chaque carte */
-    .category-card:nth-child(1) { animation-delay: 0.1s; }
-    .category-card:nth-child(2) { animation-delay: 0.2s; }
-    .category-card:nth-child(3) { animation-delay: 0.3s; }
-    .category-card:nth-child(4) { animation-delay: 0.4s; }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .image-container {
-            width: 100px;
-            height: 100px;
-        }
-        
-        .category-name {
-            font-size: 1rem;
-        }
-        
-        .category-card {
-            padding: 20px;
-        }
-
-        .category-card:hover {
-            transform: perspective(800px) rotateX(3deg) rotateY(3deg) translateY(-8px);
-        }
-    }
-
-    /* Gloss effect */
-    .category-card::after {
-        content: '';
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        right: 10px;
-        height: 50%;
-        background: linear-gradient(180deg, 
-            rgba(255, 255, 255, 0.1) 0%, 
-            rgba(255, 255, 255, 0.05) 50%, 
-            transparent 100%
-        );
-        border-radius: 15px 15px 0 0;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .category-card:hover::after {
-        opacity: 1;
-    }
-</style>
-@endpush
