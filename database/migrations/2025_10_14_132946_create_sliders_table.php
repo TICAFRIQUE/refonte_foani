@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle')->unique(); // titre ou nom du slider
+            $table->string('libelle')->nullable(); // titre ou nom du slider
             $table->string('url')->nullable(); // lien associé
             $table->string('btn_nom')->nullable(); // nom du bouton (ex: "Découvrir")
             $table->text('description')->nullable(); // texte descriptif
