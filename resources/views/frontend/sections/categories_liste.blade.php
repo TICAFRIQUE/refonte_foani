@@ -5,6 +5,9 @@
         .categories-section {
             position: relative;
             z-index: 1;
+            width: 100%;
+            padding: 60px 0;
+            background: #f8f9fa;
         }
 
         .categories-title {
@@ -165,11 +168,13 @@
             text-shadow: 0 2px 4px rgba(247, 201, 72, 0.2);
         }
 
-        /* Scroll horizontal infini */
+        /* Scroll horizontal infini - prend tout le container */
         .categories-scroll-container {
             position: relative;
             overflow: hidden;
-            margin: 0 50px; /* Espace pour les boutons */
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
         }
 
         .categories-scroll-wrapper {
@@ -177,6 +182,7 @@
             gap: 20px;
             transition: transform 0.5s ease;
             will-change: transform;
+            padding: 0 60px; /* Padding pour éviter que les éléments touchent les bords */
         }
 
         .categories-item {
@@ -204,11 +210,11 @@
         }
 
         .categories-nav-prev {
-            left: -20px;
+            left: 20px;
         }
 
         .categories-nav-next {
-            right: -20px;
+            right: 20px;
         }
 
         .categories-nav-btn:hover {
@@ -232,8 +238,8 @@
                 width: calc(33.333% - 13px); /* 3 colonnes sur tablette */
             }
 
-            .categories-scroll-container {
-                margin: 0 40px;
+            .categories-scroll-wrapper {
+                padding: 0 50px;
             }
 
             .categories-nav-btn {
@@ -242,15 +248,19 @@
             }
 
             .categories-nav-prev {
-                left: -15px;
+                left: 15px;
             }
 
             .categories-nav-next {
-                right: -15px;
+                right: 15px;
             }
         }
 
         @media (max-width: 768px) {
+            .categories-section {
+                padding: 40px 0;
+            }
+
             .categories-title {
                 font-size: 1.7rem !important;
                 margin-bottom: 1.5rem !important;
@@ -260,8 +270,8 @@
                 width: calc(50% - 10px); /* 2 colonnes sur mobile */
             }
 
-            .categories-scroll-container {
-                margin: 0 35px;
+            .categories-scroll-wrapper {
+                padding: 0 45px;
             }
 
             .categories-nav-btn {
@@ -274,11 +284,11 @@
             }
 
             .categories-nav-prev {
-                left: -10px;
+                left: 10px;
             }
 
             .categories-nav-next {
-                right: -10px;
+                right: 10px;
             }
 
             .categories-card {
@@ -291,12 +301,16 @@
         }
 
         @media (max-width: 576px) {
+            .categories-section {
+                padding: 30px 0;
+            }
+
             .categories-title {
                 font-size: 1.5rem !important;
             }
 
-            .categories-scroll-container {
-                margin: 0 30px;
+            .categories-scroll-wrapper {
+                padding: 0 40px;
             }
 
             .categories-nav-btn {
@@ -309,11 +323,11 @@
             }
 
             .categories-nav-prev {
-                left: -5px;
+                left: 5px;
             }
 
             .categories-nav-next {
-                right: -5px;
+                right: 5px;
             }
         }
 
@@ -347,8 +361,10 @@
     </style>
 @endpush
 
-<section class="categories-section container mb-5">
-    <h2 class="text-center mb-4 fw-bold title categories-title">Nos Catégories</h2>
+<section class="categories-section">
+    <div class="container">
+        <h2 class="text-center mb-4 fw-bold title categories-title">Nos Catégories</h2>
+    </div>
     
     <div class="categories-scroll-container">
         <div class="categories-scroll-wrapper" id="categoriesWrapper">
