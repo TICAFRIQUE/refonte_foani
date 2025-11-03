@@ -18,7 +18,7 @@
                         <div class="col-md-5">
                             <label class="form-label">Libellé</label>
                             <input type="text" name="libelle" class="form-control" value="{{ $slider->libelle }}"
-                                required>
+                                >
                         </div>
 
                         {{-- Nom du bouton --}}

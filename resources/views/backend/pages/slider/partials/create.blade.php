@@ -13,7 +13,7 @@
                         {{-- Libellé --}}
                         <div class="col-md-5">
                             <label class="form-label">Libellé</label>
-                            <input type="text" name="libelle" class="form-control" required>
+                            <input type="text" name="libelle" class="form-control">
                         </div>
 
                         {{-- Nom du bouton --}}

@@ -452,7 +452,7 @@
     @endif
 
     {{-- Breadcrumb --}}
-    <div class="breadcrumb-nav">
+    {{-- <div class="breadcrumb-nav">
         <div class="container">
             <a href="{{ route('accueil') }}">Accueil</a>
             <span class="separator">></span>
@@ -464,7 +464,7 @@
                 <span class="current">Boutique</span>
             @endif
         </div>
-    </div>
+    </div> --}}
 
     {{-- Section de contrôles --}}
     <div class="controls-section">
