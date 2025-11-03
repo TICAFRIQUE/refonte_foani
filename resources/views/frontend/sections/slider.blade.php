@@ -444,7 +444,7 @@
                 <img src="{{ $slider->getFirstMediaUrl('image') ?: asset('front/images/sliders/default.jpg') }}"
                     alt="{{ $slider->libelle }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
 
-                @if (isset($slider->btn_nom) || isset($slider->libelle) || isset($slider->description) || isset($slider->url))
+                @if (isset($slider->btn_nom))
                     <div class="main-slider-caption-center">
                     {{-- <h1 class="slide-title">{{ $slider->libelle }}</h1>
                     <p class="slide-description">{{ $slider->description ?? 'Découvrez nos produits de qualité' }}</p> --}}
