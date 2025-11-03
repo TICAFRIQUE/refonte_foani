@@ -27,13 +27,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.3;
+            opacity: 0.5;
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(42, 107, 42, 0.8), rgba(85, 158, 51, 0.6));
+            /* background: linear-gradient(135deg, rgba(42, 107, 42, 0.8), rgba(85, 158, 51, 0.6)); */
             display: flex;
             align-items: center;
             justify-content: center;

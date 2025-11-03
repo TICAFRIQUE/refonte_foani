@@ -230,14 +230,15 @@
             transform: scale(1.1);
         }
 
-        /* Résumé total */
+        /* Résumé total - sticky à droite */
         .total-summary {
             background: linear-gradient(135deg, var(--color-vert), var(--color-vert2));
             color: white;
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(42, 107, 42, 0.3);
-            margin-top: 30px;
+            position: sticky;
+            top: 20px;
         }
 
         .total-amount {
@@ -249,9 +250,8 @@
 
         .action-buttons {
             display: flex;
+            flex-direction: column;
             gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
         }
 
         .btn-continue {
@@ -262,6 +262,8 @@
             border-radius: 25px;
             font-weight: 600;
             transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
         }
 
         .btn-continue:hover {
@@ -278,6 +280,8 @@
             border-radius: 25px;
             font-weight: 700;
             transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
         }
 
         .btn-validate:hover {
@@ -285,6 +289,7 @@
             border-color: #f1c40f;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(241, 196, 15, 0.4);
+            color: #333;
         }
 
         /* État panier vide */
@@ -345,6 +350,19 @@
         }
 
         /* Responsive */
+        @media (max-width: 991px) {
+            .total-summary {
+                position: static;
+                margin-top: 30px;
+            }
+            
+            .action-buttons {
+                flex-direction: row;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+
         @media (max-width: 768px) {
             .panier-hero {
                 padding: 40px 0;
@@ -471,108 +489,112 @@
                 <strong>Votre commande doit être égale ou supérieure à <strong>10 000 FCFA</strong> avant de pouvoir la valider.</strong>
             </div>
 
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div id="panier-content">
-                        @if (empty($panier))
-                            {{-- Panier vide --}}
-                            <div class="panier-content">
-                                <div class="empty-cart">
-                                    <i class="bi bi-cart-x"></i>
-                                    <h3>Votre panier est vide</h3>
-                                    <p>Découvrez nos délicieux produits et commencez vos achats !</p>
-                                    <a href="{{ route('boutique.index') }}" class="btn btn-shop">
-                                        <i class="bi bi-shop me-2 text-white"></i>Découvrir nos produits
-                                    </a>
-                                </div>
+            @if (empty($panier))
+                {{-- Panier vide --}}
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="panier-content">
+                            <div class="empty-cart">
+                                <i class="bi bi-cart-x"></i>
+                                <h3>Votre panier est vide</h3>
+                                <p>Découvrez nos délicieux produits et commencez vos achats !</p>
+                                <a href="{{ route('boutique.index') }}" class="btn btn-shop">
+                                   Découvrir nos produits
+                                </a>
                             </div>
-                        @else
-                            {{-- Panier avec produits --}}
-                            <div class="panier-content">
-                                {{-- En-tête du panier --}}
-                                <div class="panier-header">
-                                    <h2 class="panier-title">
-                                        <i class="bi bi-bag-check me-2"></i>Vos articles
-                                    </h2>
-                                    <div class="panier-count">
-                                        {{session('panier') ? array_sum(array_column(session('panier'), 'quantite')) : 0;}}
-                                        {{-- {{ count($panier) }} article{{ count($panier) > 1 ? 's' : '' }} --}}
-                                    </div>
-                                </div>
-
-                                {{-- Liste des produits --}}
-                                  <div class="row gy-3" id="panier-content">
-                            @foreach ($panier as $item)
-                                <div class="col-12">
-                                    <div class="card shadow-sm border-0 rounded-4 position-relative"
-                                        data-id="{{ $item->id }}">
-                                        <div class="card-body d-flex flex-column flex-md-row align-items-center gap-3">
-                                            <!-- Image produit -->
-                                            <img src="{{ $item->getFirstMediaUrl('image_principale') ?: asset('front/images/produits/poulet.png') }}"
-                                                alt="{{ $item->libelle }}" class="rounded"
-                                                style="width:90px; height:90px; object-fit:cover; flex-shrink:0;">
-
-                                            <!-- Infos produit -->
-                                            <div class="flex-grow-1 text-center text-md-start">
-                                                <h6 class="fw-bold mb-1">{{ $item->libelle }}</h6>
-                                                <p class="text-muted small mb-1">{{ $item->categorie->libelle ?? '' }}</p>
-                                                <p class="mb-1 text-dark fw-bold prix-unitaire" style="font-size:15px;">
-                                                    {{ number_format($item->prix_de_vente, 0, ',', ' ') }} FCFA
-                                                </p>
-                                            </div>
-
-                                            <!-- Quantité -->
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <button class="btn btn-sm btn-outline-secondary btn-decrement">−</button>
-                                                <input type="number"
-                                                    class="form-control form-control-sm text-center mx-2 quantite"
-                                                    value="{{ $item->quantite }}" min="1" max="{{ $item->stock }}"
-                                                    style="width:70px;">
-                                                <button class="btn btn-sm btn-outline-secondary btn-increment">+</button>
-                                            </div>
-
-                                            <!-- Total -->
-                                            <div class="text-center fw-bold total-ligne" style="min-width:100px;">
-                                                {{ number_format($item->prix_de_vente * $item->quantite, 0, ',', ' ') }}
-                                                FCFA
-                                            </div>
-
-                                            <!-- Supprimer -->
-                                            <button
-                                                class="btn btn-sm btn-outline-danger btn-remove-panier position-absolute top-0 end-0 m-2"
-                                                data-id="{{ $item->id }}" title="Retirer">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
                         </div>
-                            </div>
-
-                            {{-- Résumé total --}}
-                            <div class="total-summary">
-                                <div class="total-amount">
-                                    <i class="bi bi-calculator me-2"></i>
-                                    Total : <span id="total-general">
-                                        {{ number_format(array_sum(array_map(fn($item) => $item->prix_de_vente * $item->quantite, $panier)), 0, ',', ' ') }} FCFA
-                                    </span>
-                                </div>
-
-                                <div class="action-buttons">
-                                    <a href="{{ route('boutique.index') }}" class="btn btn-continue">
-                                        <i class="bi bi-arrow-left me-2"></i>Continuer mes achats
-                                    </a>
-                                    <a href="{{ route('panier.caisse') }}" class="btn btn-validate btn-valide-cmd">
-                                        <i class="bi bi-check-circle me-2"></i>
-                                        {{ Auth::check() ? 'Valider ma commande' : 'Se connecter pour commander' }}
-                                    </a>
-                                </div>
-                            </div>
-                        @endif
                     </div>
                 </div>
-            </div>
+            @else
+                {{-- Layout 2 colonnes: Produits à gauche, Résumé à droite --}}
+                <div class="row">
+                    {{-- Colonne produits (gauche) --}}
+                    <div class="col-lg-8">
+                        <div class="panier-content">
+                            {{-- En-tête du panier --}}
+                            <div class="panier-header">
+                                <h2 class="panier-title">
+                                    <i class="bi bi-bag-check me-2"></i>Vos articles
+                                </h2>
+                                <div class="panier-count">
+                                    {{session('panier') ? array_sum(array_column(session('panier'), 'quantite')) : 0;}}
+                                </div>
+                            </div>
+
+                            {{-- Liste des produits --}}
+                            <div class="row gy-3" id="panier-content">
+                                @foreach ($panier as $item)
+                                    <div class="col-12">
+                                        <div class="card shadow-sm border-0 rounded-4 position-relative"
+                                            data-id="{{ $item->id }}">
+                                            <div class="card-body d-flex flex-column flex-md-row align-items-center gap-3">
+                                                <!-- Image produit -->
+                                                <img src="{{ $item->getFirstMediaUrl('image_principale') ?: asset('front/images/produits/poulet.png') }}"
+                                                    alt="{{ $item->libelle }}" class="rounded"
+                                                    style="width:90px; height:90px; object-fit:cover; flex-shrink:0;">
+
+                                                <!-- Infos produit -->
+                                                <div class="flex-grow-1 text-center text-md-start">
+                                                    <h6 class="fw-bold mb-1">{{ $item->libelle }}</h6>
+                                                    <p class="text-muted small mb-1">{{ $item->categorie->libelle ?? '' }}</p>
+                                                    <p class="mb-1 text-dark fw-bold prix-unitaire" style="font-size:15px;">
+                                                        {{ number_format($item->prix_de_vente, 0, ',', ' ') }} FCFA
+                                                    </p>
+                                                </div>
+
+                                                <!-- Quantité -->
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <button class="btn btn-sm btn-outline-secondary btn-decrement">−</button>
+                                                    <input type="number"
+                                                        class="form-control form-control-sm text-center mx-2 quantite"
+                                                        value="{{ $item->quantite }}" min="1" max="{{ $item->stock }}"
+                                                        style="width:70px;">
+                                                    <button class="btn btn-sm btn-outline-secondary btn-increment">+</button>
+                                                </div>
+
+                                                <!-- Total -->
+                                                <div class="text-center fw-bold total-ligne" style="min-width:100px;">
+                                                    {{ number_format($item->prix_de_vente * $item->quantite, 0, ',', ' ') }}
+                                                    FCFA
+                                                </div>
+
+                                                <!-- Supprimer -->
+                                                <button
+                                                    class="btn btn-sm btn-outline-danger btn-remove-panier position-absolute top-0 end-0 m-2"
+                                                    data-id="{{ $item->id }}" title="Retirer">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Colonne résumé (droite) --}}
+                    <div class="col-lg-4">
+                        <div class="total-summary">
+                            <div class="total-amount">
+                                <i class="bi bi-calculator me-2"></i>
+                                Total : <span id="total-general">
+                                    {{ number_format(array_sum(array_map(fn($item) => $item->prix_de_vente * $item->quantite, $panier)), 0, ',', ' ') }} FCFA
+                                </span>
+                            </div>
+
+                            <div class="action-buttons">
+                                <a href="{{ route('boutique.index') }}" class="btn btn-continue">
+                                    <i class="bi bi-arrow-left me-2"></i>Continuer mes achats
+                                </a>
+                                <a href="{{ route('panier.caisse') }}" class="btn btn-validate btn-valide-cmd">
+                                    <i class="bi bi-check-circle me-2"></i>
+                                    {{ Auth::check() ? 'Valider ma commande' : 'Se connecter pour commander' }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 

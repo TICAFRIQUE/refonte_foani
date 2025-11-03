@@ -298,6 +298,7 @@ Route::controller(PanierController::class)->group(function () {
     Route::post('/panier/remove/{produit_id}', 'remove')->name('panier.remove');
     Route::get('/caisse', 'caisse')->name('panier.caisse')->middleware('client');
     Route::post('/commande-store', 'commandeStore')->name('panier.commande.store')->middleware('client'); // route de validation de la commande
+    Route::get('/send-sms', 'send')->name('panier.send.sms');
 });
 
 // Route pour récupérer le nombre d'articles dans le panier
