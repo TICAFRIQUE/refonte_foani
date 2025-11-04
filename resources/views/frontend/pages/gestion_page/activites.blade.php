@@ -64,6 +64,15 @@
             min-height: 70vh;
         }
 
+        /* Grid des activités - 3 par ligne */
+        .activites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         /* Cards des activités */
         .activite-card {
             background: white;
@@ -72,8 +81,10 @@
             overflow: hidden;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            margin-bottom: 30px;
             position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .activite-card::before {
@@ -86,6 +97,7 @@
             background: linear-gradient(135deg, rgba(42, 107, 42, 0.02), rgba(247, 201, 72, 0.02));
             opacity: 0;
             transition: opacity 0.4s ease;
+            z-index: 1;
         }
 
         .activite-card:hover {
@@ -102,6 +114,7 @@
             position: relative;
             overflow: hidden;
             height: 220px;
+            flex-shrink: 0;
         }
 
         .activite-image-container::after {
@@ -117,6 +130,7 @@
                 rgba(247, 201, 72, 0.1) 100%);
             opacity: 0;
             transition: opacity 0.4s ease;
+            z-index: 2;
         }
 
         .activite-card:hover .activite-image-container::after {
@@ -153,12 +167,16 @@
 
         /* Contenu de la carte */
         .activite-body {
-            padding: 30px;
+            padding: 25px;
             position: relative;
+            z-index: 3;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .activite-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--color-vert);
             margin-bottom: 15px;
@@ -179,9 +197,10 @@
 
         .activite-description {
             color: #666;
-            line-height: 1.7;
+            line-height: 1.6;
             font-size: 0.95rem;
             margin-bottom: 20px;
+            flex: 1;
         }
 
         /* Bouton lecture */
@@ -201,7 +220,10 @@
             text-decoration: none;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            align-self: flex-start;
+            margin-top: auto;
         }
 
         .btn-lire-suite::before {
@@ -242,6 +264,7 @@
             background: white;
             border-radius: 25px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            grid-column: 1 / -1;
         }
 
         .activites-empty i {
@@ -263,7 +286,7 @@
             font-size: 1rem;
         }
 
-        /* Layout mobile-first */
+        /* Responsive Design */
         @media (max-width: 992px) {
             .activites-hero {
                 padding: 60px 0;
@@ -277,12 +300,21 @@
                 padding: 40px 0;
             }
 
+            .activites-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+
             .activite-body {
-                padding: 25px;
+                padding: 20px;
             }
 
             .activite-title {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
+            }
+
+            .activite-image-container {
+                height: 200px;
             }
         }
 
@@ -303,21 +335,26 @@
                 padding: 30px 0;
             }
 
+            .activites-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                max-width: 400px;
+            }
+
             .activite-card {
-                margin-bottom: 25px;
                 border-radius: 20px;
             }
 
             .activite-image-container {
-                height: 200px;
+                height: 180px;
             }
 
             .activite-body {
-                padding: 20px;
+                padding: 18px;
             }
 
             .activite-title {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
                 margin-bottom: 12px;
             }
 
@@ -355,20 +392,19 @@
             }
 
             .activite-card {
-                margin-bottom: 20px;
                 border-radius: 15px;
             }
 
             .activite-image-container {
-                height: 180px;
+                height: 160px;
             }
 
             .activite-body {
-                padding: 18px;
+                padding: 15px;
             }
 
             .activite-title {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
 
             .activites-empty {
@@ -385,12 +421,28 @@
             animation: slideInUp 0.6s ease-out;
         }
 
-        .activite-card:nth-child(odd) {
+        .activite-card:nth-child(1) {
             animation-delay: 0.1s;
         }
 
-        .activite-card:nth-child(even) {
+        .activite-card:nth-child(2) {
             animation-delay: 0.2s;
+        }
+
+        .activite-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .activite-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .activite-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .activite-card:nth-child(6) {
+            animation-delay: 0.6s;
         }
 
         @keyframes slideInUp {
@@ -430,66 +482,58 @@
     {{-- Container principal --}}
     <section class="activites-container">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10 col-xl-9">
-                    @forelse($activites as $activite)
-                        <article class="activite-card">
-                            <div class="row g-0">
-                                {{-- Image --}}
-                                <div class="col-md-5">
-                                    <div class="activite-image-container">
-                                        @if($activite->getFirstMediaUrl('image'))
-                                            <img src="{{ $activite->getFirstMediaUrl('image') }}" 
-                                                 alt="{{ $activite->libelle }}"
-                                                 class="activite-image"
-                                                 loading="lazy">
-                                        @else
-                                            <img src="{{ asset('front/images/default.jpg') }}" 
-                                                 alt="Activité par défaut"
-                                                 class="activite-image"
-                                                 loading="lazy">
-                                        @endif
-                                        
-                                        {{-- Badge mot-clé --}}
-                                        @if($activite->mot_cle)
-                                            <div class="activite-badge">
-                                                {{ $activite->mot_cle }}
-                                            </div>
-                                        @endif
-                                    </div>
+            <div class="activites-grid">
+                @forelse($activites as $activite)
+                    <article class="activite-card">
+                        {{-- Image --}}
+                        <div class="activite-image-container">
+                            @if($activite->getFirstMediaUrl('image'))
+                                <img src="{{ $activite->getFirstMediaUrl('image') }}" 
+                                     alt="{{ $activite->libelle }}"
+                                     class="activite-image"
+                                     loading="lazy">
+                            @else
+                                <img src="{{ asset('front/images/default.jpg') }}" 
+                                     alt="Activité par défaut"
+                                     class="activite-image"
+                                     loading="lazy">
+                            @endif
+                            
+                            {{-- Badge mot-clé --}}
+                            @if($activite->mot_cle)
+                                <div class="activite-badge">
+                                    {{ $activite->mot_cle }}
                                 </div>
-
-                                {{-- Contenu --}}
-                                <div class="col-md-7">
-                                    <div class="activite-body">
-                                        <h3 class="activite-title">
-                                            <a href="{{ route('page.show', $activite->slug) }}">
-                                                {{ $activite->libelle }}
-                                            </a>
-                                        </h3>
-                                        
-                                        <p class="activite-description">
-                                            {{ Str::limit(strip_tags($activite->description), 200, '...') }}
-                                        </p>
-                                        
-                                        <a href="{{ route('page.show', $activite->slug) }}" 
-                                           class="btn-lire-suite">
-                                            <i class="bi bi-book-half"></i>
-                                            Lire la suite
-                                            <i class="bi bi-arrow-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                    @empty
-                        <div class="activites-empty">
-                            <i class="bi bi-inbox"></i>
-                            <h3>Aucune activité disponible</h3>
-                            <p>Nos activités seront bientôt publiées. Revenez nous voir !</p>
+                            @endif
                         </div>
-                    @endforelse
-                </div>
+
+                        {{-- Contenu --}}
+                        <div class="activite-body">
+                            <h3 class="activite-title">
+                                <a href="{{ route('page.show', $activite->slug) }}">
+                                    {{ $activite->libelle }}
+                                </a>
+                            </h3>
+                            
+                            <p class="activite-description">
+                                {{ Str::limit(strip_tags($activite->description), 150, '...') }}
+                            </p>
+                            
+                            <a href="{{ route('page.show', $activite->slug) }}" 
+                               class="btn-lire-suite">
+                                <i class="bi bi-book-half"></i>
+                                Lire la suite
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </article>
+                @empty
+                    <div class="activites-empty">
+                        <i class="bi bi-inbox"></i>
+                        <h3>Aucune activité disponible</h3>
+                        <p>Nos activités seront bientôt publiées. Revenez nous voir !</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </section>
