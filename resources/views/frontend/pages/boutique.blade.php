@@ -434,8 +434,8 @@
                 alt="{{ $categorie->libelle }}" class="hero-banner-img">
             <div class="hero-overlay">
                 <div class="hero-content">
-                    <h1>{{ $categorie->libelle }}</h1>
-                    <p>{{ $categorie->produits()->count() }} produit(s) disponible(s)</p>
+                    {{-- <h1>{{ $categorie->libelle }}</h1> --}}
+                    {{-- <p>{{ $categorie->produits()->count() }} produit(s) disponible(s)</p> --}}
                 </div>
             </div>
         </div>
@@ -610,9 +610,9 @@
             function scrollToProduits() {
                 setTimeout(function() {
                     $('html, body').animate({
-                        scrollTop: $('#produits-section').offset().top - 100
-                    }, 600, 'easeInOutCubic');
-                }, 100);
+                        scrollTop: $('#produits-section').offset().top - 600
+                    }, 40, 'easeInOutCubic');
+                }, 50);
             }
 
             // Gestion des liens de catégories

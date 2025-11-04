@@ -409,7 +409,7 @@
                             <div class="card-icon">
                                 <i class="bi bi-people-fill"></i>
                             </div>
-                            <h5>Plus de 500 Employés</h5>
+                            <h5>Plus de 250 Employés</h5>
                             <p>FOANI participe activement à l'emploi des jeunes à travers des emplois permanents et temporaires.</p>
                         </div>
                     </div>
