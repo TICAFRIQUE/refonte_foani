@@ -239,7 +239,7 @@ class PanierController extends Controller
             $smsService = new smsService();
 
             // 📞 Numéro de l'administrateur (à configurer dans .env)
-            // $numero_admin = '0779613593'; // Numéro par défaut
+            $numero_admin = '2250142855584'; // Numéro par défaut
             // // $numero_admin = ltrim($numero_admin, '0'); // retire le 0 au début
             // $numero_admin = '225' . $numero_admin; // ajoute l’indicatif du pays
 
@@ -260,7 +260,7 @@ class PanierController extends Controller
             Log::info('SMS Admin envoyé', [
                 'commande_id' => $commande->id,
                 'message' => $message,
-                'numero' => env('SMS_ADMIN_PHONE'),
+                'numero' =>env('SMS_ADMIN_PHONE'),
                 'response' => $response
             ]);
         } catch (\Exception $e) {
@@ -331,7 +331,7 @@ class PanierController extends Controller
     {
         // Base du message
         $message  = "NOUVELLE COMMANDE FOANI\n";
-        $message .= "------------------------------\n";
+        // $message .= "------------------------------\n";
         $message .= "Commande: {$commande->code}\n";
         $message .= "Client: {$commande->nom}\n";
         $message .= "Tel: {$commande->telephone}\n";
@@ -340,12 +340,12 @@ class PanierController extends Controller
 
         // Détails produits (max 3)
         if (!empty($commande->produits_details)) {
-            $message .= "------------------------------\n";
+            // $message .= "------------------------------\n";
             $message .= "Produits:\n";
             $produits_count = 0;
 
             foreach ($commande->produits_details as $produit) {
-                if ($produits_count >= 3) {
+                if ($produits_count >= 2) {
                     $remaining = count($commande->produits_details) - 3;
                     $message .= "... et {$remaining} autre(s)\n";
                     break;
@@ -359,15 +359,15 @@ class PanierController extends Controller
         }
 
         // Totaux
-        $message .= "------------------------------\n";
-        $message .= "Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
-        $message .= "Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
-        $message .= "TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
+        // $message .= "------------------------------\n";
+        // $message .= "Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
+        // $message .= "Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
+        // $message .= "TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
 
         // Infos temporelles
-        $message .= "------------------------------\n";
-        $message .= "Date: " . $commande->date_commande->format('d/m/Y H:i') . "\n";
-        $message .= "Paiement: " . ucfirst($commande->mode_paiement) . "\n";
+        // $message .= "------------------------------\n";
+        // $message .= "Date: " . $commande->date_commande->format('d/m/Y H:i') . "\n";
+        // $message .= "Paiement: " . ucfirst($commande->mode_paiement) . "\n";
 
         // 🔗 Lien vers la commande
         $baseUrl = rtrim(env('APP_URL'), '/');
@@ -460,6 +460,13 @@ class PanierController extends Controller
         $numero = ltrim($numero, '0'); // retire le ²0 au début
         $numero = '225' . $numero; // ajoute l’indicatif du pays
 
+        // Construire un message court compatible SMS
+        $message = "Nouvelle commande FOANI: ";
+        $message .= "Cmd #{$commande->code}, ";
+        $message .= "Client: {$commande->nom}, ";
+        $message .= "Tel: {$commande->telephone}, ";
+        $message .= "Total: " . number_format($commande->total, 0, ',', ' ') . " FCFA, ";
+
         if (!$numero) {
             return response()->json([
                 'status' => 'error',
@@ -468,14 +475,14 @@ class PanierController extends Controller
         }
 
         // Message
-        $message = "Bonjour " . Auth::user()->username .
-            ", votre commande #{$commande->id} a été validée avec succès.";
+        // $message = "Bonjour " . Auth::user()->username .
+        //     ", votre commande #{$commande->id} a été validée avec succès.";
 
         // Envoi du SMS
         $response = $sms->send(
             env('SMS_API_USERNAME'),
             env('SMS_API_PASSWORD'),
-            '22507000000',
+            'FOANI',
             $message,
             0, // flash message : 0 = normal, 1 = message flash
             '2250779613593', // <= très important !
