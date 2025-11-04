@@ -218,6 +218,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .product-card:hover {
@@ -243,15 +244,37 @@
             transform: scale(1.05);
         }
 
+        /* Badge de stock - toujours visible */
         .product-badge {
             position: absolute;
             top: 10px;
-            right: 10px;
+            left: 10px;
             z-index: 2;
-            padding: 4px 8px;
-            border-radius: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
+            opacity: 1 !important;
+            display: block !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-badge.bg-success {
+            background: linear-gradient(135deg, #28a745, #20c997) !important;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .product-badge.bg-danger {
+            background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .product-badge.bg-warning {
+            background: linear-gradient(135deg, #ffc107, #ffb300) !important;
+            color: #333;
+            border: 2px solid rgba(0, 0, 0, 0.1);
         }
 
         .product-info {
@@ -416,6 +439,11 @@
             .results-title {
                 font-size: 1.5rem;
             }
+
+            .product-badge {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
         }
 
         @media (max-width: 576px) {
@@ -543,10 +571,15 @@
                     @endif
                     
                     <div class="product-card">
+                        {{-- Badge de stock toujours visible --}}
                         @if ($produit->stock > 0)
-                            <span class="product-badge badge bg-success">En stock</span>
+                            <span class="product-badge bg-success">
+                                <i class="bi bi-check-circle-fill me-1"></i>En stock
+                            </span>
                         @else
-                            <span class="product-badge badge bg-danger">Rupture</span>
+                            <span class="product-badge bg-danger">
+                                <i class="bi bi-x-circle-fill me-1"></i>Rupture
+                            </span>
                         @endif
                         
                         <div class="product-image-container">
