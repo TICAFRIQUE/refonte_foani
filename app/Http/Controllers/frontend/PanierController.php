@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 
 class PanierController extends Controller
@@ -238,9 +239,9 @@ class PanierController extends Controller
             $smsService = new smsService();
 
             // 📞 Numéro de l'administrateur (à configurer dans .env)
-            $numero_admin = '0779613593'; // Numéro par défaut
-            $numero_admin = ltrim($numero_admin, '0'); // retire le 0 au début
-            $numero_admin = '225' . $numero_admin; // ajoute l’indicatif du pays
+            // $numero_admin = '0779613593'; // Numéro par défaut
+            // // $numero_admin = ltrim($numero_admin, '0'); // retire le 0 au début
+            // $numero_admin = '225' . $numero_admin; // ajoute l’indicatif du pays
 
             // 📋 Construction du message détaillé
             $message = $this->construireMessageAdmin($commande, $request);
@@ -252,14 +253,14 @@ class PanierController extends Controller
                 env('SMS_API_SENDER', 'FOANI'),
                 $message,
                 0, // Message normal (pas flash)
-                $numero_admin
+                env('SMS_ADMIN_PHONE'),
             );
 
             // 📝 Log pour debug (optionnel)
             Log::info('SMS Admin envoyé', [
                 'commande_id' => $commande->id,
                 'message' => $message,
-                'numero' => $numero_admin,
+                'numero' => env('SMS_ADMIN_PHONE'),
                 'response' => $response
             ]);
         } catch (\Exception $e) {
@@ -274,55 +275,124 @@ class PanierController extends Controller
     /**
      * 📝 Construire le message SMS pour l'administrateur
      */
+    // private function construireMessageAdmin($commande, $request)
+    // {
+    //     // En-tête du message
+    //     $message = "NOUVELLE COMMANDE FOANI\n";
+    //     $message .= "-----------------------------\n";
+    //     $message .= "Commande: {$commande->code}\n";
+    //     $message .= "Client: {$commande->nom}\n";
+    //     $message .= "Tel: {$commande->telephone}\n";
+    //     $message .= "Livraison: {$commande->adresse}, {$commande->commune}\n";
+    //     $message .= "Total: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
+
+    //     // Détails des produits (limités pour éviter un SMS trop long)
+    //     if (isset($commande->produits_details) && !empty($commande->produits_details)) {
+    //         $message .= "-----------------------------\n";
+    //         $message .= "PRODUITS:\n";
+
+    //         $produits_count = 0;
+    //         foreach ($commande->produits_details as $produit) {
+    //             if ($produits_count >= 3) { // Limiter à 3 produits
+    //                 $remaining = count($commande->produits_details) - 3;
+    //                 $message .= "... et {$remaining} autre(s) produit(s)\n";
+    //                 break;
+    //             }
+
+    //             $nom = substr($produit['nom'], 0, 20);
+    //             if (strlen($produit['nom']) > 20) $nom .= "...";
+    //             $message .= "- {$nom} x{$produit['quantite']}\n";
+    //             $produits_count++;
+    //         }
+    //     }
+
+    //     // Récapitulatif financier
+    //     $message .= "-----------------------------\n";
+    //     $message .= "Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
+    //     $message .= "Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
+    //     $message .= "TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
+
+    //     // Informations temporelles
+    //     $message .= "-----------------------------\n";
+    //     $message .= "Date: " . $commande->date_commande->format('d/m/Y H:i') . "\n";
+    //     $message .= "Paiement: " . ucfirst($commande->mode_paiement) . "\n";
+
+    //     // Appel à l’action
+    //     $message .= "-----------------------------\n";
+    //     $message .= "Action requise: Valider la commande\n";
+    //     $message .= "Voir details sur";
+
+    //     return $message;
+    // }
+
+
+
     private function construireMessageAdmin($commande, $request)
     {
-        // 🎯 En-tête du message
-        $message = "🔔 NOUVELLE COMMANDE FOANI\n";
-        $message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
-        $message .= "📦 Commande: {$commande->code}\n";
-        $message .= "👤 Client: {$commande->nom}\n";
-        $message .= "📱 Tél: {$commande->telephone}\n";
-        $message .= "📍 Livraison: {$commande->adresse}, {$commande->commune}\n";
-        $message .= "💰 Total: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
+        // Base du message
+        $message  = "NOUVELLE COMMANDE FOANI\n";
+        $message .= "------------------------------\n";
+        $message .= "Commande: {$commande->code}\n";
+        $message .= "Client: {$commande->nom}\n";
+        $message .= "Tel: {$commande->telephone}\n";
+        $message .= "Livraison: {$commande->adresse}, {$commande->commune}\n";
+        $message .= "Total: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
 
-        // 🛒 Détails des produits (limité pour SMS)
-        if (isset($commande->produits_details) && !empty($commande->produits_details)) {
-            $message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
-            $message .= "🛒 PRODUITS:\n";
-
+        // Détails produits (max 3)
+        if (!empty($commande->produits_details)) {
+            $message .= "------------------------------\n";
+            $message .= "Produits:\n";
             $produits_count = 0;
+
             foreach ($commande->produits_details as $produit) {
-                if ($produits_count >= 3) { // Limiter à 3 produits pour éviter SMS trop long
+                if ($produits_count >= 3) {
                     $remaining = count($commande->produits_details) - 3;
-                    $message .= "... et {$remaining} autre(s) produit(s)\n";
+                    $message .= "... et {$remaining} autre(s)\n";
                     break;
                 }
 
-                $message .= "• " . substr($produit['nom'], 0, 20);
-                if (strlen($produit['nom']) > 20) $message .= "...";
-                $message .= " x{$produit['quantite']}\n";
+                $nom = substr($produit['nom'], 0, 20);
+                if (strlen($produit['nom']) > 20) $nom .= "...";
+                $message .= "- {$nom} x{$produit['quantite']}\n";
                 $produits_count++;
             }
         }
 
-        // 💵 Récapitulatif financier
-        $message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
-        $message .= "💳 Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
-        $message .= "🚚 Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
-        $message .= "💰 TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
+        // Totaux
+        $message .= "------------------------------\n";
+        $message .= "Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
+        $message .= "Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
+        $message .= "TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
 
-        // ⏰ Informations temporelles
-        $message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
-        $message .= "🕐 " . $commande->date_commande->format('d/m/Y à H:i') . "\n";
-        $message .= "💳 Paiement: " . ucfirst($commande->mode_paiement) . "\n";
+        // Infos temporelles
+        $message .= "------------------------------\n";
+        $message .= "Date: " . $commande->date_commande->format('d/m/Y H:i') . "\n";
+        $message .= "Paiement: " . ucfirst($commande->mode_paiement) . "\n";
 
-        // 🎯 Call to action
-        $message .= "━━━━━━━━━━━━━━━━━━━━━━\n";
-        $message .= "⚡ Action requise: Valider commande\n";
-        $message .= "🌐 Voir détails sur admin.foani.ci";
+        // 🔗 Lien vers la commande
+        $baseUrl = rtrim(env('APP_URL'), '/');
+        $fullUrl = "{$baseUrl}/admin/commandes/{$commande->id}";
+
+        try {
+            // Raccourcir le lien avec TinyURL
+            $shortUrl = Http::get("https://tinyurl.com/api-create.php", [
+                'url' => $fullUrl
+            ])->body();
+
+            if (!filter_var($shortUrl, FILTER_VALIDATE_URL)) {
+                $shortUrl = $fullUrl; // fallback si erreur
+            }
+        } catch (\Exception $e) {
+            $shortUrl = $fullUrl;
+        }
+
+        $message .= "------------------------------\n";
+        $message .= "Voir commande: {$shortUrl}";
 
         return $message;
     }
+
+
 
     /**
      * 📱 Méthode pour envoyer SMS de confirmation au client (bonus)
@@ -405,10 +475,10 @@ class PanierController extends Controller
         $response = $sms->send(
             env('SMS_API_USERNAME'),
             env('SMS_API_PASSWORD'),
-            env('SMS_API_SENDER'),
+            '22507000000',
             $message,
             0, // flash message : 0 = normal, 1 = message flash
-            $numero // <= très important !
+            '2250779613593', // <= très important !
         );
 
         return response()->json([
