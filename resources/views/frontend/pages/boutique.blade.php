@@ -2,13 +2,16 @@
 @extends('frontend.layouts.app')
 
 @section('title', 'Boutique Foani | ' . ($categorie->libelle ?? 'Tous les produits'))
-@section('meta_description', 'Achetez en ligne vos volailles et œufs frais chez Foani. Large choix de produits de
+@section('meta_description',
+    'Achetez en ligne vos volailles et œufs frais chez Foani. Large choix de produits de
     qualité premium, livraison rapide en Côte d\'Ivoire. Commandez maintenant!')
-@section('meta_keywords', 'boutique en ligne volaille, acheter œufs frais, commande volaille Côte d\'Ivoire, livraison
+@section('meta_keywords',
+    'boutique en ligne volaille, acheter œufs frais, commande volaille Côte d\'Ivoire, livraison
     poulets, e-commerce aviculture')
 
 @section('og_title', 'Boutique Foani - Commandez Volaille & Œufs Frais en Ligne')
-@section('og_description', 'Commandez facilement vos volailles et œufs frais sur la boutique en ligne Foani. Produits de
+@section('og_description',
+    'Commandez facilement vos volailles et œufs frais sur la boutique en ligne Foani. Produits de
     qualité, livraison rapide en Côte d\'Ivoire.')
 @section('og_type', 'product.group')
 
@@ -326,6 +329,7 @@
         .btn-add:hover {
             background: linear-gradient(135deg, #4CAF50, var(--color-vert));
             transform: translateY(-1px);
+            color: var(--color-jaune);
         }
 
         .btn-reserve {
@@ -424,8 +428,8 @@
             }
 
             /* .product-title {
-                font-size: 0.9rem;
-            } */
+                            font-size: 0.9rem;
+                        } */
 
             .product-price {
                 font-size: 1rem;
@@ -501,8 +505,8 @@
             <div class="search-container">
                 <form method="GET" action="{{ route('boutique.index') }}" class="search-form" id="search-form">
                     <div class="input-group">
-                        <input type="text" name="recherche" class="form-control"
-                            placeholder="Rechercher un produit..." value="{{ $recherche ?? '' }}">
+                        <input type="text" name="recherche" class="form-control" placeholder="Rechercher un produit..."
+                            value="{{ $recherche ?? '' }}">
                         @if (isset($categorie))
                             <input type="hidden" name="categorie" value="{{ $categorie->slug }}">
                         @endif
@@ -529,8 +533,7 @@
             {{-- Filtres par catégorie --}}
             <div class="filters-container">
                 <div class="category-chips">
-                    <a href="{{ route('boutique.index') }}"
-                        class="category-chip {{ !isset($categorie) ? 'active' : '' }}">
+                    <a href="{{ route('boutique.index') }}" class="category-chip {{ !isset($categorie) ? 'active' : '' }}">
                         <i class="bi bi-grid-fill me-1"></i>
                         Toutes
                         <span class="count">{{ \App\Models\Produit::count() }}</span>
@@ -569,7 +572,7 @@
                     @if ($loop->first)
                         <div class="products-grid">
                     @endif
-                    
+
                     <div class="product-card">
                         {{-- Badge de stock toujours visible --}}
                         @if ($produit->stock > 0)
@@ -581,57 +584,65 @@
                                 <i class="bi bi-x-circle-fill me-1"></i>Rupture
                             </span>
                         @endif
-                        
+
                         <div class="product-image-container">
                             <img src="{{ $produit->getFirstMediaUrl('image_principale') ?: asset('front/images/produits/poulet.png') }}"
                                 class="card-img-top" alt="{{ $produit->libelle }}">
                         </div>
-                        
+
                         <div class="product-info">
                             <h5 class="product-title">{{ $produit->libelle }}</h5>
-                            <p class="product-price">
-                                {{ number_format($produit->prix_de_vente, 0, ',', ' ') }} FCFA
+                            <p class="product-price" style="color:var(--color-vert);">
+                                {{ $produit->prix_de_vente > 0 ? number_format($produit->prix_de_vente, 0, ',', ' ').' FCFA' : 'Commande en avance' }} 
                             </p>
-                            <div class="product-action">
-                                @if ($produit->stock > 0)
-                                    <button class="btn btn-add btn-product btn-ajouter-panier" data-id="{{ $produit->id }}">
-                                        <i class="bi bi-cart-plus me-1"></i>Ajouter au panier
-                                    </button>
-                                @else
-                                    <a href="{{ route('reservation.create', ['slug' => $produit->slug]) }}"
-                                        class="btn btn-reserve btn-product">
-                                        <i class="bi bi-clock me-1"></i>Réserver
-                                    </a>
-                                @endif
-                            </div>
+                            @if ($produit->prix_de_vente > 0)
+                                <div class="product-action">
+                                    @if ($produit->stock > 0)
+                                        <button class="btn btn-add btn-product btn-ajouter-panier"
+                                            data-id="{{ $produit->id }}">
+                                            <i class="bi bi-cart-plus me-1"></i>Ajouter au panier
+                                        </button>
+                                    @else
+                                        <a href="{{ route('reservation.create', ['slug' => $produit->slug]) }}"
+                                            class="btn btn-reserve btn-product">
+                                            <i class="bi bi-clock me-1"></i>Réserver
+                                        </a>
+                                    @endif
+                                </div>
+                            @else
+                                <a href="https://wa.me/2250505969625/?text=Bonjour%2C%20Je%20veux%20commander%20le%20produit%20{{ $produit->libelle }}"
+                                    target="_blank" class="btn btn-success btn-product">
+                                    <i class="bi bi-whatsapp fs-6 me-2"></i></i>Commander via WhatsApp
+                                </a>
+                            @endif
                         </div>
                     </div>
 
                     @if ($loop->last)
-                        </div>
-                    @endif
-                @empty
-                    <div class="empty-state">
-                        <i class="bi bi-inbox"></i>
-                        <h4>Aucun produit trouvé</h4>
-                        <p>
-                            @if ($recherche)
-                                Essayez avec d'autres mots-clés ou parcourez nos catégories.
-                            @else
-                                Aucun produit disponible dans cette catégorie pour le moment.
-                            @endif
-                        </p>
-                    </div>
-                @endforelse
             </div>
-
-            {{-- Pagination --}}
-            @if ($produits->hasPages())
-                <div class="pagination-container">
-                    {{ $produits->withQueryString()->links() }}
-                </div>
             @endif
+        @empty
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h4>Aucun produit trouvé</h4>
+                <p>
+                    @if ($recherche)
+                        Essayez avec d'autres mots-clés ou parcourez nos catégories.
+                    @else
+                        Aucun produit disponible dans cette catégorie pour le moment.
+                    @endif
+                </p>
+            </div>
+            @endforelse
         </div>
+
+        {{-- Pagination --}}
+        @if ($produits->hasPages())
+            <div class="pagination-container">
+                {{ $produits->withQueryString()->links() }}
+            </div>
+        @endif
+    </div>
     </div>
 
 @endsection
@@ -671,7 +682,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('scroll') === 'true') {
                 scrollToProduits();
-                
+
                 // Nettoyer l'URL
                 const url = new URL(window.location);
                 url.searchParams.delete('scroll');

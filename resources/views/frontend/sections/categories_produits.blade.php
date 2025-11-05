@@ -59,20 +59,30 @@
                                     </div>
 
                                     <div class="card-body text-center p-3">
-                                        <h6 class=" mb-2" style="font-size:0.9rem ;text-transform:capitalize">{{ Str::limit($produit->libelle,40) }}</h6>
+                                        <h6 class=" mb-2" style="font-size:0.9rem ;text-transform:capitalize">
+                                            {{ Str::limit($produit->libelle, 40) }}</h6>
                                         <p class="card-text fw-bold mb-3" style="color:var(--color-vert);">
-                                            {{ number_format($produit->prix_de_vente, 0, ',', ' ') }} FCFA
+                                            {{ $produit->prix_de_vente > 0 ? number_format($produit->prix_de_vente, 0, ',', ' ') . ' FCFA' : 'Commande en avance' }}
                                         </p>
-                                        @if ($produit->stock > 0)
-                                            <button class="btn btn-add btn-sm w-100 btn-ajouter-panier"
-                                                data-id="{{ $produit->id }}">
-                                                <i class="bi bi-cart-plus me-1"></i>Ajouter
-                                            </button>
+
+
+                                        @if ($produit->prix_de_vente > 0)
+                                            @if ($produit->stock > 0)
+                                                <button class="btn btn-add btn-sm w-100 btn-ajouter-panier"
+                                                    data-id="{{ $produit->id }}">
+                                                    <i class="bi bi-cart-plus me-1"></i>Ajouter
+                                                </button>
+                                            @else
+                                                <a href="{{ route('reservation.create', ['slug' => $produit->slug]) }}"
+                                                    class="btn btn-warning btn-sm w-100">
+                                                    <i class="bi bi-clock me-1"></i>
+                                                    {{ Auth::check() ? 'Réserver' : 'Réserver (connexion requise)' }}
+                                                </a>
+                                            @endif
                                         @else
-                                            <a href="{{ route('reservation.create', ['slug' => $produit->slug]) }}"
-                                                class="btn btn-warning btn-sm w-100">
-                                                <i class="bi bi-clock me-1"></i>
-                                                {{ Auth::check() ? 'Réserver' : 'Réserver (connexion requise)' }}
+                                            <a href="https://wa.me/2250505969625/?text=Bonjour%2C%20Je%20veux%20commander%20le%20produit%20{{ $produit->libelle }}"
+                                                target="_blank" class="btn btn-success btn-sm w-100 mt-2">
+                                                <i class="bi bi-whatsapp me-1"></i>Commander via WhatsApp
                                             </a>
                                         @endif
                                     </div>
