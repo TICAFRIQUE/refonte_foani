@@ -111,7 +111,7 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
         transition: left 0.5s;
     }
 
@@ -356,6 +356,7 @@
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.8);
         }
+
         to {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
@@ -367,6 +368,7 @@
             opacity: 0;
             transform: translate(-50%, -30%) translateY(30px);
         }
+
         to {
             opacity: 1;
             transform: translate(-50%, -50%) translateY(0);
@@ -378,12 +380,15 @@
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.3);
         }
+
         50% {
             transform: translate(-50%, -50%) scale(1.05);
         }
+
         70% {
             transform: translate(-50%, -50%) scale(0.9);
         }
+
         100% {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
@@ -426,6 +431,7 @@
         0% {
             transform: rotate(0deg);
         }
+
         100% {
             transform: rotate(360deg);
         }
@@ -446,13 +452,13 @@
 
                 @if (isset($slider->btn_nom))
                     <div class="main-slider-caption-center">
-                    {{-- <h1 class="slide-title">{{ $slider->libelle }}</h1>
+                        {{-- <h1 class="slide-title">{{ $slider->libelle }}</h1>
                     <p class="slide-description">{{ $slider->description ?? 'Découvrez nos produits de qualité' }}</p> --}}
-                    <a href="{{ $slider->url ?? route('boutique.index') }}" class="btn btn-cta-slider slide-button">
-                        <i class="bi bi-cart-plus me-2"></i>
-                        {{ $slider->btn_nom ?? 'Commander maintenant' }}
-                    </a>
-                </div>
+                        <a href="{{ $slider->url ?? route('boutique.index') }}" class="btn btn-cta-slider slide-button">
+                            <i class="bi bi-cart-plus me-2"></i>
+                            {{ $slider->btn_nom ?? 'Commander maintenant' }}
+                        </a>
+                    </div>
                 @endif
 
                 {{-- Barre de progression --}}
@@ -486,7 +492,7 @@
             const loadingElement = $("#slider-loading");
 
             // Animations centrées
-            const animations = ['animate-fade-scale', 'animate-slide-up', 'animate-bounce-in'];
+            const animations = ['animate-bounce-in'];
 
             // Fonction pour appliquer les animations
             function applyAnimations(slide) {
@@ -576,7 +582,7 @@
 
             // Gestion des erreurs d'images
             slider.find('img').on('error', function() {
-                $(this).attr('src', '{{ asset("front/images/sliders/default.jpg") }}');
+                $(this).attr('src', '{{ asset('front/images/sliders/default.jpg') }}');
             });
 
             // Redimensionnement intelligent
