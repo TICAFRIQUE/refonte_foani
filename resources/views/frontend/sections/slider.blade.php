@@ -156,17 +156,17 @@
     .owl-dot.active {
         background: var(--color-vert);
         transform: scale(1.3);
-        box-shadow: 0 0 10px rgba(42, 107, 42, 0.5);
+        /* box-shadow: 0 0 10px rgba(42, 107, 42, 0.5); */
     }
 
     .owl-dot::after {
-        content: '';
+        /* content: ''; */
         position: absolute;
-        top: 50%;
-        left: 50%;
+        top: 80%;
+        left: 100%;
         transform: translate(-50%, -50%);
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
         border-radius: 50%;
         border: 2px solid transparent;
         transition: all 0.3s ease;
@@ -175,6 +175,16 @@
     .owl-dot.active::after {
         border-color: var(--color-vert);
     }
+
+    .owl-theme .owl-dots .owl-dot span {
+      background:var(--color-vert);
+    }
+
+    .owl-theme .owl-dots .owl-dot.active span {
+      background:var(--color-jaune);
+    }
+
+    
 
     /* Navigation arrows */
     .owl-nav {
