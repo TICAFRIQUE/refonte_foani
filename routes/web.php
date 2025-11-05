@@ -228,7 +228,12 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     // clients
     Route::prefix('clients')->name('client.')->controller(AdminController::class)->group(function () {
         Route::get('/', 'index_client')->name('index_client');            // Liste des clients
-        Route::get('delete/{id}', 'delete_client')->name('delete');    // Suppression (retour JSON recommandé)
+        Route::get('importer', 'importer_client')->name('importer');     // Formulaire d'importation
+        Route::post('importer/store', 'importer_client')->name('importer_store'); // Traitement de l'importation
+        Route::get('assign-role', 'assignRole')->name('assign_role');     // Assigner le rôle client aux utilisateurs existants
+
+
+        // Route::get('delete/{id}', 'delete_client')->name('delete_client');    // Suppression (retour JSON recommandé)
     });
 
     // candidats

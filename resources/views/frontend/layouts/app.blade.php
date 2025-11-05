@@ -15,7 +15,7 @@
 
     {{-- Open Graph Meta Tags --}}
     <meta property="og:type" content="@yield('og_type', 'website')">
-    <meta property="og:title" content="@yield('og_title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire')">
+    <meta property="og:title" content="@yield('og_title', 'Foani - Services Côte d\'Ivoire')">
     <meta property="og:description" content="@yield('og_description', 'Découvrez Foani, votre spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits de qualité premium, livraison rapide et fraîcheur garantie.')">
     <meta property="og:image" content="@yield('og_image', asset('images/foani-og-image.jpg'))">
     <meta property="og:url" content="@yield('og_url', url()->current())">
@@ -98,7 +98,7 @@
     {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Foani",
+        "name": "Foani & Services",
         "description": "Spécialiste de la volaille et des œufs frais en Côte d'Ivoire",
         "url": "{{ url('/') }}",
         "logo": "{{ asset('front/images/logo.png') }}",
@@ -126,6 +126,41 @@
     </script>
 
     @yield('structured_data')
+
+    <!-- Facebook Pixel Code -->
+    <script>
+        ! function(f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function() {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '5121195344601135');
+        fbq('track', 'PageView');
+        fbq('track', 'Search');
+        fbq('track', 'AddToCart');
+        fbq('track', 'ViewContent');
+        fbq('track', 'SubmitApplication');
+    </script>
+    <noscript>
+        <img height="1" width="1"
+            src="https://www.facebook.com/tr?id=5121195344601135&ev=PageView
+&noscript=1" />
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+
 
     <style>
         :root {
@@ -256,7 +291,8 @@
                 height: 85%;
             }
         }
-/* 
+
+        /*
         #mobile-bottom-bar {
             position: fixed;
             left: 0;
@@ -802,7 +838,7 @@
     @include('frontend.components.mobile_navBarV1')
 
     <!-- Footer -->
-  @include('frontend.layouts.footer')
+    @include('frontend.layouts.footer')
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

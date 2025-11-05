@@ -37,6 +37,15 @@
             </div>
 
             <div class="d-flex align-items-center">
+
+                <!-- Redirection vers le site web -->
+                <div class="ms-1 header-item d-none d-sm-flex">
+                    <a href="{{ url('/') }}" target="blank"
+                        class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle">
+                        <i class='bx bx-world fs-22'></i>
+                    </a>
+                </div>
+                <!-- End Redirection vers le site web -->
                 <!-- Dark/Light Mode -->
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button"
@@ -45,6 +54,8 @@
                     </button>
                 </div>
                 <!-- End Dark/Light Mode -->
+
+
 
 
                 <!--notification-->

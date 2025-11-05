@@ -27,6 +27,16 @@
 
 
                 <div class="card-body">
+                   <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Liste des clients</h5>
+                    {{-- <a href="#" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Créer un client
+                    </a> --}}
+                    <a href="{{ route('client.importer') }}" class="btn btn-success">
+                        <i class="bi bi-upload"></i> Importer des clients
+                    </a>
+
+                </div>
                     <div class="table-responsive">
                         <table id="buttons-datatables" class="display table table-bordered table-hover" style="width:100%">
                             <thead class="table-primary">
@@ -84,6 +94,6 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
-        window.routeName = "clients";
+        window.routeName = "register";
     </script>
 @endsection

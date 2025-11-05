@@ -22,42 +22,94 @@ class UserController extends Controller
     {
         return view('frontend.pages.auth.register');
     }
+
+    //login de la nouvelle version du site
+    // public function login(Request $request)
+    // {
+
+    //     // Valider les données du formulaire
+    //     $request->validate(
+    //         [
+    //             'phone' => 'required|string|min:10|max:10',
+    //             'password' => 'required|string|min:6',
+    //         ],
+    //         [
+    //             'phone.required' => 'Le numéro de téléphone est requis.',
+    //             //le numero de telephone doit contenir 10 chiffres minimum
+    //             'phone.min' => 'Le numéro de téléphone doit contenir au moins 10 chiffres.',
+    //             'phone.max' => 'Le numéro de téléphone ne doit pas dépasser 10 chiffres.',
+    //             'password.required' => 'Le mot de passe est requis.',
+    //             'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
+    //         ]
+    //     );
+    //     $credentials = $request->only('phone', 'password');
+
+    //     if (Auth::attempt($credentials)) {
+    //         // Authentication passed...
+    //         $request->session()->regenerate();
+
+    //         $redirectUrl = session()->pull('redirect_after_login', '/');
+
+    //         // ✅ Empêche les redirections externes
+    //         if (!str_starts_with($redirectUrl, url('/'))) {
+    //             $redirectUrl = '/';
+    //         }
+
+    //         return redirect($redirectUrl)->with('success', 'Connexion réussie !');
+    //     }
+
+    //     return back()->withErrors('Numéro de téléphone ou mot de passe incorrect.')->withInput();
+    // }
+
     public function login(Request $request)
     {
+        // 1️⃣ Validation
+        $request->validate([
+            'phone' => 'required|string|size:10',
+            'password' => 'required|string|min:6',
+        ]);
 
-        // Valider les données du formulaire
-        $request->validate(
-            [
-                'phone' => 'required|string|min:10|max:10',
-                'password' => 'required|string|min:6',
-            ],
-            [
-                'phone.required' => 'Le numéro de téléphone est requis.',
-                //le numero de telephone doit contenir 10 chiffres minimum
-                'phone.min' => 'Le numéro de téléphone doit contenir au moins 10 chiffres.',
-                'phone.max' => 'Le numéro de téléphone ne doit pas dépasser 10 chiffres.',
-                'password.required' => 'Le mot de passe est requis.',
-                'password.min' => 'Le mot de passe doit contenir au moins 6 caractères.',
-            ]
-        );
-        $credentials = $request->only('phone', 'password');
+        $user = User::where('phone', $request->phone)->first();
 
-        if (Auth::attempt($credentials)) {
-            // Authentication passed...
-            $request->session()->regenerate();
-
-            $redirectUrl = session()->pull('redirect_after_login', '/');
-
-            // ✅ Empêche les redirections externes
-            if (!str_starts_with($redirectUrl, url('/'))) {
-                $redirectUrl = '/';
-            }
-
-            return redirect($redirectUrl)->with('success', 'Connexion réussie !');
+        if (!$user) {
+            return back()->withErrors(['phone' => 'Numéro de téléphone ou mot de passe incorrect.'])->withInput();
         }
 
-        return back()->withErrors('Numéro de téléphone ou mot de passe incorrect.')->withInput();
+        $password = $request->password;
+
+        // 2️⃣ Détection du type de hash
+        if ($this->isSha1($user->password)) {
+            // SHA-1
+            if (sha1($password) === $user->password) {
+                Auth::login($user);
+                $request->session()->regenerate();
+
+                // Ré-hashage en Bcrypt
+                $user->password = Hash::make($password);
+                $user->save();
+
+                return redirect('/')->with('success', 'Connexion réussie (mot de passe mis à jour) !');
+            }
+        } else {
+            // Bcrypt classique
+            if (Hash::check($password, $user->password)) {
+                Auth::login($user);
+                $request->session()->regenerate();
+
+                return redirect('/')->with('success', 'Connexion réussie !');
+            }
+        }
+
+        // 3️⃣ Échec
+        return back()->withErrors(['phone' => 'Numéro de téléphone ou mot de passe incorrect.'])->withInput();
     }
+
+    private function isSha1(string $password): bool
+    {
+        return strlen($password) === 40 && preg_match('/^[a-f0-9]{40}$/i', $password);
+    }
+
+
     public function register(Request $request)
     {
 
