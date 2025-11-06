@@ -178,10 +178,12 @@
 
     .owl-theme .owl-dots .owl-dot span {
       background:var(--color-vert);
+      opacity: 0.4;
     }
 
     .owl-theme .owl-dots .owl-dot.active span {
       background:var(--color-jaune);
+        opacity: 0.6;
     }
 
     
