@@ -331,7 +331,7 @@
 
         {{-- Bouton de categories --}}
         <a href="{{ route('categories') }}"
-            class="mobile-nav-btn{{ request()->routeIs('categories') ? 'active' : '' }}"
+            class="mobile-nav-btn {{ request()->routeIs('categories') ? 'active' : '' }}"
             title="Catégories">
             <i class="bi bi-list fs-3"></i>
         </a>
