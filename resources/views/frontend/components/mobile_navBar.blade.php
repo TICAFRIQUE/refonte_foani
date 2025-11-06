@@ -239,6 +239,13 @@
             <i class="bi bi-search fs-3"></i>
         </button>
 
+        {{-- Bouton de categories --}}
+        <a href="{{ route('categories') }}"
+            class="btn btn-outline-success rounded-circle flex-shrink-0 {{ request()->routeIs('categories') ? 'active' : '' }}"
+            title="Catégories">
+            <i class="bi bi-list fs-3"></i>
+        </a>
+
         {{-- Panier --}}
         <a href="{{ route('panier.index') }}"
             class="btn btn-warning rounded-circle position-relative flex-shrink-0 {{ request()->routeIs('panier.*') ? 'active' : '' }}"

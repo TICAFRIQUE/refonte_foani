@@ -698,12 +698,12 @@
             </form>
 
             <!-- Panier mobile (visible uniquement sur mobile) -->
-            {{-- <a href="{{ route('panier.index') }}" class="mobile-cart-link d-lg-none">
+            <a href="{{ route('panier.index') }}" class="mobile-cart-link d-lg-none">
                 <i class="bi bi-cart"></i>
                 @if(($count ?? 0) > 0)
                     <span class="mobile-cart-badge">{{ $count }}</span>
                 @endif
-            </a> --}}
+            </a>
 
             <!-- Menu burger -->
             <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">

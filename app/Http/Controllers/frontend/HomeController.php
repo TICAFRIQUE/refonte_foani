@@ -62,6 +62,13 @@ class HomeController extends Controller
         }
     }
 
+    // Liste des categories
+    public function categories()
+    {
+        $categories = Categorie::withCount('produits')->active()->position()->get();
+        return view('frontend.pages.categorie', compact('categories'));
+    }
+
 
 
   

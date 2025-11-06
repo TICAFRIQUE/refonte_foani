@@ -1,3 +1,4 @@
+{{-- filepath: c:\laragon\www\foani\resources\views\frontend\layouts\app.blade.php --}}
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -259,8 +260,8 @@
         /* Responsive pour le logo */
         @media (max-width: 768px) {
             .logo-wrapper {
-                width: 60px;
-                height: 60px;
+                width: 75px;
+                height: 75px;
             }
 
             .logo-image {
@@ -271,8 +272,8 @@
 
         @media (max-width: 480px) {
             .logo-wrapper {
-                width: 55px;
-                height: 55px;
+                width: 65px;
+                height: 65px;
             }
 
             .logo-image {
@@ -281,6 +282,7 @@
             }
         }
 
+        /* Styles pour les cartes */
         .card {
             transition: transform 0.3s cubic-bezier(.4, 2, .3, 1), box-shadow 0.3s cubic-bezier(.4, 2, .3, 1);
             border-radius: 18px;
@@ -350,328 +352,184 @@
             }
         }
 
-        /* MOBILE - Barre de recherche améliorée */
-        @media (max-width: 991.98px) {
-            /* Container principal mobile */
-            .navbar .container {
-                padding: 0.75rem 1rem;
-            }
-
-            /* Logo mobile - plus compact */
-            .navbar .navbar-brand {
-                margin-right: 12px;
-                flex-shrink: 0;
-            }
-
-            /* Barre de recherche mobile moderne */
-            #mobile-search-form {
-                display: flex !important;
-                flex: 1;
-                max-width: none;
-                margin: 0 12px;
-                background: rgba(255, 255, 255, 0.15);
-                border-radius: 25px;
-                padding: 4px;
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
-
-            #mobile-search-form:focus-within {
-                background: rgba(255, 255, 255, 0.25);
-                border-color: rgba(255, 255, 255, 0.4);
-                transform: translateY(-1px);
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            }
-
-            /* Input de recherche mobile */
-            #mobile-search-form input {
-                border: none !important;
-                background: transparent !important;
-                color: white !important;
-                font-size: 14px !important;
-                padding: 8px 16px !important;
-                box-shadow: none !important;
-                outline: none !important;
-                font-weight: 500;
-            }
-
-            #mobile-search-form input::placeholder {
-                color: rgba(255, 255, 255, 0.8) !important;
-                font-weight: 400;
-            }
-
-            #mobile-search-form input:focus {
-                color: white !important;
-                background: transparent !important;
-            }
-
-            /* Bouton de recherche mobile */
-            #mobile-search-form button {
-                background: rgba(255, 255, 255, 0.2) !important;
-                border: none !important;
-                color: white !important;
-                border-radius: 50% !important;
-                width: 36px !important;
-                height: 36px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                transition: all 0.3s ease !important;
-                flex-shrink: 0;
-            }
-
-            #mobile-search-form button:hover {
-                background: rgba(255, 255, 255, 0.3) !important;
-                transform: scale(1.1) !important;
-                color: white !important;
-            }
-
-            #mobile-search-form button i {
-                font-size: 14px !important;
-            }
-
-            /* Menu burger - plus compact */
-            .navbar-toggler {
-                margin-left: 12px !important;
-                padding: 8px !important;
-                border: 1px solid rgba(255, 255, 255, 0.3) !important;
-                border-radius: 8px !important;
-                background: rgba(255, 255, 255, 0.1) !important;
-                transition: all 0.3s ease !important;
-                flex-shrink: 0;
-            }
-
-            .navbar-toggler:hover {
-                background: rgba(255, 255, 255, 0.2) !important;
-                border-color: rgba(255, 255, 255, 0.5) !important;
-                transform: scale(1.05) !important;
-            }
-
-            .navbar-toggler:focus {
-                box-shadow: none !important;
-            }
-
-            .navbar-toggler-icon {
-                width: 20px !important;
-                height: 20px !important;
-                background-size: 20px 20px !important;
-            }
-
-            /* Panier mobile dans la barre */
-            .mobile-cart-link {
-                color: white;
-                text-decoration: none;
-                background: rgba(255, 255, 255, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s ease;
-                position: relative;
-                margin-left: 8px;
-                flex-shrink: 0;
-            }
-
-            .mobile-cart-link:hover {
-                color: white;
-                background: rgba(255, 255, 255, 0.25);
-                transform: scale(1.05);
-            }
-
-            .mobile-cart-badge {
-                position: absolute;
-                top: -6px;
-                right: -6px;
-                background: #ff4757;
-                color: white;
-                border-radius: 50%;
-                width: 18px;
-                height: 18px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 10px;
-                font-weight: 600;
-                border: 2px solid white;
-                animation: pulse 2s infinite;
-            }
-
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.1); }
-            }
-
-            /* Responsive breakpoints */
-            @media (max-width: 576px) {
-                .navbar .container {
-                    padding: 0.5rem 0.75rem;
-                }
-
-                .navbar .navbar-brand {
-                    margin-right: 8px;
-                }
-
-                #mobile-search-form {
-                    margin: 0 8px;
-                }
-
-                .navbar-toggler {
-                    margin-left: 8px !important;
-                }
-
-                .mobile-cart-link {
-                    margin-left: 6px;
-                }
-            }
-
-            @media (max-width: 375px) {
-                #mobile-search-form input {
-                    font-size: 13px !important;
-                    padding: 6px 12px !important;
-                }
-
-                #mobile-search-form button {
-                    width: 32px !important;
-                    height: 32px !important;
-                }
-
-                #mobile-search-form button i {
-                    font-size: 13px !important;
-                }
-            }
-        }
-
-        /* DESKTOP - Cacher la barre mobile */
-        @media (min-width: 992px) {
-            #mobile-search-form {
-                display: none !important;
-            }
-
-            .mobile-cart-link {
-                display: none !important;
-            }
-        }
-
-        /* Desktop - Barre de recherche avec toggle */
-        .navbar-search-container {
-            position: absolute;
-            top: 50%;
-            right: 54px;
-            transform: translateY(-50%);
-            z-index: 1000;
-            background: linear-gradient(135deg, #ffffff, #f8f9fa);
-            border-radius: 30px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            animation: slideInRight 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            backdrop-filter: blur(20px);
-            overflow: hidden;
-        }
-
-        .btn-search-toggle {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.25));
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            z-index: 1001;
-        }
-
-        .btn-search-toggle:hover {
-            transform: translateY(-2px) scale(1.05);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.35));
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .navbar-search-form {
-            display: flex !important;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar-search-form .form-control {
-            border: none;
-            border-radius: 30px 0 0 30px;
-            width: 280px;
-            padding: 14px 20px;
-            background: transparent;
-            font-size: 0.95rem;
-            color: #333;
-            transition: all 0.3s ease;
-            margin: 0;
-            flex: 1;
-        }
-
-        .navbar-search-form .form-control:focus {
-            box-shadow: none;
-            background: rgba(255, 255, 255, 0.9);
-            outline: none;
-            width: 320px;
-        }
-
-        .btn-search-submit {
-            background: linear-gradient(135deg, #2a6b2a, #1e5a1e);
-            border: none;
-            padding: 14px 18px;
-            color: white;
-            transition: all 0.3s ease;
-            border-radius: 0 30px 30px 0;
-            margin: 0;
-            flex-shrink: 0;
-        }
-
-        .btn-search-submit:hover {
-            background: linear-gradient(135deg, #1e5a1e, #164a16);
-            transform: scale(1.05);
-            color: white;
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateY(-50%) translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(-50%) translateX(0);
-            }
-        }
-
-        .navbar-search-container.closing {
-            animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-        }
-
-        @keyframes slideOutRight {
-            0% {
-                opacity: 1;
-                transform: translateY(-50%) translateX(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-50%) translateX(30px) scale(0.9);
-            }
-        }
-
+        /* MOBILE - Layout spécifique */
         @media (max-width: 991px) {
-            .navbar-search-container {
+            /* Logo centré sur mobile */
+            .navbar-brand {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 10;
+            }
+
+            /* Menu burger à gauche */
+            .navbar-toggler {
+                order: -1;
+                margin-right: auto;
+                border: none;
+                padding: 4px 8px;
+            }
+
+            /* Options auth à droite */
+            .navbar-mobile-auth {
+                margin-left: auto;
+                order: 2;
+            }
+
+            /* Collapse menu responsive */
+            .navbar-collapse {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--color-vert);
+                border-radius: 0 0 15px 15px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+
+            /* Barre de recherche mobile */
+            .mobile-search-section {
+                background: rgba(255,255,255,0.1);
+                border-radius: 10px;
+                margin: 10px;
+                padding: 10px;
+            }
+
+            .mobile-search-input {
+                border: none;
+                border-radius: 20px;
+                background: white;
+                padding: 8px 15px;
+            }
+
+            .mobile-search-btn {
+                border-radius: 0 20px 20px 0;
+                border: none;
+                background: var(--color-vert2);
+                color: white;
+                padding: 8px 12px;
+            }
+
+            /* Masquer éléments desktop */
+            .d-lg-flex {
                 display: none !important;
+            }
+        }
+
+        /* Desktop - barre de recherche */
+        @media (min-width: 992px) {
+            /* Barre de recherche navbar */
+            .navbar-search-container {
+                position: absolute;
+                top: 50%;
+                right: 54px;
+                transform: translateY(-50%);
+                z-index: 1000;
+                background: linear-gradient(135deg, #ffffff, #f8f9fa);
+                border-radius: 30px;
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                animation: slideInRight 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                backdrop-filter: blur(20px);
+                overflow: hidden;
+            }
+
+            .btn-search-toggle {
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.25));
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                color: white;
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(10px);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                position: relative;
+                overflow: hidden;
+                z-index: 1001;
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .btn-search-toggle:hover {
+                transform: translateY(-2px) scale(1.05);
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.35));
+                border-color: rgba(255, 255, 255, 0.5);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.2);
+                color: white;
+            }
+
+            .navbar-search-form {
+                display: flex !important;
+                align-items: center;
+                margin: 0;
+                padding: 0;
+            }
+
+            .navbar-search-form .form-control {
+                border: none;
+                border-radius: 30px 0 0 30px;
+                width: 280px;
+                padding: 14px 20px;
+                background: transparent;
+                font-size: 0.95rem;
+                color: #333;
+                transition: all 0.3s ease;
+                margin: 0;
+                flex: 1;
+            }
+
+            .navbar-search-form .form-control:focus {
+                box-shadow: none;
+                background: rgba(255, 255, 255, 0.9);
+                outline: none;
+                width: 320px;
+            }
+
+            .btn-search-submit {
+                background: linear-gradient(135deg, #2a6b2a, #1e5a1e);
+                border: none;
+                padding: 14px 18px;
+                color: white;
+                transition: all 0.3s ease;
+                border-radius: 0 30px 30px 0;
+                margin: 0;
+                flex-shrink: 0;
+            }
+
+            .btn-search-submit:hover {
+                background: linear-gradient(135deg, #1e5a1e, #164a16);
+                transform: scale(1.05);
+                color: white;
+            }
+
+            /* Animations */
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateY(-50%) translateX(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(-50%) translateX(0);
+                }
+            }
+
+            .navbar-search-container.closing {
+                animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            }
+
+            @keyframes slideOutRight {
+                0% {
+                    opacity: 1;
+                    transform: translateY(-50%) translateX(0) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(-50%) translateX(30px) scale(0.9);
+                }
             }
         }
     </style>
@@ -680,8 +538,13 @@
 <body>
     <!-- Header & Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
-        <div class="container d-flex align-items-center">
-            <!-- Logo -->
+        <div class="container">
+            <!-- Menu burger à gauche (mobile) -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Logo centré -->
             <a class="navbar-brand fw-bold" href="{{ route('accueil') }}">
                 <div id="logo" class="logo-wrapper rounded-circle">
                     <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
@@ -689,29 +552,64 @@
                 </div>
             </a>
 
-            <!-- Barre de recherche mobile (visible uniquement sur mobile) -->
-            <form method="GET" action="{{ route('boutique.index') }}" id="mobile-search-form">
-                <input type="text" name="recherche" class="form-control" placeholder="Rechercher..." value="{{ request('recherche') }}">
-                <button type="submit">
-                    <i class="bi bi-search"></i>
-                </button>
-            </form>
+            <!-- Actions utilisateur à droite (mobile) -->
+            <div class="d-flex d-lg-none navbar-mobile-auth">
+                <a href="{{ route('panier.index') }}" class="btn btn-outline-light rounded-circle position-relative me-2">
+                    <i class="bi bi-cart"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ $count ?? 0 }}
+                    </span>
+                </a>
 
-            <!-- Panier mobile (visible uniquement sur mobile) -->
-            {{-- <a href="{{ route('panier.index') }}" class="mobile-cart-link d-lg-none">
-                <i class="bi bi-cart"></i>
-                @if(($count ?? 0) > 0)
-                    <span class="mobile-cart-badge">{{ $count }}</span>
-                @endif
-            </a> --}}
+                @guest
+                    <div class="dropdown">
+                        <a class="btn btn-outline-light" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ route('user.loginForm') }}">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
+                                </a></li>
+                            <li><a class="dropdown-item" href="{{ route('user.registerForm') }}">
+                                    <i class="bi bi-person-plus me-2"></i> Créer un compte
+                                </a></li>
+                        </ul>
+                    </div>
+                @else
+                    <div class="dropdown">
+                        <a class="btn btn-outline-light" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
+                            <li><a class="dropdown-item" href="{{ route('user.commandes') }}">Mes commandes</a></li>
+                            <li><a class="dropdown-item" href="{{ route('user.reservations') }}">Mes reservations</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            @role('developpeur')
+                                <li><a class="dropdown-item" href="{{ route('dashboard.index') }}">Admin Panel</a></li>
+                            @endrole
+                            <li><a class="dropdown-item" href="{{ route('user.logout') }}">Déconnexion</a></li>
+                        </ul>
+                    </div>
+                @endguest
+            </div>
 
-            <!-- Menu burger -->
-            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Menu desktop -->
+            <!-- Menu collapse -->
             <div class="collapse navbar-collapse" id="mainNavbar">
+                <!-- Barre de recherche mobile -->
+                <div class="d-lg-none mobile-search-section">
+                    <form method="GET" action="{{ route('boutique.index') }}" class="d-flex">
+                        <input type="text" name="recherche" class="form-control mobile-search-input flex-grow-1"
+                            placeholder="Rechercher un produit..." value="{{ request('recherche') }}">
+                        <button class="btn mobile-search-btn" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Menu navigation -->
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-bold">
                     <li class="nav-item"><a class="nav-link text-white {{ Route::is('accueil') ? 'active' : '' }}"
                             href="{{ route('accueil') }}"> ACCUEIL</a></li>
@@ -783,7 +681,7 @@
                         </div>
                     </div>
 
-                    <!-- Panier desktop -->
+                    <!-- Panier -->
                     <a href="{{ route('panier.index') }}" class="btn btn-outline-light rounded-circle position-relative">
                         <i class="bi bi-cart"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -826,43 +724,6 @@
                         </div>
                     @endguest
                 </div>
-
-                <!-- Section auth mobile dans collapse -->
-                <div class="d-lg-none mt-3 px-3">
-                    @guest
-                        <div class="dropdown">
-                            <a class="btn btn-outline-light dropdown-toggle fw-bold w-100" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> Mon Compte
-                            </a>
-                            <ul class="dropdown-menu w-100">
-                                <li><a class="dropdown-item" href="{{ route('user.loginForm') }}">
-                                        <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
-                                    </a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.registerForm') }}">
-                                        <i class="bi bi-person-plus me-2"></i> Créer un compte
-                                    </a></li>
-                            </ul>
-                        </div>
-                    @else
-                        <div class="dropdown">
-                            <a class="btn btn-outline-light dropdown-toggle fw-bold w-100" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> {{ Auth::user()->username }}
-                            </a>
-                            <ul class="dropdown-menu w-100">
-                                <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.commandes') }}">Mes commandes</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.reservations') }}">Mes reservations</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                @role('developpeur')
-                                    <li><a class="dropdown-item" href="{{ route('dashboard.index') }}">Admin Panel</a></li>
-                                @endrole
-                                <li><a class="dropdown-item" href="{{ route('user.logout') }}">Déconnexion</a></li>
-                            </ul>
-                        </div>
-                    @endguest
-                </div>
             </div>
         </div>
     </nav>
@@ -872,16 +733,13 @@
         @include('frontend.components.breadcrumb')
     @endif
 
-
     <!-- Yield content -->
-
     @yield('content')
 
     <!-- sweetalert-->
     @include('sweetalert::alert')
 
-
-    <!-- Bouton remonter en haut, WhatsApp & Panier flottant -->
+    <!-- Boutons flottants -->
     <a href="#" id="btnScrollTop" class="btn btn-success rounded-circle shadow position-fixed"
         style="bottom: 140px; right: 25px; z-index: 999; width: 48px; height: 48px; display: none;">
         <i class="bi bi-arrow-up fs-4"></i>
@@ -892,31 +750,17 @@
         <i class="bi bi-whatsapp fs-3"></i>
     </a>
 
-    {{-- <a href="{{ route('panier.index') }}" id="btnPanier"
-        class="btn btn-warning rounded-circle shadow position-fixed d-flex align-items-center justify-content-center mt-4"
-        style="bottom: 25px; right: 25px; z-index: 999; width: 56px; height: 56px;">
-        <span class="position-relative">
-            <i class="bi bi-cart fs-3 text-white"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                style="font-size:0.8rem;">
-                {{ $count ?? 0 }}
-            </span>
-        </span>
-    </a> --}}
-
-    {{-- ...MOBILE BAR --}}
+    {{-- Mobile bar --}}
     @include('frontend.components.mobile_navBarV1')
 
     <!-- Footer -->
     @include('frontend.layouts.footer')
 
-    <!-- Bootstrap JS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-    <!-- jQuery (pour les requêtes AJAX) -->
     <script>
         // Configuration globale pour AJAX avec le token CSRF
         $.ajaxSetup({
@@ -926,15 +770,12 @@
         });
     </script>
 
-    <!-- Custom JS -->
-
     <script src="{{ asset('myJs/js/cart_add.js') }}"></script>
-    {{-- <script src="{{ asset('myJs/js/cart_update.js') }}"></script>
-    <script src="{{ asset('myJs/js/cart_remove.js') }}"></script> --}}
     @stack('scripts')
 
-    <!-- bootstrap form validation -->
+    <!-- Scripts de validation et navigation -->
     <script>
+        // Validation des formulaires
         (function() {
             'use strict'
             var forms = document.querySelectorAll('.needs-validation')
@@ -949,8 +790,7 @@
                     }, false)
                 })
         })();
-    </script>
-    <script>
+
         // Bouton remonter en haut
         const btnScrollTop = document.getElementById('btnScrollTop');
         window.addEventListener('scroll', function() {
@@ -967,168 +807,121 @@
                 behavior: 'smooth'
             });
         });
-    </script>
-    <script>
+
+        // Mise à jour des badges du panier
         function updateCartBadges(newCount) {
-            // Badge header desktop
-            const badgeHeader = document.querySelector('.navbar .badge');
+            let badgeHeader = document.getElementById('cart-badge-header');
             if (badgeHeader) badgeHeader.textContent = newCount;
 
-            // Badge mobile
-            const badgeMobile = document.querySelector('.mobile-cart-badge');
-            if (badgeMobile) {
-                if (newCount > 0) {
-                    badgeMobile.textContent = newCount;
-                    badgeMobile.style.display = 'flex';
-                } else {
-                    badgeMobile.style.display = 'none';
-                }
-            }
-
-            // Badge bottom nav
-            const badgeBottom = document.getElementById('cart-badge-bottom');
+            let badgeBottom = document.getElementById('cart-badge-bottom');
             if (badgeBottom) badgeBottom.textContent = newCount;
-        }
-    </script>
-    <script>
-        // Toggle barre de recherche desktop amélioré
-        document.getElementById('searchToggleBtn').addEventListener('click', function(e) {
-            e.stopPropagation(); // Empêche la propagation du clic
-            const container = document.getElementById('navbarSearchContainer');
-            const input = document.getElementById('navbarSearchInput');
-            const toggleBtn = this;
 
-            if (container.style.display === 'none' || container.style.display === '') {
-                // Afficher la barre et cacher l'icône
-                container.style.display = 'block';
-                container.classList.remove('closing');
-                toggleBtn.style.opacity = '0';
-                toggleBtn.style.visibility = 'hidden';
-                toggleBtn.classList.add('active');
-
-                setTimeout(() => {
-                    input.focus();
-                    input.select(); // Sélectionne le texte existant
-                }, 150);
-            } else {
-                closeSearchBar();
-            }
-        });
-
-        // Fonction pour fermer la barre de recherche avec animation
-        function closeSearchBar() {
-            const container = document.getElementById('navbarSearchContainer');
-            const toggleBtn = document.getElementById('searchToggleBtn');
-
-            container.classList.add('closing');
-
-            setTimeout(() => {
-                container.style.display = 'none';
-                container.classList.remove('closing');
-                toggleBtn.classList.remove('active');
-
-                // Réafficher l'icône avec animation
-                toggleBtn.style.opacity = '1';
-                toggleBtn.style.visibility = 'visible';
-            }, 300);
+            let badgeMobile = document.getElementById('cart-badge-mobile');
+            if (badgeMobile) badgeMobile.textContent = newCount;
         }
 
-        // Empêcher TOUS les clics dans le container de recherche de se propager
-        document.getElementById('navbarSearchContainer').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
+        // Gestion de la barre de recherche desktop
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchToggleBtn = document.getElementById('searchToggleBtn');
+            const searchContainer = document.getElementById('navbarSearchContainer');
+            const searchInput = document.getElementById('navbarSearchInput');
 
-        // Gestion spécifique du formulaire de recherche DESKTOP
-        const searchForm = document.querySelector('.navbar-search-form');
-        const searchSubmitBtn = document.querySelector('.btn-search-submit');
+            if (searchToggleBtn && searchContainer) {
+                searchToggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    if (searchContainer.style.display === 'none' || searchContainer.style.display === '') {
+                        searchContainer.style.display = 'block';
+                        searchContainer.classList.remove('closing');
+                        searchToggleBtn.style.opacity = '0';
+                        searchToggleBtn.style.visibility = 'hidden';
+                        searchToggleBtn.classList.add('active');
 
-        // Empêcher la propagation sur le formulaire et ajouter scroll=true
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+                        setTimeout(() => {
+                            if (searchInput) {
+                                searchInput.focus();
+                                searchInput.select();
+                            }
+                        }, 150);
+                    } else {
+                        closeSearchBar();
+                    }
+                });
 
-            // Récupérer la valeur de recherche
-            const searchValue = document.getElementById('navbarSearchInput').value;
+                // Fermer la barre de recherche
+                function closeSearchBar() {
+                    searchContainer.classList.add('closing');
 
-            // Construire l'URL avec le paramètre scroll=true
-            let url = '{{ route('boutique.index') }}';
-            if (searchValue.trim()) {
-                url += '?recherche=' + encodeURIComponent(searchValue) + '&scroll=true';
-            } else {
-                url += '?scroll=true';
-            }
-
-            // Rediriger vers la boutique
-            window.location.href = url;
-        });
-
-        // Empêcher la propagation sur le bouton de soumission
-        searchSubmitBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            // Le formulaire va gérer la soumission
-        });
-
-        // Empêcher la propagation sur l'input
-        document.getElementById('navbarSearchInput').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        // Gestion du formulaire de recherche MOBILE
-        const mobileSearchForm = document.querySelector('#mobile-search-form');
-        if (mobileSearchForm) {
-            mobileSearchForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                // Récupérer la valeur de recherche mobile
-                const mobileSearchValue = this.querySelector('input[name="recherche"]').value;
-
-                // Construire l'URL avec le paramètre scroll=true
-                let url = '{{ route('boutique.index') }}';
-                if (mobileSearchValue.trim()) {
-                    url += '?recherche=' + encodeURIComponent(mobileSearchValue) + '&scroll=true';
-                } else {
-                    url += '?scroll=true';
+                    setTimeout(() => {
+                        searchContainer.style.display = 'none';
+                        searchContainer.classList.remove('closing');
+                        searchToggleBtn.classList.remove('active');
+                        searchToggleBtn.style.opacity = '1';
+                        searchToggleBtn.style.visibility = 'visible';
+                    }, 300);
                 }
 
-                // Rediriger vers la boutique
-                window.location.href = url;
-            });
-        }
+                // Empêcher la fermeture lors du clic dans la barre
+                searchContainer.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
 
-        // Fermer la barre de recherche en cliquant ailleurs
-        document.addEventListener('click', function(e) {
-            const container = document.getElementById('navbarSearchContainer');
-            const toggleBtn = document.getElementById('searchToggleBtn');
+                // Fermer en cliquant ailleurs
+                document.addEventListener('click', function(e) {
+                    if (!searchContainer.contains(e.target) && !searchToggleBtn.contains(e.target)) {
+                        if (searchContainer.style.display === 'block') {
+                            closeSearchBar();
+                        }
+                    }
+                });
 
-            // Vérifier si le clic est en dehors du container ET du bouton toggle
-            if (!container.contains(e.target) && !toggleBtn.contains(e.target)) {
-                if (container.style.display === 'block') {
-                    closeSearchBar();
+                // Fermer avec Escape
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && searchContainer.style.display === 'block') {
+                        closeSearchBar();
+                    }
+                });
+
+                // Gestion du formulaire de recherche
+                const searchForm = document.querySelector('.navbar-search-form');
+                if (searchForm) {
+                    searchForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const searchValue = searchInput.value;
+                        let url = '{{ route('boutique.index') }}';
+                        
+                        if (searchValue.trim()) {
+                            url += '?recherche=' + encodeURIComponent(searchValue) + '&scroll=true';
+                        } else {
+                            url += '?scroll=true';
+                        }
+
+                        window.location.href = url;
+                    });
                 }
             }
-        });
 
-        // Fermer avec la touche Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const container = document.getElementById('navbarSearchContainer');
+            // Gestion du formulaire de recherche mobile
+            const mobileSearchForm = document.querySelector('.mobile-search-section form');
+            if (mobileSearchForm) {
+                mobileSearchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
 
-                if (container.style.display === 'block') {
-                    closeSearchBar();
-                }
+                    const mobileSearchValue = this.querySelector('input[name="recherche"]').value;
+                    let url = '{{ route('boutique.index') }}';
+                    
+                    if (mobileSearchValue.trim()) {
+                        url += '?recherche=' + encodeURIComponent(mobileSearchValue) + '&scroll=true';
+                    } else {
+                        url += '?scroll=true';
+                    }
+
+                    window.location.href = url;
+                });
             }
         });
-
-        // Toggle barre de recherche mobile
-        function toggleMobileSearch() {
-            const searchBar = document.getElementById('mobile-search-bar');
-            if (searchBar.style.display === 'none' || searchBar.style.display === '') {
-                searchBar.style.display = 'block';
-                setTimeout(() => searchBar.querySelector('input').focus(), 100);
-            } else {
-                searchBar.style.display = 'none';
-            }
-        }
     </script>
 </body>
 

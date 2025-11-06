@@ -5,19 +5,10 @@
 @section('meta_description',
     'Achetez en ligne vos volailles et œufs frais chez Foani. Large choix de produits de
     qualité premium, livraison rapide en Côte d\'Ivoire. Commandez maintenant!')
-@section('meta_keywords',
-    'boutique en ligne volaille, acheter œufs frais, commande volaille Côte d\'Ivoire, livraison
-    poulets, e-commerce aviculture')
-
-@section('og_title', 'Boutique Foani - Commandez Volaille & Œufs Frais en Ligne')
-@section('og_description',
-    'Commandez facilement vos volailles et œufs frais sur la boutique en ligne Foani. Produits de
-    qualité, livraison rapide en Côte d\'Ivoire.')
-@section('og_type', 'product.group')
 
 @section('content')
     <style>
-        /* Bannière Hero optimisée */
+        /* Styles existants conservés */
         .hero-banner {
             height: 280px;
             position: relative;
@@ -36,7 +27,6 @@
         .hero-overlay {
             position: absolute;
             inset: 0;
-            /* background: linear-gradient(135deg, rgba(42, 107, 42, 0.8), rgba(85, 158, 51, 0.6)); */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -56,24 +46,6 @@
             margin: 0;
         }
 
-        .breadcrumb-nav {
-            background: white;
-            padding: 12px 0;
-            border-bottom: 1px solid #e9ecef;
-            font-size: 0.9rem;
-        }
-
-        .breadcrumb-nav a {
-            color: #2a6b2a;
-            text-decoration: none;
-        }
-
-        .breadcrumb-nav .separator {
-            color: #6c757d;
-            margin: 0 8px;
-        }
-
-        /* Section de contrôles (recherche + filtres) */
         .controls-section {
             background: #f8f9fa;
             padding: 25px 0;
@@ -114,59 +86,349 @@
             border-color: #1e5a1e;
         }
 
-        /* Filtres horizontaux compacts */
+        /* NOUVEAU: Carrousel des catégories avec images */
         .filters-container {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .categories-carousel-wrapper {
+            position: relative;
+            margin: 0 -10px;
+        }
+
+        .categories-carousel {
+            padding: 0 10px;
+        }
+
+        /* Navigation carrousel */
+        .categories-carousel .owl-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            padding: 0 5px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .categories-carousel .owl-nav button {
+            background: rgba(42, 107, 42, 0.9) !important;
+            color: white !important;
+            border-radius: 50% !important;
+            width: 40px !important;
+            height: 40px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: none !important;
+            font-size: 18px !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+            transition: all 0.3s ease !important;
+            pointer-events: all;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .categories-carousel-wrapper:hover .owl-nav button {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .categories-carousel .owl-nav .owl-prev {
+            position: absolute;
+            left: -15px;
+        }
+
+        .categories-carousel .owl-nav .owl-next {
+            position: absolute;
+            right: -15px;
+        }
+
+        .categories-carousel .owl-nav button:hover {
+            background: rgba(42, 107, 42, 1) !important;
+            transform: scale(1.1) !important;
+        }
+
+        .categories-carousel .owl-dots {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .categories-carousel .owl-dots .owl-dot {
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .categories-carousel .owl-dots .owl-dot span {
+            width: 10px;
+            height: 10px;
+            background: #ddd;
+            border-radius: 50%;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .categories-carousel .owl-dots .owl-dot.active span {
+            background: #2a6b2a;
+            transform: scale(1.3);
+        }
+
+        /* Cards catégories avec images */
+        .category-card-carousel {
+            background: white;
+            border: 2px solid #f1f3f4;
+            border-radius: 20px;
+            padding: 20px 15px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: block;
+            text-align: center;
+            margin: 0 8px;
+            position: relative;
+            overflow: hidden;
+            min-height: 140px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .category-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
+        .category-card-carousel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
         }
 
-        .category-chip {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 25px;
-            padding: 8px 16px;
-            text-decoration: none;
-            color: #495057;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+        .category-card-carousel:hover::before {
+            left: 100%;
         }
 
-        .category-chip:hover {
+        .category-card-carousel:hover {
             border-color: #2a6b2a;
             color: #2a6b2a;
-            background: #f0f8f0;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(42, 107, 42, 0.15);
         }
 
-        .category-chip.active {
-            background: #2a6b2a;
+        .category-card-carousel.active {
+            background: linear-gradient(135deg, #2a6b2a, #559e33);
             border-color: #2a6b2a;
             color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(42, 107, 42, 0.25);
         }
 
-        .category-chip .count {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            padding: 2px 6px;
-            margin-left: 5px;
+        .category-card-carousel.active::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        /* Image catégorie - forme carrée arrondie */
+        .category-image-carousel {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            /* Changé de 50% à 12px */
+            object-fit: cover;
+            margin: 0 auto 12px;
+            border: 3px solid #f1f3f4;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .category-card-carousel:hover .category-image-carousel {
+            transform: scale(1.1) rotate(5deg);
+            border-color: #2a6b2a;
+            border-radius: 15px;
+            /* Légèrement plus arrondi au hover */
+        }
+
+        .category-card-carousel.active .category-image-carousel {
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+            border-radius: 15px;
+        }
+
+        /* Placeholder image - forme carrée arrondie */
+        .category-placeholder-carousel {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            /* Changé de 50% à 12px */
+            background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            color: #6c757d;
+            font-size: 24px;
+            border: 3px solid #f1f3f4;
+            transition: all 0.3s ease;
+        }
+
+        .category-card-carousel:hover .category-placeholder-carousel {
+            transform: scale(1.1) rotate(-5deg);
+            border-color: #2a6b2a;
+            color: #2a6b2a;
+            border-radius: 15px;
+            /* Plus arrondi au hover */
+        }
+
+        .category-card-carousel.active .category-placeholder-carousel {
+            border-color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 15px;
+        }
+
+        /* Icône spéciale pour "Toutes" - forme carrée arrondie */
+        .category-icon-all {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            /* Changé de 50% à 12px */
+            background: linear-gradient(135deg, #559e33, #4CAF50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            color: white;
+            font-size: 28px;
+            border: 3px solid #f1f3f4;
+            transition: all 0.3s ease;
+        }
+
+        .category-card-carousel:hover .category-icon-all {
+            transform: scale(1.1) rotate(-10deg);
+            border-color: #2a6b2a;
+            border-radius: 15px;
+            /* Plus arrondi au hover */
+        }
+
+        .category-card-carousel.active .category-icon-all {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            color: #2a6b2a;
+            border-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+        }
+
+        /* Contenu textuel */
+        .category-content-carousel {
+            flex: 1;
+        }
+
+        .category-name-carousel {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+
+        .category-count-carousel {
             font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: 500;
         }
 
-        .category-chip.active .count {
-            background: rgba(255, 255, 255, 0.2);
+        .category-card-carousel.active .category-count-carousel {
+            color: rgba(255, 255, 255, 0.9);
         }
 
-        /* Section résultats */
+        /* Badge avec nombre de produits - toujours rond */
+        .category-badge-carousel {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border-radius: 50%;
+            /* Reste rond pour le badge */
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-card-carousel.active .category-badge-carousel {
+            background: linear-gradient(135deg, #ffc107, #ffb300);
+            color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 200px;
+            }
+
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .controls-section {
+                padding: 20px 0;
+            }
+
+            .search-container {
+                margin-bottom: 15px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .product-image-container {
+                height: 140px;
+            }
+
+            .product-info {
+                padding: 12px;
+            }
+
+            .product-price {
+                font-size: 1rem;
+            }
+
+            .btn-product {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            .results-title {
+                font-size: 1.5rem;
+            }
+
+            .product-badge {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+                max-width: 350px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Styles complets pour la grille de produits */
         .results-section {
             padding: 30px 0;
         }
@@ -204,7 +466,6 @@
             font-weight: 500;
         }
 
-        /* Cards produits optimisées */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -247,7 +508,6 @@
             transform: scale(1.05);
         }
 
-        /* Badge de stock - toujours visible */
         .product-badge {
             position: absolute;
             top: 10px;
@@ -272,12 +532,6 @@
             background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .product-badge.bg-warning {
-            background: linear-gradient(135deg, #ffc107, #ffb300) !important;
-            color: #333;
-            border: 2px solid rgba(0, 0, 0, 0.1);
         }
 
         .product-info {
@@ -329,7 +583,7 @@
         .btn-add:hover {
             background: linear-gradient(135deg, #4CAF50, var(--color-vert));
             transform: translateY(-1px);
-            color: var(--color-jaune);
+            color: white;
         }
 
         .btn-reserve {
@@ -343,7 +597,6 @@
             transform: translateY(-1px);
         }
 
-        /* États vides */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -356,7 +609,6 @@
             opacity: 0.5;
         }
 
-        /* Pagination */
         .pagination-container {
             margin-top: 40px;
             text-align: center;
@@ -375,43 +627,63 @@
             border-color: #2a6b2a;
         }
 
-        /* Responsive Design */
+        /* Responsive pour les produits */
         @media (max-width: 768px) {
-            .hero-banner {
-                height: 200px;
-            }
-
-            .hero-content h1 {
-                font-size: 1.8rem;
-            }
-
-            .hero-content p {
-                font-size: 1rem;
-            }
-
-            .controls-section {
-                padding: 20px 0;
-            }
-
-            .search-container {
-                margin-bottom: 15px;
-            }
-
             .filters-container {
-                padding: 15px;
+                padding: 20px 15px;
+                margin: 0 -15px;
+                border-radius: 0;
             }
 
-            .category-chips {
-                justify-content: flex-start;
-                overflow-x: auto;
-                padding-bottom: 5px;
-                flex-wrap: nowrap;
+            .categories-carousel-wrapper {
+                margin: 0 -5px;
             }
 
-            .category-chip {
-                flex-shrink: 0;
-                padding: 6px 12px;
-                font-size: 0.85rem;
+            .category-card-carousel {
+                padding: 15px 10px;
+                margin: 0 5px;
+                min-height: 120px;
+            }
+
+            .category-image-carousel,
+            .category-placeholder-carousel,
+            .category-icon-all {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 10px;
+                border-radius: 10px;
+            }
+
+            .category-card-carousel:hover .category-image-carousel,
+            .category-card-carousel:hover .category-placeholder-carousel,
+            .category-card-carousel:hover .category-icon-all {
+                border-radius: 12px;
+            }
+
+            .category-card-carousel.active .category-image-carousel,
+            .category-card-carousel.active .category-placeholder-carousel,
+            .category-card-carousel.active .category-icon-all {
+                border-radius: 12px;
+            }
+
+            .category-name-carousel {
+                font-size: 0.9rem;
+            }
+
+            .category-count-carousel {
+                font-size: 0.75rem;
+            }
+
+            .category-badge-carousel {
+                width: 20px;
+                height: 20px;
+                font-size: 0.6rem;
+            }
+
+            .categories-carousel .owl-nav button {
+                width: 35px !important;
+                height: 35px !important;
+                font-size: 16px !important;
             }
 
             .products-grid {
@@ -426,10 +698,6 @@
             .product-info {
                 padding: 12px;
             }
-
-            /* .product-title {
-                            font-size: 0.9rem;
-                        } */
 
             .product-price {
                 font-size: 1rem;
@@ -451,10 +719,60 @@
         }
 
         @media (max-width: 576px) {
+            .category-card-carousel {
+                padding: 12px 8px;
+                min-height: 110px;
+            }
+
+            .category-image-carousel,
+            .category-placeholder-carousel,
+            .category-icon-all {
+                width: 45px;
+                height: 45px;
+                border-radius: 8px;
+            }
+
+            .category-card-carousel:hover .category-image-carousel,
+            .category-card-carousel:hover .category-placeholder-carousel,
+            .category-card-carousel:hover .category-icon-all {
+                border-radius: 10px;
+            }
+
+            .category-card-carousel.active .category-image-carousel,
+            .category-card-carousel.active .category-placeholder-carousel,
+            .category-card-carousel.active .category-icon-all {
+                border-radius: 10px;
+            }
+
+            .category-name-carousel {
+                font-size: 0.85rem;
+            }
+
+            .category-count-carousel {
+                font-size: 0.7rem;
+            }
+
             .products-grid {
                 grid-template-columns: 1fr;
                 max-width: 350px;
                 margin: 0 auto;
+            }
+        }
+
+        /* Animation de chargement pour les catégories */
+        .category-card-carousel {
+            animation: fadeInScale 0.6s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
             }
         }
     </style>
@@ -482,21 +800,6 @@
             </div>
         </div>
     @endif
-
-    {{-- Breadcrumb --}}
-    {{-- <div class="breadcrumb-nav">
-        <div class="container">
-            <a href="{{ route('accueil') }}">Accueil</a>
-            <span class="separator">></span>
-            @if (isset($categorie))
-                <a href="{{ route('boutique.index') }}">Boutique</a>
-                <span class="separator">></span>
-                <span class="current">{{ $categorie->libelle }}</span>
-            @else
-                <span class="current">Boutique</span>
-            @endif
-        </div>
-    </div> --}}
 
     {{-- Section de contrôles --}}
     <div class="controls-section">
@@ -530,21 +833,50 @@
                 </div>
             @endif
 
-            {{-- Filtres par catégorie --}}
+            {{-- NOUVEAU: Carrousel des catégories avec images --}}
             <div class="filters-container">
-                <div class="category-chips">
-                    <a href="{{ route('boutique.index') }}" class="category-chip {{ !isset($categorie) ? 'active' : '' }}">
-                        <i class="bi bi-grid-fill me-1"></i>
-                        Toutes
-                        <span class="count">{{ \App\Models\Produit::count() }}</span>
-                    </a>
-                    @foreach (\App\Models\Categorie::position()->get() as $cat)
-                        <a href="{{ route('boutique.categorie', ['slug' => $cat->slug]) }}"
-                            class="category-chip {{ isset($categorie) && $categorie->slug == $cat->slug ? 'active' : '' }}">
-                            {{ $cat->libelle }}
-                            <span class="count">{{ $cat->produits()->count() }}</span>
-                        </a>
-                    @endforeach
+                <div class="categories-carousel-wrapper">
+                    <div class="owl-carousel owl-theme categories-carousel">
+                        {{-- Toutes les catégories --}}
+                        <div class="item">
+                            <a href="{{ route('boutique.index') }}"
+                                class="category-card-carousel {{ !isset($categorie) ? 'active' : '' }}">
+                                <div class="category-icon-all">
+                                    <i class="bi bi-grid-fill"></i>
+                                </div>
+                                <div class="category-content-carousel">
+                                    <div class="category-name-carousel">Toutes</div>
+                                    <div class="category-count-carousel">{{ \App\Models\Produit::count() }} produits</div>
+                                </div>
+                                <span class="category-badge-carousel">{{ \App\Models\Produit::count() }}</span>
+                            </a>
+                        </div>
+
+                        {{-- Catégories avec images --}}
+                        @foreach (\App\Models\Categorie::position()->get() as $cat)
+                            <div class="item">
+                                <a href="{{ route('boutique.categorie', ['slug' => $cat->slug]) }}"
+                                    class="category-card-carousel {{ isset($categorie) && $categorie->slug == $cat->slug ? 'active' : '' }}">
+
+                                    @if ($cat->getFirstMediaUrl('image'))
+                                        <img src="{{ $cat->getFirstMediaUrl('image') }}" alt="{{ $cat->libelle }}"
+                                            class="category-image-carousel" loading="lazy">
+                                    @else
+                                        <div class="category-placeholder-carousel">
+                                            <i class="bi bi-image"></i>
+                                        </div>
+                                    @endif
+
+                                    <div class="category-content-carousel">
+                                        <div class="category-name-carousel">{{ $cat->libelle }}</div>
+                                        <div class="category-count-carousel">{{ $cat->produits()->count() }}
+                                            produit{{ $cat->produits()->count() > 1 ? 's' : '' }}</div>
+                                    </div>
+                                    <span class="category-badge-carousel">{{ $cat->produits()->count() }}</span>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
@@ -593,7 +925,7 @@
                         <div class="product-info">
                             <h5 class="product-title">{{ $produit->libelle }}</h5>
                             <p class="product-price" style="color:var(--color-vert);">
-                                {{ $produit->prix_de_vente > 0 ? number_format($produit->prix_de_vente, 0, ',', ' ').' FCFA' : 'Commande en avance' }} 
+                                {{ $produit->prix_de_vente > 0 ? number_format($produit->prix_de_vente, 0, ',', ' ') . ' FCFA' : 'Commande en avance' }}
                             </p>
                             @if ($produit->prix_de_vente > 0)
                                 <div class="product-action">
@@ -612,7 +944,7 @@
                             @else
                                 <a href="https://wa.me/2250505969625/?text=Bonjour%2C%20Je%20veux%20commander%20le%20produit%20{{ $produit->libelle }}"
                                     target="_blank" class="btn btn-success btn-product">
-                                    <i class="bi bi-whatsapp fs-6 me-2"></i></i>Commander via WhatsApp
+                                    <i class="bi bi-whatsapp fs-6 me-2"></i>Commander via WhatsApp
                                 </a>
                             @endif
                         </div>
@@ -647,25 +979,500 @@
 
 @endsection
 
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            // Scroll vers les produits
-            function scrollToProduits() {
-                setTimeout(function() {
-                    $('html, body').animate({
-                        scrollTop: $('#produits-section').offset().top - 600
-                    }, 40, 'easeInOutCubic');
-                }, 50);
+@push('styles')
+    <!-- OwlCarousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+    <style>
+        /* Styles complets pour la grille de produits */
+        .results-section {
+            padding: 30px 0;
+        }
+
+        .results-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .results-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .results-subtitle {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .search-indicator {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 25px;
+            padding: 8px 16px;
+            margin: 15px auto;
+            display: inline-block;
+        }
+
+        .search-indicator .clear-search {
+            color: #dc3545;
+            text-decoration: none;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(42, 107, 42, 0.15);
+        }
+
+        .product-image-container {
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        .product-card .card-img-top {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 1 !important;
+            display: block !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-badge.bg-success {
+            background: linear-gradient(135deg, #28a745, #20c997) !important;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .product-badge.bg-danger {
+            background: linear-gradient(135deg, #dc3545, #e74c3c) !important;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .product-info {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 700;
+            color: var(--color-vert);
+            margin-bottom: 12px;
+        }
+
+        .product-action {
+            margin-top: auto;
+        }
+
+        .btn-product {
+            width: 100%;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, var(--color-vert), #4CAF50);
+            border: none;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: linear-gradient(135deg, #4CAF50, var(--color-vert));
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-reserve {
+            background: linear-gradient(135deg, #ffc107, #ffb300);
+            border: none;
+            color: #333;
+        }
+
+        .btn-reserve:hover {
+            background: linear-gradient(135deg, #ffb300, #ffa000);
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .pagination-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .pagination .page-link {
+            color: #2a6b2a;
+            border-radius: 8px;
+            margin: 0 3px;
+            border: 1px solid #e9ecef;
+            font-weight: 500;
+        }
+
+        .pagination .page-item.active .page-link {
+            background: #2a6b2a;
+            border-color: #2a6b2a;
+        }
+
+        /* Responsive pour les produits */
+        @media (max-width: 768px) {
+            .filters-container {
+                padding: 20px 15px;
+                margin: 0 -15px;
+                border-radius: 0;
             }
 
-            // Gestion des liens de catégories
-            $('.category-chip').on('click', function(e) {
+            .categories-carousel-wrapper {
+                margin: 0 -5px;
+            }
+
+            .category-card-carousel {
+                padding: 15px 10px;
+                margin: 0 5px;
+                min-height: 120px;
+            }
+
+            .category-image-carousel,
+            .category-placeholder-carousel,
+            .category-icon-all {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 10px;
+                border-radius: 10px;
+            }
+
+            .category-card-carousel:hover .category-image-carousel,
+            .category-card-carousel:hover .category-placeholder-carousel,
+            .category-card-carousel:hover .category-icon-all {
+                border-radius: 12px;
+            }
+
+            .category-card-carousel.active .category-image-carousel,
+            .category-card-carousel.active .category-placeholder-carousel,
+            .category-card-carousel.active .category-icon-all {
+                border-radius: 12px;
+            }
+
+            .category-name-carousel {
+                font-size: 0.9rem;
+            }
+
+            .category-count-carousel {
+                font-size: 0.75rem;
+            }
+
+            .category-badge-carousel {
+                width: 20px;
+                height: 20px;
+                font-size: 0.6rem;
+            }
+
+            .categories-carousel .owl-nav button {
+                width: 35px !important;
+                height: 35px !important;
+                font-size: 16px !important;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .product-image-container {
+                height: 140px;
+            }
+
+            .product-info {
+                padding: 12px;
+            }
+
+            .product-price {
+                font-size: 1rem;
+            }
+
+            .btn-product {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            .results-title {
+                font-size: 1.5rem;
+            }
+
+            .product-badge {
+                padding: 4px 8px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .category-card-carousel {
+                padding: 12px 8px;
+                min-height: 110px;
+            }
+
+            .category-image-carousel,
+            .category-placeholder-carousel,
+            .category-icon-all {
+                width: 45px;
+                height: 45px;
+                border-radius: 8px;
+            }
+
+            .category-card-carousel:hover .category-image-carousel,
+            .category-card-carousel:hover .category-placeholder-carousel,
+            .category-card-carousel:hover .category-icon-all {
+                border-radius: 10px;
+            }
+
+            .category-card-carousel.active .category-image-carousel,
+            .category-card-carousel.active .category-placeholder-carousel,
+            .category-card-carousel.active .category-icon-all {
+                border-radius: 10px;
+            }
+
+            .category-name-carousel {
+                font-size: 0.85rem;
+            }
+
+            .category-count-carousel {
+                font-size: 0.7rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                max-width: 350px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Animation de chargement pour les catégories */
+        .category-card-carousel {
+            animation: fadeInScale 0.6s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <!-- OwlCarousel JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialisation du carrousel des catégories
+            $('.categories-carousel').owlCarousel({
+                loop: true,
+                margin: 15,
+                nav: true,
+                dots: true,
+                autoplay: false,
+                smartSpeed: 500,
+                mouseDrag: true,
+                touchDrag: true,
+                pullDrag: true,
+                freeDrag: false,
+                stagePadding: 0,
+                responsive: {
+                    0: {
+                        items: 1.2,
+                        margin: 8,
+                        stagePadding: 20,
+                        dots: false
+                    },
+                    480: {
+                        items: 2.2,
+                        margin: 10,
+                        stagePadding: 15
+                    },
+                    576: {
+                        items: 2.5,
+                        margin: 12
+                    },
+                    768: {
+                        items: 3.5,
+                        margin: 15
+                    },
+                    992: {
+                        items: 4.5,
+                        margin: 15
+                    },
+                    1200: {
+                        items: 5.5,
+                        margin: 15
+                    },
+                    1400: {
+                        items: 6,
+                        margin: 15
+                    }
+                },
+                navText: [
+                    '<i class="bi bi-chevron-left"></i>',
+                    '<i class="bi bi-chevron-right"></i>'
+                ],
+                onInitialized: function() {
+                    // Animation des éléments après initialisation
+                    $('.category-card-carousel').each(function(index) {
+                        $(this).css({
+                            'animation-delay': (index * 0.1) + 's',
+                            'animation-fill-mode': 'both'
+                        });
+                    });
+
+                    // Masquer les boutons si pas assez d'éléments
+                    const itemsCount = $('.categories-carousel .item').length;
+                    const visibleItems = $(window).width() >= 1200 ? 6 :
+                        $(window).width() >= 992 ? 4.5 :
+                        $(window).width() >= 768 ? 3.5 : 2.2;
+
+                    if (itemsCount <= visibleItems) {
+                        $('.categories-carousel .owl-nav').hide();
+                        $('.categories-carousel .owl-dots').hide();
+                    }
+                }
+            });
+
+            // Gestion du swipe tactile amélioré
+            let startX = 0;
+            let startTime = 0;
+            const threshold = 50;
+            const allowedTime = 300;
+            const carousel = $('.categories-carousel');
+
+            carousel.on('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+                startTime = new Date().getTime();
+            });
+
+            carousel.on('touchend', function(e) {
+                const endX = e.changedTouches[0].clientX;
+                const endTime = new Date().getTime();
+                const diffX = startX - endX;
+                const elapsedTime = endTime - startTime;
+
+                if (elapsedTime <= allowedTime && Math.abs(diffX) >= threshold) {
+                    if (diffX > 0) {
+                        carousel.trigger('next.owl.carousel');
+                    } else {
+                        carousel.trigger('prev.owl.carousel');
+                    }
+                }
+            });
+
+            // Scroll fluide vers les produits
+            function scrollToProduits() {
+                setTimeout(function() {
+                    const target = $('#produits-section');
+                    if (target.length) {
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - 500
+                        }, 800, 'easeInOutCubic');
+                    }
+                }, 150);
+            }
+
+            // Gestion des clics sur les catégories
+            $('.category-card-carousel').on('click', function(e) {
                 if (!$(this).hasClass('active')) {
                     e.preventDefault();
-                    const href = $(this).attr('href');
-                    const url = href + (href.includes('?') ? '&' : '?') + 'scroll=true';
-                    window.location.href = url;
+
+                    // Animation de l'élément cliqué
+                    $(this).addClass('loading').css({
+                        'transform': 'scale(0.95)',
+                        'opacity': '0.8'
+                    });
+
+                    // Effet de propagation
+                    const ripple = $('<div class="ripple-effect"></div>');
+                    $(this).append(ripple);
+
+                    setTimeout(() => {
+                        const href = $(this).attr('href');
+                        const url = href + (href.includes('?') ? '&' : '?') + 'scroll=true';
+                        window.location.href = url;
+                    }, 250);
                 }
             });
 
@@ -689,11 +1496,85 @@
                 window.history.replaceState({}, document.title, url.toString());
             }
 
+            // Lazy loading optimisé des images catégories
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.style.opacity = '1';
+                            img.style.transform = 'scale(1)';
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '50px'
+                });
+
+                document.querySelectorAll('.category-image-carousel').forEach(img => {
+                    img.style.opacity = '0.7';
+                    img.style.transform = 'scale(0.95)';
+                    img.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                    imageObserver.observe(img);
+                });
+            }
+
+            // Haptic feedback pour mobile
+            if ('vibrate' in navigator) {
+                $('.category-card-carousel').on('touchstart', function() {
+                    navigator.vibrate(15);
+                });
+            }
+
+            // Préchargement des pages au hover
+            const preloadedLinks = new Set();
+            $('.category-card-carousel').on('mouseenter', function() {
+                const href = $(this).attr('href');
+                if (href && !preloadedLinks.has(href)) {
+                    const preloadLink = document.createElement('link');
+                    preloadLink.rel = 'prefetch';
+                    preloadLink.href = href;
+                    document.head.appendChild(preloadLink);
+                    preloadedLinks.add(href);
+                }
+            });
+
+            // Gestion du redimensionnement
+            let resizeTimer;
+            $(window).on('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    $('.categories-carousel').trigger('refresh.owl.carousel');
+                }, 250);
+            });
+
             // Easing personnalisé
             $.easing.easeInOutCubic = function(x, t, b, c, d) {
                 if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
                 return c / 2 * ((t -= 2) * t * t + 2) + b;
             };
+
+            // CSS pour l'effet ripple
+            $('<style>')
+                .prop('type', 'text/css')
+                .html(`
+                    .ripple-effect {
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.6);
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        pointer-events: none;
+                    }
+                    @keyframes ripple {
+                        to {
+                            transform: scale(4);
+                            opacity: 0;
+                        }
+                    }
+                `)
+                .appendTo('head');
         });
     </script>
 @endpush

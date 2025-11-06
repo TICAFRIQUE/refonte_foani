@@ -161,9 +161,11 @@
             opacity: 0;
             transform: scale(0.3);
         }
+
         50% {
             transform: scale(1.2);
         }
+
         100% {
             opacity: 1;
             transform: scale(1);
@@ -171,8 +173,15 @@
     }
 
     @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
+
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
     }
 
     /* Bouton recherche actif */
@@ -237,17 +246,32 @@
         animation: slideUp 0.6s ease-out;
     }
 
-    .mobile-bar-content .mobile-nav-btn:nth-child(1) { animation-delay: 0.1s; }
-    .mobile-bar-content .mobile-nav-btn:nth-child(2) { animation-delay: 0.2s; }
-    .mobile-bar-content .mobile-nav-btn:nth-child(3) { animation-delay: 0.3s; }
-    .mobile-bar-content .mobile-nav-btn:nth-child(4) { animation-delay: 0.4s; }
-    .mobile-bar-content .mobile-nav-btn:nth-child(5) { animation-delay: 0.5s; }
+    .mobile-bar-content .mobile-nav-btn:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .mobile-bar-content .mobile-nav-btn:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .mobile-bar-content .mobile-nav-btn:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .mobile-bar-content .mobile-nav-btn:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .mobile-bar-content .mobile-nav-btn:nth-child(5) {
+        animation-delay: 0.5s;
+    }
 
     @keyframes slideUp {
         from {
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -273,7 +297,7 @@
 
 <div id="mobile-bottom-bar" class="d-lg-none d-md-none d-block">
     {{-- Barre de recherche mobile (toggle) --}}
-     {{-- Barre de recherche mobile (toggle) --}}
+    {{-- Barre de recherche mobile (toggle) --}}
     <div id="mobile-search-bar" class="mobile-search-container" style="display: none;">
         <div class="p-3 bg-white border-top">
             <form method="GET" action="{{ route('boutique.index') }}">
@@ -293,50 +317,55 @@
 
     <div class="mobile-bar-content d-flex justify-content-around align-items-center">
         {{-- Accueil --}}
-        <a href="{{ route('accueil') }}" 
-           class="mobile-nav-btn {{ request()->routeIs('accueil') || request()->routeIs('home') ? 'active' : '' }}"
-           title="Accueil">
+        <a href="{{ route('accueil') }}"
+            class="mobile-nav-btn {{ request()->routeIs('accueil') || request()->routeIs('home') ? 'active' : '' }}"
+            title="Accueil">
             <i class="bi bi-house-fill"></i>
         </a>
 
         {{-- Bouton de recherche --}}
-        <button class="mobile-nav-btn" id="search-toggle-btn" onclick="toggleMobileSearch()"
+        {{-- <button class="mobile-nav-btn" id="search-toggle-btn" onclick="toggleMobileSearch()"
                 title="Rechercher" type="button">
             <i class="bi bi-search"></i>
-        </button>
+        </button> --}}
+
+        {{-- Bouton de categories --}}
+        <a href="{{ route('categories') }}"
+            class="btn btn-outline-success rounded-circle flex-shrink-0 {{ request()->routeIs('categories') ? 'active' : '' }}"
+            title="Catégories">
+            <i class="bi bi-list fs-3"></i>
+        </a>
 
         {{-- Panier --}}
         <a href="{{ route('panier.index') }}"
-           class="mobile-nav-btn cart-btn {{ request()->routeIs('panier.*') ? 'active' : '' }}" 
-           title="Panier"
-           id="mobile-cart-btn">
+            class="mobile-nav-btn cart-btn {{ request()->routeIs('panier.*') ? 'active' : '' }}" title="Panier"
+            id="mobile-cart-btn">
             <i class="bi bi-cart-fill"></i>
-            
-                <span id="cart-badge-mobile" class="cart-badge">
-                    {{ $count }}
-                </span>
-           
+
+            <span id="cart-badge-mobile" class="cart-badge">
+                {{ $count }}
+            </span>
+
         </a>
 
         {{-- Boutique --}}
-        <a href="{{ route('boutique.index') }}" 
-           class="mobile-nav-btn {{ request()->routeIs('boutique.*') && !request()->routeIs('boutique.categorie') ? 'active' : '' }}"
-           title="Boutique">
+        <a href="{{ route('boutique.index') }}"
+            class="mobile-nav-btn {{ request()->routeIs('boutique.*') && !request()->routeIs('boutique.categorie') ? 'active' : '' }}"
+            title="Boutique">
             <i class="bi bi-shop-window"></i>
         </a>
 
         {{-- Connexion ou Profil --}}
         @guest
-            <a href="{{ route('user.loginForm') }}" 
-               class="mobile-nav-btn {{ request()->routeIs('user.loginForm') || request()->routeIs('user.registerForm') ? 'active' : '' }}"
-               title="Se connecter">
+            <a href="{{ route('user.loginForm') }}"
+                class="mobile-nav-btn {{ request()->routeIs('user.loginForm') || request()->routeIs('user.registerForm') ? 'active' : '' }}"
+                title="Se connecter">
                 <i class="bi bi-person-circle"></i>
             </a>
         @else
             <div class="mobile-dropdown dropup">
-                <a href="#" 
-                   class="mobile-nav-btn dropdown-toggle {{ request()->routeIs('user.*') ? 'active' : '' }}"
-                   data-bs-toggle="dropdown" aria-expanded="false" title="Mon compte">
+                <a href="#" class="mobile-nav-btn dropdown-toggle {{ request()->routeIs('user.*') ? 'active' : '' }}"
+                    data-bs-toggle="dropdown" aria-expanded="false" title="Mon compte">
                     <i class="bi bi-person-check-fill"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">

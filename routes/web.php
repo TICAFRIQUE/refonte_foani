@@ -280,6 +280,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'accueil')->name('accueil'); // page d'accueil
     Route::get('/contact', 'contact')->name('contact'); // page contact
     Route::get('/points-de-vente/{slug}', 'pointsDeVente')->name('points_de_vente'); // points de vente
+    Route::get('/categories', 'categories')->name('categories'); // liste des categories
 });
 
 //gestion des pages dynamiques
