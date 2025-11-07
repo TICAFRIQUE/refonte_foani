@@ -834,7 +834,51 @@
             @endif
 
             {{-- NOUVEAU: Carrousel des catégories avec images --}}
-            
+            <div class="filters-container">
+                <div class="categories-carousel-wrapper">
+                    <div class="owl-carousel owl-theme categories-carousel">
+                        {{-- Toutes les catégories --}}
+                        <div class="item">
+                            <a href="{{ route('boutique.index') }}"
+                                class="category-card-carousel {{ !isset($categorie) ? 'active' : '' }}">
+                                <div class="category-icon-all">
+                                    <i class="bi bi-grid-fill"></i>
+                                </div>
+                                <div class="category-content-carousel">
+                                    <div class="category-name-carousel">Tous</div>
+                                    <div class="category-count-carousel">{{ \App\Models\Produit::count() }} produits</div>
+                                </div>
+                                <span class="category-badge-carousel">{{ \App\Models\Produit::count() }}</span>
+                            </a>
+                        </div>
+
+                        {{-- Catégories avec images --}}
+                        @foreach (\App\Models\Categorie::position()->get() as $cat)
+                            <div class="item">
+                                <a href="{{ route('boutique.categorie', ['slug' => $cat->slug]) }}"
+                                    class="category-card-carousel {{ isset($categorie) && $categorie->slug == $cat->slug ? 'active' : '' }}">
+
+                                    @if ($cat->getFirstMediaUrl('image'))
+                                        <img src="{{ $cat->getFirstMediaUrl('image') }}" alt="{{ $cat->libelle }}"
+                                            class="category-image-carousel" loading="lazy">
+                                    @else
+                                        <div class="category-placeholder-carousel">
+                                            <i class="bi bi-image"></i>
+                                        </div>
+                                    @endif
+
+                                    <div class="category-content-carousel">
+                                        <div class="category-name-carousel">{{ $cat->libelle }}</div>
+                                        <div class="category-count-carousel">{{ $cat->produits()->count() }}
+                                            produit{{ $cat->produits()->count() > 1 ? 's' : '' }}</div>
+                                    </div>
+                                    <span class="category-badge-carousel">{{ $cat->produits()->count() }}</span>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1314,30 +1358,30 @@
                 stagePadding: 0,
                 responsive: {
                     0: {
-                        items: 1.2,
+                        items: 1,
                         margin: 8,
                         stagePadding: 20,
                         dots: false
                     },
                     480: {
-                        items: 2.2,
+                        items: 2,
                         margin: 10,
                         stagePadding: 15
                     },
                     576: {
-                        items: 2.5,
+                        items: 2,
                         margin: 12
                     },
                     768: {
-                        items: 3.5,
+                        items: 3,
                         margin: 15
                     },
                     992: {
-                        items: 4.5,
+                        items: 4,
                         margin: 15
                     },
                     1200: {
-                        items: 5.5,
+                        items: 5,
                         margin: 15
                     },
                     1400: {
