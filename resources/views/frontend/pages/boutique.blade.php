@@ -1276,6 +1276,27 @@
             }
         }
 
+
+        /* Force masquage overflow sur body si nécessaire */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Container principal page */
+        .container {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Section contrôles - correction overflow */
+        .controls-section {
+            background: #f8f9fa;
+            padding: 25px 0;
+            border-bottom: 1px solid #e9ecef;
+            overflow-x: hidden;
+            /* AJOUTÉ: Empêche overflow horizontal */
+        }
+
         @media (max-width: 576px) {
             .category-card-carousel {
                 padding: 12px 8px;
@@ -1358,30 +1379,30 @@
                 stagePadding: 0,
                 responsive: {
                     0: {
-                        items: 1,
+                        items: 1.2,
                         margin: 8,
                         stagePadding: 20,
                         dots: false
                     },
                     480: {
-                        items: 2,
+                        items: 2.2,
                         margin: 10,
                         stagePadding: 15
                     },
                     576: {
-                        items: 2,
+                        items: 2.5,
                         margin: 12
                     },
                     768: {
-                        items: 3,
+                        items: 3.5,
                         margin: 15
                     },
                     992: {
-                        items: 4,
+                        items: 4.5,
                         margin: 15
                     },
                     1200: {
-                        items: 5,
+                        items: 5.5,
                         margin: 15
                     },
                     1400: {
