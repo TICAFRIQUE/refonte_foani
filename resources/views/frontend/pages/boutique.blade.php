@@ -141,12 +141,12 @@
 
         .categories-carousel .owl-nav .owl-prev {
             position: absolute;
-            left: -15px;
+            left: -10px;
         }
 
         .categories-carousel .owl-nav .owl-next {
             position: absolute;
-            right: -15px;
+            right: 10px;
         }
 
         .categories-carousel .owl-nav button:hover {
@@ -232,8 +232,8 @@
 
         /* Image catégorie - forme carrée arrondie */
         .category-image-carousel {
-            width: 60px;
-            height: 60px;
+            /* width: auto; */
+            height: 100px;
             border-radius: 12px;
             /* Changé de 50% à 12px */
             object-fit: cover;
@@ -294,14 +294,14 @@
             height: 60px;
             border-radius: 12px;
             /* Changé de 50% à 12px */
-            background: linear-gradient(135deg, #559e33, #4CAF50);
+            /* background: linear-gradient(135deg, #559e33, #4CAF50); */
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 12px;
             color: white;
             font-size: 28px;
-            border: 3px solid #f1f3f4;
+            /* border: 3px solid #f1f3f4; */
             transition: all 0.3s ease;
         }
 
@@ -313,8 +313,8 @@
         }
 
         .category-card-carousel.active .category-icon-all {
-            background: linear-gradient(135deg, #ffffff, #f8f9fa);
-            color: #2a6b2a;
+            /* background: linear-gradient(135deg, #ffffff, #f8f9fa); */
+            color: #f1f1f1;
             border-color: rgba(255, 255, 255, 0.8);
             border-radius: 15px;
         }
@@ -649,7 +649,7 @@
             .category-placeholder-carousel,
             .category-icon-all {
                 width: 50px;
-                height: 50px;
+                height: 100px;
                 margin-bottom: 10px;
                 border-radius: 10px;
             }
@@ -727,8 +727,8 @@
             .category-image-carousel,
             .category-placeholder-carousel,
             .category-icon-all {
-                width: 45px;
-                height: 45px;
+                width: 100;
+                height: 100px;
                 border-radius: 8px;
             }
 
@@ -845,7 +845,7 @@
                                     <i class="bi bi-grid-fill"></i>
                                 </div>
                                 <div class="category-content-carousel">
-                                    <div class="category-name-carousel">Toutes</div>
+                                    <div class="category-name-carousel">Tous</div>
                                     <div class="category-count-carousel">{{ \App\Models\Produit::count() }} produits</div>
                                 </div>
                                 <span class="category-badge-carousel">{{ \App\Models\Produit::count() }}</span>
@@ -1336,6 +1336,7 @@
     </style>
 @endpush
 
+
 @push('scripts')
     <!-- OwlCarousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -1391,153 +1392,24 @@
                 navText: [
                     '<i class="bi bi-chevron-left"></i>',
                     '<i class="bi bi-chevron-right"></i>'
-                ],
-                onInitialized: function() {
-                    // Animation des éléments après initialisation
-                    $('.category-card-carousel').each(function(index) {
-                        $(this).css({
-                            'animation-delay': (index * 0.1) + 's',
-                            'animation-fill-mode': 'both'
-                        });
-                    });
-
-                    // Masquer les boutons si pas assez d'éléments
-                    const itemsCount = $('.categories-carousel .item').length;
-                    const visibleItems = $(window).width() >= 1200 ? 6 :
-                        $(window).width() >= 992 ? 4.5 :
-                        $(window).width() >= 768 ? 3.5 : 2.2;
-
-                    if (itemsCount <= visibleItems) {
-                        $('.categories-carousel .owl-nav').hide();
-                        $('.categories-carousel .owl-dots').hide();
-                    }
-                }
+                ]
             });
 
-            // Gestion du swipe tactile amélioré
-            let startX = 0;
-            let startTime = 0;
-            const threshold = 50;
-            const allowedTime = 300;
-            const carousel = $('.categories-carousel');
-
-            carousel.on('touchstart', function(e) {
-                startX = e.touches[0].clientX;
-                startTime = new Date().getTime();
-            });
-
-            carousel.on('touchend', function(e) {
-                const endX = e.changedTouches[0].clientX;
-                const endTime = new Date().getTime();
-                const diffX = startX - endX;
-                const elapsedTime = endTime - startTime;
-
-                if (elapsedTime <= allowedTime && Math.abs(diffX) >= threshold) {
-                    if (diffX > 0) {
-                        carousel.trigger('next.owl.carousel');
-                    } else {
-                        carousel.trigger('prev.owl.carousel');
-                    }
-                }
-            });
-
-            // Scroll fluide vers les produits
-            function scrollToProduits() {
-                setTimeout(function() {
-                    const target = $('#produits-section');
-                    if (target.length) {
-                        $('html, body').animate({
-                            scrollTop: target.offset().top - 500
-                        }, 800, 'easeInOutCubic');
-                    }
-                }, 150);
-            }
-
-            // Gestion des clics sur les catégories
+            // Gestion des clics sur les catégories - NAVIGATION DIRECTE
             $('.category-card-carousel').on('click', function(e) {
                 if (!$(this).hasClass('active')) {
                     e.preventDefault();
-
-                    // Animation de l'élément cliqué
-                    $(this).addClass('loading').css({
-                        'transform': 'scale(0.95)',
-                        'opacity': '0.8'
-                    });
-
-                    // Effet de propagation
-                    const ripple = $('<div class="ripple-effect"></div>');
-                    $(this).append(ripple);
-
-                    setTimeout(() => {
-                        const href = $(this).attr('href');
-                        const url = href + (href.includes('?') ? '&' : '?') + 'scroll=true';
-                        window.location.href = url;
-                    }, 250);
+                    const href = $(this).attr('href');
+                    window.location.href = href;
                 }
             });
 
-            // Gestion de la recherche
+            // Gestion de la recherche - NAVIGATION DIRECTE
             $('#search-form').on('submit', function(e) {
                 e.preventDefault();
                 const formData = $(this).serialize();
                 const action = $(this).attr('action');
-                const url = action + '?' + formData + '&scroll=true';
-                window.location.href = url;
-            });
-
-            // Auto-scroll si paramètre présent
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('scroll') === 'true') {
-                scrollToProduits();
-
-                // Nettoyer l'URL
-                const url = new URL(window.location);
-                url.searchParams.delete('scroll');
-                window.history.replaceState({}, document.title, url.toString());
-            }
-
-            // Lazy loading optimisé des images catégories
-            if ('IntersectionObserver' in window) {
-                const imageObserver = new IntersectionObserver(function(entries) {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const img = entry.target;
-                            img.style.opacity = '1';
-                            img.style.transform = 'scale(1)';
-                            imageObserver.unobserve(img);
-                        }
-                    });
-                }, {
-                    threshold: 0.1,
-                    rootMargin: '50px'
-                });
-
-                document.querySelectorAll('.category-image-carousel').forEach(img => {
-                    img.style.opacity = '0.7';
-                    img.style.transform = 'scale(0.95)';
-                    img.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                    imageObserver.observe(img);
-                });
-            }
-
-            // Haptic feedback pour mobile
-            if ('vibrate' in navigator) {
-                $('.category-card-carousel').on('touchstart', function() {
-                    navigator.vibrate(15);
-                });
-            }
-
-            // Préchargement des pages au hover
-            const preloadedLinks = new Set();
-            $('.category-card-carousel').on('mouseenter', function() {
-                const href = $(this).attr('href');
-                if (href && !preloadedLinks.has(href)) {
-                    const preloadLink = document.createElement('link');
-                    preloadLink.rel = 'prefetch';
-                    preloadLink.href = href;
-                    document.head.appendChild(preloadLink);
-                    preloadedLinks.add(href);
-                }
+                window.location.href = action + '?' + formData;
             });
 
             // Gestion du redimensionnement
@@ -1548,33 +1420,6 @@
                     $('.categories-carousel').trigger('refresh.owl.carousel');
                 }, 250);
             });
-
-            // Easing personnalisé
-            $.easing.easeInOutCubic = function(x, t, b, c, d) {
-                if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
-                return c / 2 * ((t -= 2) * t * t + 2) + b;
-            };
-
-            // CSS pour l'effet ripple
-            $('<style>')
-                .prop('type', 'text/css')
-                .html(`
-                    .ripple-effect {
-                        position: absolute;
-                        border-radius: 50%;
-                        background: rgba(255, 255, 255, 0.6);
-                        transform: scale(0);
-                        animation: ripple 0.6s linear;
-                        pointer-events: none;
-                    }
-                    @keyframes ripple {
-                        to {
-                            transform: scale(4);
-                            opacity: 0;
-                        }
-                    }
-                `)
-                .appendTo('head');
         });
     </script>
 @endpush
