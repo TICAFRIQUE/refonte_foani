@@ -50,7 +50,7 @@ class Reservation extends Model
         return $this->belongsTo(Produit::class);
     }
 
-    //scope pour les statuts
+    //scope pour les statuts [en_attente, confirmée, annulée, livrée]
     public function scopeStatut($query, $statut)
     {
         return $query->where('statut', $statut);

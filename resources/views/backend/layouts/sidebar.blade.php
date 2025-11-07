@@ -36,6 +36,9 @@
                     <a href="{{ route('commandes.index') }}"
                         class="nav-link menu-link {{ Route::is('commandes.*') ? 'active' : '' }}">
                         <i class="bi bi-bag-check me-1"></i> Commandes
+                        @if ( $pendingCommandesCount > 0)
+                            <span class="badge bg-danger">{{ $pendingCommandesCount }}</span>
+                        @endif
                     </a>
                 </li>
 
@@ -44,6 +47,9 @@
                     <a href="{{ route('reservations.index') }}"
                         class="nav-link menu-link {{ Route::is('reservations.*') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check me-1"></i> Reservations
+                       @if ( $pendingReservationsCount > 0)
+                            <span class="badge bg-danger">{{ $pendingReservationsCount }}</span>
+                       @endif
                     </a>
                 </li>
 

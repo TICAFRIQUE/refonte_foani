@@ -65,7 +65,7 @@ class AppServiceProvider extends ServiceProvider
             $data_parametre = Parametre::with('media')->first();
         }
 
-        //partager le nombre d'éléments dans le panier dans toutes les vues
+        //partager le nombre d'éléments dans le panier dans toutes les vues(frontend)
         view()->composer('frontend.layouts.app', function ($view) {
             $count = 0;
             $panier = session('panier', []);
@@ -92,10 +92,12 @@ class AppServiceProvider extends ServiceProvider
                 $pages = Page::where('statut', 1)->get();
             }
 
+
+
             //detail de la page
             $page_detail = null;
 
-            $view->with(['count' => $count, 'categories_pages' => $categories_pages, 'pages' => $pages]);
+            $view->with(['count' => $count, 'categories_pages' => $categories_pages, 'pages' => $pages, 'page_detail' => $page_detail]);
         });
 
 
@@ -108,9 +110,25 @@ class AppServiceProvider extends ServiceProvider
             $newMessagesCount = 0;
         }
 
+        //compter les reservations en attente
+        if (Schema::hasTable('reservations')) {
+            $pendingReservationsCount = \App\Models\Reservation::where('statut', 'en_attente')->count();
+        } else {
+            $pendingReservationsCount = 0;
+        }
+
+        //compter les commandes en attente
+        if (Schema::hasTable('commandes')) {
+            $pendingCommandesCount = \App\Models\Commande::where('statut', 'en_attente')->count();
+        } else {
+            $pendingCommandesCount = 0;
+        }   
+
         view()->share([
             'data_parametre' => $data_parametre,
             'newMessagesCount' => $newMessagesCount,
+            'pendingReservationsCount' => $pendingReservationsCount,
+            'pendingCommandesCount' => $pendingCommandesCount
         ]);
     }
 }

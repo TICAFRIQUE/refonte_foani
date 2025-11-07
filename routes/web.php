@@ -222,7 +222,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('newReservationCount', 'newReservationCount')->name('newReservationCount'); // JSON polling
         Route::post('{reservation}', 'update')->name('update'); // Mise à jour
         Route::get('{reservation}', 'show')->name('show'); // Détail d'une réservation
-        Route::delete('{id}', 'delete')->name('delete'); // Suppression
+        Route::get('delete/{id}', 'delete')->name('delete'); // Suppression
     });
 
     // clients

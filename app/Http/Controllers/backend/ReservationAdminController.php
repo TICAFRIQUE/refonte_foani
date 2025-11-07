@@ -13,10 +13,37 @@ use RealRashid\SweetAlert\Facades\Alert;
 class ReservationAdminController extends Controller
 {
     // Liste des réservations
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $reservations = Reservation::with(['user', 'produit'])->latest()->get();
+            $query = Reservation::with(['user', 'produit']);
+
+            $hasFiltre = $request->filled('statut') || $request->filled('date') || $request->filled('date_debut') || $request->filled('date_fin');
+
+            if ($hasFiltre) {
+                // Filtre par statut
+                if ($request->filled('statut')) {
+                    $query->where('statut', $request->input('statut'));
+                }
+                // Filtre par date exacte
+                if ($request->filled('date')) {
+                    $query->whereDate('created_at', $request->input('date'));
+                }
+                // Filtre par intervalle de dates
+                if ($request->filled('date_debut')) {
+                    $query->whereDate('created_at', '>=', $request->input('date_debut'));
+                }
+                if ($request->filled('date_fin')) {
+                    $query->whereDate('created_at', '<=', $request->input('date_fin'));
+                }
+            } else {
+                // Aucun filtre : reservations du jour et en_attente
+                $query
+                    // ->whereDate('created_at', now()->toDateString())
+                    ->where('statut', 'en_attente');
+            }
+
+            $reservations = $query->orderBy('created_at', 'desc')->get();
             return view('backend.pages.reservations.index', compact('reservations'));
         } catch (Exception $e) {
             Alert::error('Erreur', 'Impossible de charger les réservations');

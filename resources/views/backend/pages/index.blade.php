@@ -90,7 +90,7 @@
                             <div class="card-body">
                                 <div class="fs-2 text-info"><i class="bi bi-calendar-check"></i></div>
                                 <div class="fw-bold fs-4">{{ $nbReservations }}</div>
-                                <div class="text-muted">Réservations</div>
+                                <div class="text-muted">Réservations en attente</div>
                             </div>
                         </div>
                     </div>

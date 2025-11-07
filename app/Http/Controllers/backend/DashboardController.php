@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $nbCommandesEnAttente = Commande::where('statut', 'en_attente')->count();
 
         // Nombre de réservations
-        $nbReservations = Reservation::count();
+        $nbReservations = Reservation::statut('en_attente')->count();
 
         // Nombre de ventes réalisées (commandes livrées)
         $nbVentes = Commande::where('statut', 'livrée')->count();
