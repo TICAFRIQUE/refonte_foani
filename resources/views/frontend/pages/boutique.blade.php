@@ -294,12 +294,12 @@
             height: 60px;
             border-radius: 12px;
             /* Changé de 50% à 12px */
-            background: linear-gradient(135deg, #559e33, #4CAF50);
+            /* background: linear-gradient(135deg, #559e33, #4CAF50); */
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 12px;
-            color: white;
+            color: var(--color-jaune);
             font-size: 28px;
             /* border: 3px solid #f1f3f4; */
             transition: all 0.3s ease;
@@ -1347,7 +1347,7 @@
             $('.categories-carousel').owlCarousel({
                 loop: true,
                 margin: 15,
-                nav: true,
+                nav: false,
                 dots: true,
                 autoplay: false,
                 smartSpeed: 500,
@@ -1389,10 +1389,10 @@
                         margin: 15
                     }
                 },
-                navText: [
-                    '<i class="bi bi-chevron-left"></i>',
-                    '<i class="bi bi-chevron-right"></i>'
-                ]
+                // navText: [
+                //     '<i class="bi bi-chevron-left"></i>',
+                //     '<i class="bi bi-chevron-right"></i>'
+                // ]
             });
 
             // Gestion des clics sur les catégories - NAVIGATION DIRECTE
