@@ -294,7 +294,7 @@
             height: 60px;
             border-radius: 12px;
             /* Changé de 50% à 12px */
-            /* background: linear-gradient(135deg, #559e33, #4CAF50); */
+            background: linear-gradient(135deg, #559e33, #4CAF50);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -805,7 +805,7 @@
     <div class="controls-section">
         <div class="container">
             {{-- Barre de recherche --}}
-            <div class="search-container">
+            {{-- <div class="search-container">
                 <form method="GET" action="{{ route('boutique.index') }}" class="search-form" id="search-form">
                     <div class="input-group">
                         <input type="text" name="recherche" class="form-control" placeholder="Rechercher un produit..."
@@ -818,7 +818,7 @@
                         </button>
                     </div>
                 </form>
-            </div>
+            </div> --}}
 
             {{-- Indicateur de recherche --}}
             @if ($recherche)
