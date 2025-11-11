@@ -40,7 +40,7 @@
             <div class="d-flex flex-wrap gap-3 justify-content-center">
                 @foreach ($stats as $statut => $count)
                     <div class="card border-0 shadow-sm" style="min-width:160px;">
-                        <a href="{{ route('commandes.index', ['statut' => $statut]) }}">
+                        <a href="{{ route('reservations.index', ['statut' => $statut]) }}">
                             <div class="card-body text-center">
                                 <span class="badge bg-{{ $colors[$statut] ?? 'secondary' }} mb-2" style="font-size:1.1em;">
                                     {{ ucfirst(str_replace('_', ' ', $statut)) }}
@@ -57,7 +57,7 @@
     {{-- Filtre par statut et date --}}
     <div class="row mb-3">
         <div class="col-lg-8 mx-auto">
-            <form method="GET" action="{{ route('commandes.index') }}"
+            <form method="GET" action="{{ route('reservations.index') }}"
                 class="row g-2 align-items-end justify-content-center">
                 <div class="col-md-3">
                     <label for="date_debut" class="form-label mb-0">Date début</label>
