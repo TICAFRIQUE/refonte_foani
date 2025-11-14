@@ -416,12 +416,12 @@ class PanierController extends Controller
             ->map(function ($p) use ($clean) {
                 $nom = $clean($p['nom']);
                 $nom = substr($nom, 0, 8); // raccourcir
-                return $nom . 'x' . $p['quantite'];
+                return $nom . 'x' . $p['quantite'] . 'de '. $p['prix_unitaire'];
             })
             ->implode(',');
 
         // Message compressé
-        $message = "Nouvelle commande de  {$nom} {$commande->telephone} Ad:{$commune} {$adresse} Liv:"
+        $message = "Commande:{$nom} {$commande->telephone} Ad:{$commune} {$adresse} Liv:"
             . number_format($commande->frais_livraison, 0, '', '')
             . " Total:" . number_format($commande->total, 0, '', '')
             . " Prod:{$produits}";
