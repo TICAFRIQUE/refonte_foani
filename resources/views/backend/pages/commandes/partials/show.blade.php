@@ -55,6 +55,8 @@
                             <p><strong>Client :</strong> {{ $commande->user->username ?? 'Inconnu' }}</p>
                             <p><strong>Téléphone :</strong> {{ $commande->telephone ?? '—' }}</p>
                             <p><strong>Date :</strong> {{ $commande->created_at?->format('d/m/Y H:i') ?? '—' }}</p>
+                            <p><strong>Adresse :</strong> {{ $commande->commune ?? '—' }} ,  <i>{{ $commande->adresse ?? '—' }}</i></p>
+
                             <p><strong>Date de livraison :</strong>
                                 {{ $commande->date_livraison?->format('d/m/Y à H:i') ?? '—' }}</p>
                         </div>

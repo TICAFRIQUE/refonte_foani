@@ -260,7 +260,7 @@ class PanierController extends Controller
             Log::info('SMS Admin envoyé', [
                 'commande_id' => $commande->id,
                 'message' => $message,
-                'numero' =>env('SMS_ADMIN_PHONE'),
+                'numero' => env('SMS_ADMIN_PHONE'),
                 'response' => $response
             ]);
         } catch (\Exception $e) {
@@ -327,69 +327,107 @@ class PanierController extends Controller
 
 
 
-    private function construireMessageAdmin($commande, $request)
+    // private function construireMessageAdmin($commande, $request)
+    // {
+    //     // Base du message
+    //     $message  = "NOUVELLE COMMANDE";
+    //     // $message .= "------------------------------\n";
+    //     $message .= "Commande: {$commande->code}\n";
+    //     $message .= "Client: {$commande->nom}\n";
+    //     $message .= "Tel: {$commande->telephone}\n";
+    //     $message .= "Adresse: {$commande->commune}, {$commande->adresse}\n";
+    //     $message .= "Frais de livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
+    //     $message .= "Total: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
+
+    //     // Détails produits (max 3)
+    //     if (!empty($commande->produits_details)) {
+    //         // $message .= "------------------------------\n";
+    //         $message .= "Produits:\n";
+    //         $produits_count = 0;
+
+    //         foreach ($commande->produits_details as $produit) {
+    //             if ($produits_count >= 2) {
+    //                 $remaining = count($commande->produits_details) - 3;
+    //                 $message .= "... et {$remaining} autre(s)\n";
+    //                 break;
+    //             }
+
+    //             $nom = substr($produit['nom'], 0, 20);
+    //             if (strlen($produit['nom']) > 20) $nom .= "...";
+    //             $message .= "- {$nom} x{$produit['quantite']}\n";
+    //             $produits_count++;
+    //         }
+    //     }
+
+    //     // Totaux
+    //     // $message .= "------------------------------\n";
+    //     // $message .= "Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
+    //     // $message .= "Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
+    //     // $message .= "TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
+
+    //     // Infos temporelles
+    //     // $message .= "------------------------------\n";
+    //     // $message .= "Date: " . $commande->date_commande->format('d/m/Y H:i') . "\n";
+    //     // $message .= "Paiement: " . ucfirst($commande->mode_paiement) . "\n";
+
+    //     // 🔗 Lien vers la commande
+    //     $baseUrl = rtrim(env('APP_URL'), '/');
+    //     $fullUrl = "{$baseUrl}/admin/commandes/{$commande->id}";
+
+    //     try {
+    //         // Raccourcir le lien avec TinyURL
+    //         $shortUrl = Http::get("https://tinyurl.com/api-create.php", [
+    //             'url' => $fullUrl
+    //         ])->body();
+
+    //         if (!filter_var($shortUrl, FILTER_VALIDATE_URL)) {
+    //             $shortUrl = $fullUrl; // fallback si erreur
+    //         }
+    //     } catch (\Exception $e) {
+    //         $shortUrl = $fullUrl;
+    //     }
+
+    //     $message .= "------------------------------\n";
+    //     $message .= "Voir commande: {$shortUrl}";
+
+    //     return $message;
+    // }
+
+
+
+    private function construireMessageAdmin($commande)
     {
-        // Base du message
-        $message  = "NOUVELLE COMMANDE FOANI\n";
-        // $message .= "------------------------------\n";
-        $message .= "Commande: {$commande->code}\n";
-        $message .= "Client: {$commande->nom}\n";
-        $message .= "Tel: {$commande->telephone}\n";
-        $message .= "Livraison: {$commande->adresse}, {$commande->commune}\n";
-        $message .= "Total: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
+        // Fonction pour enlever les accents
+        $clean = function ($str) {
+            return str_replace(
+                ['é', 'è', 'ê', 'à', 'ù', 'â', 'î', 'ô', 'û', 'ï', 'ö', 'ë', 'ç'],
+                ['e', 'e', 'e', 'a', 'u', 'a', 'i', 'o', 'u', 'i', 'o', 'e', 'c'],
+                $str
+            );
+        };
 
-        // Détails produits (max 3)
-        if (!empty($commande->produits_details)) {
-            // $message .= "------------------------------\n";
-            $message .= "Produits:\n";
-            $produits_count = 0;
+        // Nettoyage des infos client
+        $nom = $clean($commande->nom);
+        $commune = $clean($commande->commune);
+        $adresse = $clean($commande->adresse);
 
-            foreach ($commande->produits_details as $produit) {
-                if ($produits_count >= 2) {
-                    $remaining = count($commande->produits_details) - 3;
-                    $message .= "... et {$remaining} autre(s)\n";
-                    break;
-                }
+        // Produits en une seule ligne, compressés
+        $produits = collect($commande->produits_details)
+            ->map(function ($p) use ($clean) {
+                $nom = $clean($p['nom']);
+                $nom = substr($nom, 0, 8); // raccourcir
+                return $nom . 'x' . $p['quantite'];
+            })
+            ->implode(',');
 
-                $nom = substr($produit['nom'], 0, 20);
-                if (strlen($produit['nom']) > 20) $nom .= "...";
-                $message .= "- {$nom} x{$produit['quantite']}\n";
-                $produits_count++;
-            }
-        }
+        // Message compressé
+        $message = "Nouvelle commande de  {$nom} {$commande->telephone} Ad:{$commune} {$adresse} Liv:"
+            . number_format($commande->frais_livraison, 0, '', '')
+            . " Total:" . number_format($commande->total, 0, '', '')
+            . " Prod:{$produits}";
 
-        // Totaux
-        // $message .= "------------------------------\n";
-        // $message .= "Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
-        // $message .= "Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
-        // $message .= "TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
-
-        // Infos temporelles
-        // $message .= "------------------------------\n";
-        // $message .= "Date: " . $commande->date_commande->format('d/m/Y H:i') . "\n";
-        // $message .= "Paiement: " . ucfirst($commande->mode_paiement) . "\n";
-
-        // 🔗 Lien vers la commande
-        $baseUrl = rtrim(env('APP_URL'), '/');
-        $fullUrl = "{$baseUrl}/admin/commandes/{$commande->id}";
-
-        try {
-            // Raccourcir le lien avec TinyURL
-            $shortUrl = Http::get("https://tinyurl.com/api-create.php", [
-                'url' => $fullUrl
-            ])->body();
-
-            if (!filter_var($shortUrl, FILTER_VALIDATE_URL)) {
-                $shortUrl = $fullUrl; // fallback si erreur
-            }
-        } catch (\Exception $e) {
-            $shortUrl = $fullUrl;
-        }
-
-        $message .= "------------------------------\n";
-        $message .= "Voir commande: {$shortUrl}";
-
-        return $message;
+        // Limite 160 caracteres
+        return substr($message, 0, 160);
     }
 
 

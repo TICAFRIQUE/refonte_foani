@@ -44,7 +44,7 @@
                     <h4>Informations Client</h4>
                     <p><strong>Client:</strong> {{ $commande->user->username ?? 'Inconnu' }}</p>
                     <p><strong>Téléphone:</strong> {{ $commande->telephone ?? '—' }}</p>
-                    <p><strong>Adresse:</strong> {{ $commande->adresse ?? '—' }}</p>
+                    <p><strong>Adresse:</strong>{{ $commande->commune ?? '—' }} <i>{{ $commande->adresse ?? '—' }}</i></p>
                 </div>
                 <div class="info-block">
                     <h4>Informations Commande</h4>
