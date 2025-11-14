@@ -415,8 +415,9 @@ class PanierController extends Controller
         $produits = collect($commande->produits_details)
             ->map(function ($p) use ($clean) {
                 $nom = $clean($p['nom']);
-                $nom = substr($nom, 0, 8); // raccourcir
-                return $nom . 'x' . $p['quantite'] . 'de '. $p['prix_unitaire'];
+                $nom = substr($nom, 0, 20); // raccourcir
+                $nom = strtolower($nom);//mettre en lowercase
+                return $nom . 'x' . $p['quantite'] . ' de ' . $p['prix_unitaire'];
             })
             ->implode(',');
 

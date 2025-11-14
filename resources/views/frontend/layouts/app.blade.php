@@ -886,7 +886,7 @@
         style="bottom: 140px; right: 25px; z-index: 999; width: 48px; height: 48px; display: none;">
         <i class="bi bi-arrow-up fs-4"></i>
     </a>
-    <a href="https://wa.me/2250505969625?text=Bonjour%20je%20veux%20commander%20un%20de%20vos%20produits"
+    <a href="https://wa.me/225{{ $parametre?->contact2 }}?text=Bonjour%20je%20veux%20commander%20un%20de%20vos%20produits"
         target="_blank" id="btnWhatsapp" class="btn btn-success rounded-circle shadow position-fixed"
         style="bottom: 80px; right: 25px; z-index: 999; width: 48px; height: 48px;">
         <i class="bi bi-whatsapp fs-3"></i>

@@ -80,7 +80,7 @@
                                                 </a>
                                             @endif
                                         @else
-                                            <a href="https://wa.me/2250505969625/?text=Bonjour%2C%20Je%20veux%20commander%20le%20produit%20{{ $produit->libelle }}"
+                                            <a href="https://wa.me/225{{ $parametre?->contact2 }}/?text=Bonjour%2C%20Je%20veux%20commander%20le%20produit%20{{ $produit->libelle }}"
                                                 target="_blank" class="btn btn-success btn-sm w-100 mt-2">
                                                 <i class="bi bi-whatsapp me-1"></i>Commander via WhatsApp
                                             </a>
