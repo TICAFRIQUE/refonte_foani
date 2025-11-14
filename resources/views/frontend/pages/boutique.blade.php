@@ -942,7 +942,7 @@
                                     @endif
                                 </div>
                             @else
-                                <a href="https://wa.me/225{{ $parametre?->contact2 }}/?text=Bonjour%2C%20Je%20veux%20commander%20le%20produit%20{{ $produit->libelle }}"
+                                <a href="https://wa.me/225{{ $data_parametre?->contact2 }}/?text=Bonjour%2C%20Je%20veux%20commander%20le%20produit%20{{ $produit->libelle }}"
                                     target="_blank" class="btn btn-success btn-product">
                                     <i class="bi bi-whatsapp fs-6 me-2"></i>Commander via WhatsApp
                                 </a>
