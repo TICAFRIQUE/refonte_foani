@@ -530,14 +530,14 @@
                     <div class="social-media mb-4">
                         <div class="row g-2">
                             <div class="col-6">
-                                <a href="https://www.facebook.com/foaniservices" target="_blank"
+                                <a href="{{ $data_parametre?->lien_facebook }}" target="_blank"
                                     class="social-link facebook d-flex align-items-center p-3 rounded-3 text-decoration-none">
                                     <i class="bi bi-facebook fs-4 me-2"></i>
                                     <span class="small fw-semibold">Facebook</span>
                                 </a>
                             </div>
                             <div class="col-6">
-                                <a href="https://wa.me/2250505969625" target="_blank"
+                                <a href="https://wa.me/225{{ $data_parametre?->contact2 }}}" target="_blank"
                                     class="social-link whatsapp d-flex align-items-center p-3 rounded-3 text-decoration-none">
                                     <i class="bi bi-whatsapp fs-4 me-2"></i>
                                     <span class="small fw-semibold">WhatsApp</span>

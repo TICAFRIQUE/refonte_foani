@@ -5,6 +5,7 @@ use App\Models\Page;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\PageController;
 use App\Http\Controllers\backend\RoleController;
+use App\Http\Controllers\frontend\WebController;
 use App\Http\Controllers\backend\AdminController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\UserController;
@@ -317,4 +318,12 @@ Route::get('/panier/count', function () {
 Route::controller(ReservationController::class)->group(function () {
     Route::get('/reservation/{slug}', 'create')->name('reservation.create')->middleware('client');
     Route::post('/reservation/{id}', 'store')->name('reservation.store')->middleware('client');
+});
+
+
+
+//################################ROUTE WEB FOANI #######################################
+
+Route::controller(WebController::class)->group(function () {
+    Route::get('/web', 'index')->name('web.index'); // site officiel FOANI
 });

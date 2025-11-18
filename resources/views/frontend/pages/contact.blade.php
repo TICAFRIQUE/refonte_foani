@@ -345,7 +345,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s;
         }
 
@@ -506,6 +506,7 @@
                 opacity: 0;
                 transform: translateY(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -612,9 +613,7 @@
                                 <div class="ratio ratio-16x9">
                                     <iframe
                                         src="https://www.google.com/maps/embed?pb=!1m24!1m8!1m3!1d7944.072134403755!2d-4.08265!3d5.411478!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0xfc1ed254fef80ad%3A0x85d06d09dc2a3996!2sFOANI%20Abidjan%20zone%20industrielle%20Yopougon%2C%20Yopougon%20Zone%20industrielle%2Ccit%C3%A9%20bel%20air%2C%20Abidjan!3m2!1d5.4117358!2d-4.0826283!4m5!1s0xfc194554cb2cd55%3A0x8e22d541a71f973!2sAbobo%2C%20Abidjan!3m2!1d5.432887099999999!2d-4.0388918!5e0!3m2!1sfr!2sci!4v1760580862579!5m2!1sfr!2sci"
-                                        style="border:0;" 
-                                        allowfullscreen="" 
-                                        loading="lazy"
+                                        style="border:0;" allowfullscreen="" loading="lazy"
                                         referrerpolicy="no-referrer-when-downgrade">
                                     </iframe>
                                 </div>
@@ -641,40 +640,31 @@
                                 <div class="form-group">
                                     <label class="form-label">
                                         <i class="bi bi-person"></i>
-                                        Nom & Prénoms 
+                                        Nom & Prénoms
                                         <span class="required-asterisk">*</span>
                                     </label>
-                                    <input type="text" 
-                                           name="nom_prenoms" 
-                                           class="form-control" 
-                                           placeholder="Votre nom complet"
-                                           required>
+                                    <input type="text" name="nom_prenoms" class="form-control"
+                                        placeholder="Votre nom complet" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">
                                         <i class="bi bi-tag"></i>
-                                        Objet 
+                                        Objet
                                         <span class="required-asterisk">*</span>
                                     </label>
-                                    <input type="text" 
-                                           name="objet" 
-                                           class="form-control" 
-                                           placeholder="Sujet de votre message"
-                                           required>
+                                    <input type="text" name="objet" class="form-control"
+                                        placeholder="Sujet de votre message" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">
                                         <i class="bi bi-envelope"></i>
-                                        Email 
+                                        Email
                                         <span class="required-asterisk">*</span>
                                     </label>
-                                    <input type="email" 
-                                           name="email" 
-                                           class="form-control" 
-                                           placeholder="votre@email.com"
-                                           required>
+                                    <input type="email" name="email" class="form-control"
+                                        placeholder="votre@email.com" required>
                                 </div>
 
                                 <div class="form-group">
@@ -682,23 +672,17 @@
                                         <i class="bi bi-telephone"></i>
                                         Téléphone
                                     </label>
-                                    <input type="tel" 
-                                           name="telephone" 
-                                           class="form-control" 
-                                           placeholder="+225 XX XX XX XX XX">
+                                    <input type="tel" name="telephone" class="form-control"
+                                        placeholder="+225 XX XX XX XX XX">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">
                                         <i class="bi bi-chat-text"></i>
-                                        Message 
+                                        Message
                                         <span class="required-asterisk">*</span>
                                     </label>
-                                    <textarea name="message" 
-                                              class="form-control" 
-                                              rows="5" 
-                                              placeholder="Écrivez votre message ici..."
-                                              required></textarea>
+                                    <textarea name="message" class="form-control" rows="5" placeholder="Écrivez votre message ici..." required></textarea>
                                 </div>
 
                                 <div class="mt-4">
