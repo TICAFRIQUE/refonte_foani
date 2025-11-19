@@ -25,7 +25,7 @@ class HomeController extends Controller
             }])->active()->position()->get();
 
             //recuperer les sliders visibles
-            $sliders = Slider::where('visible', true)->orderBy('position', 'asc')->get();
+            $sliders = Slider::visible()->boutique()->orderBy('position', 'asc')->get();
 
             // dd($sliders->toArray());
 
@@ -58,7 +58,7 @@ class HomeController extends Controller
             return view('frontend.pages.points_de_vente', compact('categorie', 'points_de_vente'));
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->route('accueil')->with('error', 'Catégorie de point de vente non trouvée.');
+            return redirect()->route('boutique.accueil')->with('error', 'Catégorie de point de vente non trouvée.');
         }
     }
 

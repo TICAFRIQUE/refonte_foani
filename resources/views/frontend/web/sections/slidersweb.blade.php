@@ -1,499 +1,39 @@
+{{-- filepath: c:\laragon\www\foani\resources\views\frontend\web\sections\slidersweb.blade.php --}}
 @push('styles')
-    
     <style>
-        /* Container principal du slider */
-        .slider-section {
-            position: relative;
-            overflow: hidden;
-            border-radius: 0 0 25px 25px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-            margin-bottom: 40px;
-        }
-
-        /* Items du carousel */
-        .owl-carousel .item {
-            position: relative;
-            height: 100vh;
-            overflow: hidden;
-            border-radius: 0;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        .owl-carousel .item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg,
-                    rgba(40, 64, 147, 0.85) 0%,
-                    rgba(63, 94, 184, 0.75) 50%,
-                    rgba(108, 122, 224, 0.65) 100%);
-            z-index: 1;
-        }
-
-        /* Image du slide */
-        .slide-image {
-            position: absolute;
-            top: 0;
-            left: 0;
+       .owl-carousel .owl-item img {
             width: 100%;
-            height: 100%;
+            /* height: 500px; */
             object-fit: cover;
-            object-position: center;
-            z-index: 0;
-            transition: transform 8s ease-in-out;
-        }
+       }
 
-        .owl-carousel .item:hover .slide-image {
-            transform: scale(1.05);
-        }
-
-        /* Caption centrée sur toutes les tailles d'écran */
-        .main-slider-caption-center {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 900px;
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            z-index: 2;
-        }
-
-        .main-slider-caption-center h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            font-weight: 800;
-            color: white;
-            margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-            line-height: 1.1;
-            letter-spacing: -0.5px;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: slideInUp 1s ease-out 0.3s forwards;
-        }
-
-        .main-slider-caption-center p {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
-            color: white;
-            margin-bottom: 2.5rem;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-            opacity: 0;
-            font-weight: 400;
-            line-height: 1.6;
-            transform: translateY(50px);
-            animation: slideInUp 1s ease-out 0.6s forwards;
-        }
-
-        /* Boutons CTA modernes */
-        .carousel-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 10px;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: slideInUp 1s ease-out 0.9s forwards;
-        }
-
-        .btn-cta-slider {
-            background: linear-gradient(135deg, #ffffff, #f8f9ff);
-            border: none;
-            color: #284093;
-            padding: 14px 35px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.4s ease;
-            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-            min-width: 220px;
-            text-align: center;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-
-        .btn-cta-slider::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-cta-slider:hover::before {
-            left: 100%;
-        }
-
-        .btn-cta-slider:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.3);
-            color: #1e2d6f;
-        }
-
-        .btn-cta-slider-outline {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            transition: all 0.4s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 200px;
-        }
-
-        .btn-cta-slider-outline:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: white;
-            color: white;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-cta-slider i,
-        .btn-cta-slider-outline i {
-            transition: transform 0.3s ease;
-            margin-right: 8px;
-        }
-
-        .btn-cta-slider:hover i,
-        .btn-cta-slider-outline:hover i {
-            transform: translateX(3px);
-        }
-
-        /* Contrôles Owl Carousel stylés */
-        .owl-dots {
-            text-align: center;
-            padding: 25px 0 15px;
-            margin: 0;
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
-        }
-
-        .owl-dot {
-            display: inline-block;
-            margin: 0 8px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            background: transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .owl-dot.active {
-            background: white;
-            transform: scale(1.2);
-            border-color: white;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-        }
-
-        .owl-theme .owl-dots .owl-dot span {
+       .owl-theme .owl-nav {
             display: none;
-        }
+       }
 
-        /* Navigation arrows */
-        .owl-nav {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            transform: translateY(-50%);
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        .owl-nav button {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.3rem;
-            transition: all 0.3s ease;
-            pointer-events: all;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            outline: none;
-        }
-
-        .owl-nav button:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: white;
-            transform: scale(1.1);
-            opacity: 1;
-        }
-
-        .owl-prev {
-            left: 30px;
-        }
-
-        .owl-next {
-            right: 30px;
-        }
-
-        .owl-nav button span {
-            font-size: 20px;
-        }
-
-        /* Indicateur de progression */
-        .slide-progress {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #284093, #6c7ae0);
-            z-index: 2;
-            transition: width 6s linear;
-            width: 0%;
-        }
-
-        .slide-progress.active {
-            width: 100%;
-        }
-
-        /* Animations */
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* Reset animations */
-        .owl-carousel .owl-item:not(.active) .main-slider-caption-center h1,
-        .owl-carousel .owl-item:not(.active) .main-slider-caption-center p,
-        .owl-carousel .owl-item:not(.active) .carousel-buttons {
-            animation: none;
-            opacity: 0;
-            transform: translateY(50px);
-        }
-
-        /* Active slide animations */
-        .owl-carousel .owl-item.active .main-slider-caption-center h1 {
-            animation: slideInUp 1s ease-out 0.3s forwards;
-        }
-
-        .owl-carousel .owl-item.active .main-slider-caption-center p {
-            animation: slideInUp 1s ease-out 0.6s forwards;
-        }
-
-        .owl-carousel .owl-item.active .carousel-buttons {
-            animation: slideInUp 1s ease-out 0.9s forwards;
-        }
 
         /* Responsive Design - Mobile First */
         @media (max-width: 576px) {
-            .slider-section {
-                border-radius: 0 0 15px 15px;
-                margin-bottom: 20px;
+            .owl-carousel .owl-item img {
+                padding-top: 100px;
             }
-
-            .owl-carousel .item {
-                height: 70vh;
-                min-height: 400px;
-            }
-
-            .main-slider-caption-center {
-                width: 95%;
-                max-width: none;
-                padding: 0 15px;
-            }
-
-            .main-slider-caption-center h1 {
-                font-size: 2rem;
-                margin-bottom: 1rem;
-            }
-
-            .main-slider-caption-center p {
-                font-size: 1rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .carousel-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .btn-cta-slider,
-            .btn-cta-slider-outline {
-                padding: 12px 25px;
-                font-size: 0.9rem;
-                min-width: 200px;
-            }
-
-            .owl-dots {
-                padding: 20px 0 10px;
-                bottom: 15px;
-            }
-
-            .owl-dot {
-                width: 10px;
-                height: 10px;
-                margin: 0 6px;
-            }
-
-            .owl-nav button {
-                width: 40px;
-                height: 40px;
-                font-size: 1.1rem;
-            }
-
-            .owl-prev {
-                left: 15px;
-            }
-
-            .owl-next {
-                right: 15px;
+        }
+        @media (min-width: 577px) and (max-width: 767px) {
+            .owl-carousel .owl-item img {
+               
+                padding-top: 100px
             }
         }
 
-        @media (min-width: 577px) and (max-width: 768px) {
-            .slider-section {
-                border-radius: 0 0 20px 20px;
-                margin-bottom: 30px;
-            }
 
-            .owl-carousel .item {
-                height: 80vh;
-                min-height: 500px;
-            }
-
-            .main-slider-caption-center {
-                width: 90%;
-                max-width: 600px;
-            }
-
-            .main-slider-caption-center h1 {
-                font-size: 2.8rem;
-                margin-bottom: 1.2rem;
-            }
-
-            .main-slider-caption-center p {
-                font-size: 1.1rem;
-                margin-bottom: 2rem;
-            }
-
-            .carousel-buttons {
-                gap: 15px;
-            }
-
-            .btn-cta-slider,
-            .btn-cta-slider-outline {
-                padding: 13px 30px;
-                font-size: 0.95rem;
-                min-width: 210px;
+        @media (max-width: 767px) {
+            .owl-carousel .owl-item img {
+               
+                padding-top: 100px
             }
         }
+        
 
-        @media (min-width: 769px) and (max-width: 992px) {
-            .owl-carousel .item {
-                height: 90vh;
-            }
-
-            .main-slider-caption-center h1 {
-                font-size: 3.5rem;
-            }
-
-            .main-slider-caption-center p {
-                font-size: 1.2rem;
-            }
-
-            .btn-cta-slider,
-            .btn-cta-slider-outline {
-                padding: 14px 32px;
-                font-size: 0.98rem;
-            }
-        }
-
-        @media (min-width: 993px) {
-            .owl-carousel .item {
-                height: 100vh;
-            }
-
-            .main-slider-caption-center {
-                max-width: 900px;
-            }
-        }
-
-        /* Loading state */
-        .slider-loading {
-            height: 50vh;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0 0 25px 25px;
-        }
-
-        .spinner-slider {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e9ecef;
-            border-top: 4px solid #284093;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
     </style>
 @endpush
 
@@ -504,91 +44,103 @@
     </div>
 
     <div class="owl-carousel owl-theme" id="mainSliderOwl">
-        <!-- SLIDE 1 - Excellence & Innovation -->
-        <div class="item">
-            <img src="https://images.unsplash.com/photo-1516717435820-d82a54ad2b87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80" 
-                 alt="Ferme moderne - FOANI" 
-                 class="slide-image">
-            <div class="main-slider-caption-center">
-                <h1>Excellence & Innovation</h1>
-                <p>FOANI, votre partenaire de confiance dans l'industrie alimentaire. Nous nous engageons à fournir des
-                    produits de qualité supérieure avec une approche durable et innovante.</p>
-                <div class="carousel-buttons">
-                    <a href="#activities" class="btn btn-cta-slider">
-                        <i class="bi bi-eye"></i>
-                        Découvrir nos activités
-                    </a>
-                    <a href="#contact" class="btn btn-cta-slider-outline">
-                        <i class="bi bi-envelope"></i>
-                        Nous contacter
-                    </a>
-                </div>
-            </div>
-            <div class="slide-progress"></div>
-        </div>
+        @forelse ($sliders as $index => $slider)
+            <div class="item" data-slide="{{ $index }}">
+                <img src="{{ $slider->getFirstMediaUrl('image') ?: asset('front/images/sliders/default.jpg') }}"
+                    alt="{{ $slider->libelle }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
 
-        <!-- SLIDE 2 - Qualité Premium -->
-        <div class="item">
-            <img src="https://images.unsplash.com/photo-1524503518976-f4b3c7c90f1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80" 
-                 alt="Œufs frais - FOANI" 
-                 class="slide-image" 
-                 loading="lazy">
-            <div class="main-slider-caption-center">
-                <h1>Qualité Premium</h1>
-                <p>Depuis plus de 15 ans, nous garantissons la fraîcheur et la qualité de nos produits grâce à nos
-                    processus rigoureux et notre expertise reconnue dans l'aviculture.</p>
-                <div class="carousel-buttons">
-                    <a href="#values" class="btn btn-cta-slider">
-                        <i class="bi bi-heart"></i>
-                        Nos valeurs
-                    </a>
-                    <a href="{{ route('boutique.index') }}" class="btn btn-cta-slider-outline">
+                @if (isset($slider->btn_nom))
+                    <div class="main-slider-caption-center">
+                        <h1 class="slide-title">{{ $slider->libelle }}</h1>
+                        <p class="slide-description">{{ $slider->description ?? 'Découvrez nos produits de qualité' }}
+                        </p>
+                        <a href="{{ $slider->url ?? route('boutique.index') }}" class="btn btn-cta-slider slide-button">
+                            <i class="bi bi-cart-plus"></i>
+                            {{ $slider->btn_nom ?? 'Commander maintenant' }}
+                        </a>
+                    </div>
+                @endif
+
+                {{-- Barre de progression --}}
+                <div class="slide-progress"></div>
+            </div>
+        @empty
+            {{-- Slide par défaut si aucun slider --}}
+            <div class="item">
+                <img src="{{ asset('front/images/sliders/default.jpg') }}" alt="Foani - Volailles Fraîches">
+                <div class="main-slider-caption-center">
+                    <h1 class="slide-title">Volailles Fraîches FOANI</h1>
+                    <p class="slide-description">Découvrez notre sélection de volailles de qualité premium depuis plus
+                        de 15 ans</p>
+                    <a href="{{ route('boutique.index') }}" class="btn btn-cta-slider slide-button">
                         <i class="bi bi-shop"></i>
-                        Boutique en ligne
+                        Découvrir nos produits
                     </a>
                 </div>
+                <div class="slide-progress"></div>
             </div>
-            <div class="slide-progress"></div>
-        </div>
-
-        <!-- SLIDE 3 - Engagement Durable -->
-        <div class="item">
-            <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80" 
-                 alt="Poules en liberté - FOANI" 
-                 class="slide-image" 
-                 loading="lazy">
-            <div class="main-slider-caption-center">
-                <h1>Engagement Durable</h1>
-                <p>Notre mission : créer un avenir alimentaire durable en respectant l'environnement et en soutenant les
-                    communautés locales à travers nos pratiques responsables.</p>
-                <div class="carousel-buttons">
-                    <a href="#team" class="btn btn-cta-slider">
-                        <i class="bi bi-people"></i>
-                        Notre équipe
-                    </a>
-                    <a href="#news" class="btn btn-cta-slider-outline">
-                        <i class="bi bi-newspaper"></i>
-                        Actualités
-                    </a>
-                </div>
-            </div>
-            <div class="slide-progress"></div>
-        </div>
+        @endforelse
     </div>
 </section>
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <!-- OwlCarousel JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            // Configuration Owl Carousel
-            const owlSlider = $("#mainSliderOwl").owlCarousel({
+            const slider = $("#mainSliderOwl");
+            const loadingElement = $("#slider-loading");
+
+            // Fonction pour appliquer les animations
+            function applyAnimations(slide) {
+                const caption = slide.find('.main-slider-caption-center');
+                const progress = slide.find('.slide-progress');
+
+                // Reset animations
+                caption.removeClass('animate-bounce-in');
+
+                // Apply new animation
+                setTimeout(() => {
+                    caption.addClass('animate-bounce-in');
+                }, 200);
+
+                // Animation de la barre de progression
+                progress.css('width', '0%');
+                setTimeout(() => {
+                    progress.css('width', '100%');
+                }, 300);
+            }
+
+            // Optimisation du ratio d'image selon l'orientation
+            function optimizeImageDisplay() {
+                $('.owl-carousel .item img').each(function() {
+                    const img = this;
+                    if (img.complete) {
+                        const ratio = img.naturalWidth / img.naturalHeight;
+                        const containerRatio = $(img).parent().width() / $(img).parent().height();
+
+                        if (Math.abs(ratio - containerRatio) < 0.1) {
+                            // Si les ratios sont similaires, on peut utiliser cover
+                            $(img).css('object-fit', 'cover');
+                        } else {
+                            // Sinon on garde contain pour préserver les proportions
+                            $(img).css('object-fit', 'contain');
+                        }
+                    }
+                });
+            }
+
+            // Configuration du carousel optimisée
+            const owlConfig = {
                 items: 1,
                 loop: true,
-                margin: 0,
                 nav: true,
+                navText: [
+                    '<i class="bi bi-chevron-left"></i>',
+                    '<i class="bi bi-chevron-right"></i>'
+                ],
                 dots: true,
                 autoplay: true,
                 autoplayTimeout: 6000,
@@ -596,29 +148,121 @@
                 animateOut: 'fadeOut',
                 animateIn: 'fadeIn',
                 smartSpeed: 1000,
-                navText: [
-                    '<span>‹</span>',
-                    '<span>›</span>'
-                ],
+                touchDrag: true,
+                mouseDrag: true,
                 responsive: {
                     0: {
-                        nav: false,
-                        autoplayTimeout: 4000,
-                        items: 1
+                        nav: true,
+                        autoplayTimeout: 5000,
+                        smartSpeed: 800
                     },
                     768: {
                         nav: true,
                         autoplayTimeout: 6000,
-                        items: 1
+                        smartSpeed: 1000
                     },
                     992: {
                         nav: true,
                         autoplayTimeout: 6000,
-                        items: 1
+                        smartSpeed: 1000
                     }
-                },
-               
+                }
+            };
+
+            // Initialisation du carousel
+            slider.owlCarousel(owlConfig);
+
+            // Animation du premier slide
+            setTimeout(() => {
+                applyAnimations(slider.find(".owl-item.active"));
+                optimizeImageDisplay();
+            }, 500);
+
+            // Animation lors du changement de slide
+            slider.on("changed.owl.carousel", function(event) {
+                const currentItem = $(event.target).find(".owl-item").eq(event.item.index);
+                applyAnimations(currentItem);
             });
+
+            // Gestion du loading
+            slider.on('initialized.owl.carousel', function() {
+                loadingElement.addClass('d-none');
+                slider.removeClass('d-none');
+                optimizeImageDisplay();
+            });
+
+            // Touch swipe amélioré pour mobile
+            let startX = 0;
+            let endX = 0;
+
+            slider.on('touchstart', function(e) {
+                startX = e.originalEvent.touches[0].clientX;
+            });
+
+            slider.on('touchend', function(e) {
+                endX = e.originalEvent.changedTouches[0].clientX;
+                const diff = startX - endX;
+
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        slider.trigger('next.owl.carousel');
+                    } else {
+                        slider.trigger('prev.owl.carousel');
+                    }
+                }
+            });
+
+            // Accessibility enhancements
+            slider.find('.owl-nav button').attr('aria-label', function(index) {
+                return index === 0 ? 'Slide précédent' : 'Slide suivant';
+            });
+
+            // Gestion des erreurs d'images
+            slider.find('img').on('error', function() {
+                $(this).attr('src', '{{ asset('front/images/sliders/default.jpg') }}');
+                $(this).css('object-fit', 'cover'); // Fallback en cover pour l'image par défaut
+            });
+
+            // Optimisation lors du chargement des images
+            slider.find('img').on('load', function() {
+                optimizeImageDisplay();
+            });
+
+            // Redimensionnement intelligent
+            let resizeTimer;
+            $(window).on('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    slider.trigger('refresh.owl.carousel');
+                    optimizeImageDisplay();
+                }, 150);
+            });
+
+            // Pause au focus pour l'accessibilité
+            slider.on('focusin', function() {
+                slider.trigger('stop.owl.autoplay');
+            });
+
+            slider.on('focusout', function() {
+                slider.trigger('play.owl.autoplay', [6000]);
+            });
+
+            // Optimisation performance - observer pour pause hors vue
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            slider.trigger('play.owl.autoplay', [6000]);
+                        } else {
+                            slider.trigger('stop.owl.autoplay');
+                        }
+                    });
+                }, {
+                    threshold: 0.5
+                });
+
+                observer.observe(slider[0]);
+            }
         });
     </script>
 @endpush

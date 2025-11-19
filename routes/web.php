@@ -278,7 +278,7 @@ Route::controller(UserController::class)->group(function () {
 
 
 Route::controller(HomeController::class)->group(function () {
-    Route::get('/', 'accueil')->name('accueil'); // page d'accueil
+    Route::get('/boutique.accueil', 'accueil')->name('boutique.accueil'); // page d'accueil
     Route::get('/contact', 'contact')->name('contact'); // page contact
     Route::get('/points-de-vente/{slug}', 'pointsDeVente')->name('points_de_vente'); // points de vente
     Route::get('/categories', 'categories')->name('categories'); // liste des categories
@@ -325,5 +325,7 @@ Route::controller(ReservationController::class)->group(function () {
 //################################ROUTE WEB FOANI #######################################
 
 Route::controller(WebController::class)->group(function () {
-    Route::get('/web', 'index')->name('web.index'); // site officiel FOANI
+    Route::get('/', 'index')->name('web.index'); // site officiel FOANI
+    Route::get('page/{slug}', 'pageShow')->name('page.show'); // detail de la page
+
 });

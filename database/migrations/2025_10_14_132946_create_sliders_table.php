@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
             $table->string('libelle')->nullable(); // titre ou nom du slider
+            $table->string('type')->nullable(); // type de slider (web, boutique, etc.)
             $table->string('url')->nullable(); // lien associé
             $table->string('btn_nom')->nullable(); // nom du bouton (ex: "Découvrir")
             $table->text('description')->nullable(); // texte descriptif

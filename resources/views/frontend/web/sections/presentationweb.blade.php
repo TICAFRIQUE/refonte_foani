@@ -1,7 +1,7 @@
    @push('styles')
        <style>
            .about-section {
-               padding: 120px 0;
+               padding: 50px 0;
                background: linear-gradient(135deg, #f8f9ff, #ffffff);
            }
 
@@ -15,7 +15,7 @@
 
            .about-text h3 {
                color: var(--color-primary);
-               font-size: 2rem;
+               font-size: 1.5rem;
                font-weight: 700;
                margin-bottom: 25px;
                position: relative;
@@ -26,7 +26,7 @@
                position: absolute;
                bottom: -8px;
                left: 0;
-               width: 60px;
+               width: 40px;
                height: 3px;
                background: var(--color-secondary);
                border-radius: 2px;
@@ -102,21 +102,13 @@
            <div class="about-content">
                <div class="about-text" data-aos="fade-right" data-aos-delay="200">
                    <h3>Notre Histoire</h3>
-                   <p>Fondée en 2008, FOANI a commencé comme une petite entreprise familiale avec une vision claire :
-                       révolutionner l'industrie avicole en Côte d'Ivoire. Grâce à notre engagement envers l'excellence
-                       et l'innovation, nous sommes devenus l'un des leaders du marché.</p>
-
-                   <p>Aujourd'hui, nous sommes fiers de servir plus de 5000 clients à travers le pays, en maintenant les
-                       plus hauts standards de qualité et en respectant notre engagement envers le développement
-                       durable. Notre mission est de fournir des produits avicoles de qualité premium tout en respectant
-                       l'environnement et en soutenant le développement économique local.</p>
-
-                   <p>Nous nous engageons à être un partenaire de confiance pour nos clients et nos communautés, en
-                       offrant des solutions innovantes et durables dans l'industrie alimentaire.</p>
+                   <p>
+                    {!!$presentation?->description!!}
+                   </p>
                </div>
 
                <div class="about-image" data-aos="fade-left" data-aos-delay="300">
-                   <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                   <img src="{{$presentation?->getFirstMediaUrl('image') }}"
                        alt="FOANI - Notre entreprise">
                </div>
            </div>

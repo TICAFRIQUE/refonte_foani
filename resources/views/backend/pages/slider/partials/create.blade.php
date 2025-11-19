@@ -33,9 +33,20 @@
                         </div>
 
                         {{-- URL --}}
-                        <div class="col-md-12">
+                        <div class="col-md-7">
                             <label class="form-label">URL</label>
                             <input type="url" name="url" class="form-control">
+                        </div>
+                        {{-- Type --}}
+                        <div class="col-md-5">
+                            <label class="form-label">Type</label>
+                            <select name="type" class="form-select" required>
+                                  <option value="" disabled selected>Choisir le type</option>
+                                <option value="web">Web</option>
+                                <option value="boutique">Boutique</option>
+                            </select>
+                              
+                            </select>
                         </div>
 
                         {{-- Description --}}

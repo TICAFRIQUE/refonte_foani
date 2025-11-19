@@ -41,7 +41,7 @@ class BoutiqueController extends Controller
 
             return view('frontend.pages.boutique', compact('produits', 'categorie', 'recherche'));
         } catch (\Throwable $th) {
-            return redirect()->route('accueil')->with('error', 'Une erreur est survenue. Veuillez réessayer plus tard.');
+            return redirect()->route('boutique.accueil')->with('error', 'Une erreur est survenue. Veuillez réessayer plus tard.');
         }
     }
 
@@ -67,7 +67,7 @@ class BoutiqueController extends Controller
 
             return view('frontend.pages.boutique', compact('produits', 'categorie', 'recherche'));
         } catch (\Throwable $th) {
-            return redirect()->route('accueil')->with('error', 'Catégorie introuvable.');
+            return redirect()->route('boutique.accueil')->with('error', 'Catégorie introuvable.');
         }
     }
 }

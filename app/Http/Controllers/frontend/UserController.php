@@ -250,6 +250,6 @@ class UserController extends Controller
     {
         Auth::logout();
         Alert::success('Déconnexion', 'Déconnexion réussie !');
-        return redirect()->route('accueil');
+        return redirect()->route('boutique.accueil');
     }
 }

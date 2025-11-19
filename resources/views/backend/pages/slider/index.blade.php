@@ -43,6 +43,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Image</th>
+                                    <th>Type</th>
                                     <th>Libellé</th>
                                     <th>Bouton</th>
                                     <th class="d-none">URL</th>
@@ -68,6 +69,7 @@
                                                 <span class="text-muted">Aucune</span>
                                             @endif
                                         </td>
+                                        <td>{{ ucfirst($slider->type) }}</td>
 
                                         {{-- Informations --}}
                                         <td>{{ $slider->libelle ?? '—' }}</td>

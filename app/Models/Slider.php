@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Slider extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
 
     /**
      * Les attributs pouvant être remplis massivement.
@@ -20,15 +20,28 @@ class Slider extends Model implements HasMedia
         'btn_nom',
         'description',
         'position',
+        'type', //[web, 'boutique', etc.]
         'image',
         'visible',
     ];
 
-    /**
-     * Retourne le chemin complet de l’image si elle existe.
-     */
-    // public function getImageUrlAttribute()
-    // {
-    //     return $this->image ? asset('storage/' . $this->image) : asset('images/default.jpg');
-    // }
+
+       //ScopeVisible
+       public function scopeVisible($query)
+       {
+           return $query->where('visible', true);
+       }
+
+       //scopeTypeWeb
+       public function scopeWeb($query)
+       {
+           return $query->where('type', 'web');
+       }
+
+       //scopeBoutique
+       public function scopeBoutique($query)
+       {
+           return $query->where('type', 'boutique');
+       }
+
 }

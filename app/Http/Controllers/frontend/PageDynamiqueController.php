@@ -37,7 +37,7 @@ class PageDynamiqueController extends Controller
             return view('frontend.pages.gestion_page.activites', compact('categories_pages', 'activites'));
         } catch (\Throwable $th) {
             //throw $th;
-            return redirect()->route('accueil')->with('error', 'Une erreur est survenue lors du chargement des activités !');
+            return redirect()->route('boutique.accueil')->with('error', 'Une erreur est survenue lors du chargement des activités !');
         }
     }
 }

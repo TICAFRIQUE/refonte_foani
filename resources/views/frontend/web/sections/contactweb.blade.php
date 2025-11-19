@@ -406,9 +406,7 @@
                         </div>
                         <div class="contact-details">
                             <h4>Adresse</h4>
-                            <p>123 Boulevard de la République<br>
-                                Cocody, Abidjan<br>
-                                Côte d'Ivoire</p>
+                            <p>{{ $data_parametre->localisation }} </p>
                         </div>
                     </div>
 
@@ -456,19 +454,19 @@
                 <div class="contact-social">
                     <h4>Suivez-nous</h4>
                     <div class="social-links">
-                        <a href="#" class="social-link facebook">
+                        <a href="{{ $data_parametre?->lien_facebook }}" class="social-link facebook" target="_blank">
                             <i class="bi bi-facebook"></i>
                         </a>
-                        <a href="#" class="social-link twitter">
+                        <a href="{{ $data_parametre?->lien_twitter }}" class="social-link twitter" target="_blank">
                             <i class="bi bi-twitter"></i>
                         </a>
-                        <a href="#" class="social-link linkedin">
+                        <a href="{{ $data_parametre?->lien_linkedin }}" class="social-link linkedin" target="_blank">
                             <i class="bi bi-linkedin"></i>
                         </a>
-                        <a href="#" class="social-link instagram">
+                        <a href="{{ $data_parametre?->lien_instagram }}" class="social-link instagram" target="_blank">
                             <i class="bi bi-instagram"></i>
                         </a>
-                        <a href="#" class="social-link whatsapp">
+                        <a href="" class="social-link whatsapp">
                             <i class="bi bi-whatsapp"></i>
                         </a>
                     </div>

@@ -317,8 +317,8 @@
 
     <div class="mobile-bar-content d-flex justify-content-around align-items-center">
         {{-- Accueil --}}
-        <a href="{{ route('accueil') }}"
-            class="mobile-nav-btn {{ request()->routeIs('accueil') || request()->routeIs('home') ? 'active' : '' }}"
+        <a href="{{ route('web.index') }}"
+            class="mobile-nav-btn {{ request()->routeIs('web.index') || request()->routeIs('home') ? 'active' : '' }}"
             title="Accueil">
             <i class="bi bi-house-fill"></i>
         </a>
@@ -349,7 +349,7 @@
         </a>
 
         {{-- Boutique --}}
-        <a href="{{ route('boutique.index') }}"
+        <a href="{{ route('boutique.accueil') }}"
             class="mobile-nav-btn {{ request()->routeIs('boutique.*') && !request()->routeIs('boutique.categorie') ? 'active' : '' }}"
             title="Boutique">
             <i class="bi bi-shop-window"></i>

@@ -428,16 +428,16 @@
                     </h5>
                     <ul class="footer-nav list-unstyled">
                         <li class="mb-2">
-                            <a href="{{ route('page.activites') }}" class="footer-link">
+                            <a href="{{ route('web.index') }}" class="footer-link">
                                 <i class="bi bi-chevron-right me-2"></i>Nos Activités
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a href="{{ route('boutique.index') }}" class="footer-link">
+                            <a href="{{ route('boutique.accueil') }}" class="footer-link">
                                 <i class="bi bi-chevron-right me-2"></i>Boutique
                             </a>
                         </li>
-                        @foreach ($categories_pages->where('slug', '!=', 'activites')->take(3) as $categorie_page)
+                        {{-- @foreach ($categories_pages->where('slug', '!=', 'activites')->take(3) as $categorie_page)
                             @foreach ($categorie_page->pages as $page)
                                 <li class="mb-2">
                                     <a href="{{ route('page.show', ['slug' => $page->slug]) }}" class="footer-link">
@@ -445,7 +445,7 @@
                                     </a>
                                 </li>
                             @endforeach
-                        @endforeach
+                        @endforeach --}}
                         <li class="mb-2">
                             <a href="{{ route('contact') }}" class="footer-link">
                                 <i class="bi bi-chevron-right me-2"></i>Contact & Support

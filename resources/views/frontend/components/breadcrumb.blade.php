@@ -234,19 +234,19 @@
 
                 {{-- Chemin de navigation --}}
                 <div class="breadcrumb-path d-none d-md-flex">
-                    <a href="{{ route('accueil') }}">
+                    {{-- <a href="{{ route('boutique.accueil') }}">
                         <i class="bi bi-house-fill me-1"></i>Accueil
-                    </a>
+                    </a> --}}
                     
                     @if(request()->routeIs('boutique.*'))
                         <span class="breadcrumb-separator">></span>
                         @if(request()->routeIs('boutique.index'))
                             <span class="breadcrumb-current">Boutique</span>
                         @else
-                            <a href="{{ route('boutique.index') }}">Boutique</a>
+                            <a href="{{ route('boutique.accueil') }}">Boutique</a>
                             <span class="breadcrumb-separator">></span>
                             <span class="breadcrumb-current">
-                                {{ $categorie->libelle ?? 'Catégorie' }}
+                                {{ $categorie->libelle ?? 'Catégorie' }}    
                             </span>
                         @endif
                     
@@ -346,12 +346,12 @@
         
         // Si pas de référent ou référent externe, rediriger vers l'accueil
         if (!previousUrl || !previousUrl.includes(window.location.hostname)) {
-            backButton.href = "{{ route('accueil') }}";
+            backButton.href = "{{ route('boutique.accueil') }}";
         }
         
         // Si on vient de la même page, rediriger vers l'accueil
         if (previousUrl === currentUrl) {
-            backButton.href = "{{ route('accueil') }}";
+            backButton.href = "{{ route('boutique.accueil') }}";
         }
     });
 </script>

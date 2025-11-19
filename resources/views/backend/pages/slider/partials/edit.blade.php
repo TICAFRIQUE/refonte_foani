@@ -17,8 +17,7 @@
                         {{-- Libellé --}}
                         <div class="col-md-5">
                             <label class="form-label">Libellé</label>
-                            <input type="text" name="libelle" class="form-control" value="{{ $slider->libelle }}"
-                                >
+                            <input type="text" name="libelle" class="form-control" value="{{ $slider->libelle }}">
                         </div>
 
                         {{-- Nom du bouton --}}
@@ -38,9 +37,19 @@
                         </div>
 
                         {{-- URL --}}
-                        <div class="col-md-12">
+                        <div class="col-md-7">
                             <label class="form-label">URL</label>
                             <input type="url" name="url" class="form-control" value="{{ $slider->url }}">
+                        </div>
+                        {{-- Type --}}
+                        <div class="col-md-5">
+                            <label class="form-label">Type</label>
+                            <select name="type" class="form-select" required>
+                                <option value="" disabled selected>Choisir le type</option>
+                                <option value="web" {{ $slider->type == 'web' ? 'selected' : '' }}>Web</option>
+                                <option value="boutique" {{ $slider->type == 'boutique' ? 'selected' : '' }}>Boutique
+                                </option>
+                            </select>
                         </div>
 
                         {{-- Description --}}

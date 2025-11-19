@@ -66,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         //partager le nombre d'éléments dans le panier dans toutes les vues(frontend)
-        view()->composer('frontend.layouts.app', function ($view) {
+        view()->composer(['frontend.layouts.app', 'frontend.web.layouts.appweb'], function ($view) {
             $count = 0;
             $panier = session('panier', []);
             if (!empty($panier)) {
@@ -122,7 +122,7 @@ class AppServiceProvider extends ServiceProvider
             $pendingCommandesCount = \App\Models\Commande::where('statut', 'en_attente')->count();
         } else {
             $pendingCommandesCount = 0;
-        }   
+        }
 
         view()->share([
             'data_parametre' => $data_parametre,

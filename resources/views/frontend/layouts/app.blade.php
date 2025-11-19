@@ -682,7 +682,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
         <div class="container d-flex align-items-center">
             <!-- Logo -->
-            <a class="navbar-brand fw-bold" href="{{ route('accueil') }}">
+            <a class="navbar-brand fw-bold" href="{{ route('web.index') }}">
                 <div id="logo" class="logo-wrapper rounded-circle">
                     <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
                         alt="Foani" class="logo-image">
@@ -713,10 +713,10 @@
             <!-- Menu desktop -->
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-bold">
-                    <li class="nav-item"><a class="nav-link text-white {{ Route::is('accueil') ? 'active' : '' }}"
-                            href="{{ route('accueil') }}"> ACCUEIL</a></li>
+                    <li class="nav-item"><a class="nav-link text-white "
+                            href="{{ route('web.index') }}"> ACCUEIL</a></li>
 
-                    @foreach ($categories_pages->where('slug', '!=', 'activites') as $categorie_page)
+                    {{-- @foreach ($categories_pages->where('slug', '!=', 'activites') as $categorie_page)
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white px-1 {{ Route::is('page.show') ? 'active' : '' }}"
                                 href="#" id="navbar{{ $categorie_page->id }}" role="button"
@@ -731,12 +731,12 @@
                                 @endforeach
                             </ul>
                         </li>
-                    @endforeach
+                    @endforeach --}}
 
-                    <li class="nav-item"><a
+                    {{-- <li class="nav-item"><a
                             class="nav-link text-white {{ Route::is('page.activites') ? 'active' : '' }}"
                             href="{{ route('page.activites') }}">
-                            ACTIVITES</a></li>
+                            ACTIVITES</a></li> --}}
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white px-1 {{ Route::is('points_de_vente') ? 'active' : '' }}"
@@ -756,9 +756,10 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item"><a
+                    {{-- <li class="nav-item"><a
                             class="nav-link text-white {{ Route::is('boutique.index') ? 'active' : '' }}"
-                            href="{{ route('boutique.index') }}">BOUTIQUE</a></li>
+                            href="{{ route('boutique.index') }}">BOUTIQUE</a></li> --}}
+
                     <li class="nav-item"><a class="nav-link text-white {{ Route::is('contact') ? 'active' : '' }}"
                             href="{{ route('contact') }}">CONTACT</a></li>
                 </ul>
@@ -868,7 +869,7 @@
     </nav>
 
     <!--placer le breadcrumb ici si la route est different de accueil-->
-    @if (Request::routeIs('accueil') == false)
+    @if (Request::routeIs('boutique.accueil') == false)
         @include('frontend.components.breadcrumb')
     @endif
 
