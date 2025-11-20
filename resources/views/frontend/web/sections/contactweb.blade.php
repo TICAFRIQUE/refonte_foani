@@ -319,6 +319,42 @@
 
             .contact-info {
                 padding: 40px 30px;
+                text-align: center; /* CENTRAGE MOBILE */
+            }
+
+            /* MOBILE: Centrage des éléments header */
+            .contact-header {
+                text-align: center;
+            }
+
+            .contact-header h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            /* MOBILE: Centrage des contact items */
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 25px 20px;
+                align-items: center;
+            }
+
+            .contact-icon {
+                margin: 0 auto 15px;
+            }
+
+            .contact-details {
+                text-align: center;
+            }
+
+            /* MOBILE: Centrage des réseaux sociaux */
+            .contact-social {
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
             }
 
             .map-wrapper {
@@ -330,37 +366,59 @@
                 margin-top: 20px;
                 max-width: 100%;
             }
-
-            .social-links {
-                justify-content: center;
-            }
         }
 
         @media (max-width: 480px) {
             .contact-info {
                 padding: 30px 20px;
+                text-align: center; /* CENTRAGE SMALL MOBILE */
             }
 
             .contact-item {
-                flex-direction: column;
-                text-align: center;
                 padding: 20px 15px;
+                text-align: center;
             }
 
             .contact-icon {
+                width: 50px;
+                height: 50px;
                 margin: 0 auto 15px;
+            }
+
+            .contact-icon i {
+                font-size: 1.3rem;
+            }
+
+            .contact-details h4 {
+                font-size: 1.1rem;
+            }
+
+            .contact-details p {
+                font-size: 0.9rem;
             }
 
             .map-header {
                 padding: 30px 20px 15px;
+                text-align: center;
             }
 
             .map-wrapper {
                 height: 300px;
             }
+
+            /* MOBILE: Responsive social links */
+            .social-links {
+                gap: 12px;
+            }
+
+            .social-link {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
         }
 
-        /* VARIABLES CSS (à ajouter dans le head si pas déjà présentes) */
+        /* Variables CSS (à ajouter dans le head si pas déjà présentes) */
         :root {
             --color-primary: #284093;
             --color-primary-light: #3f5eb8;
@@ -371,11 +429,6 @@
         }
     </style>
 @endpush
-
-
-
-
-
 
 <!-- CONTACT SECTION -->
 <section id="contact" class="contact-section">
