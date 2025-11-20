@@ -50,6 +50,10 @@
             overflow-x: hidden;
         }
 
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
         /* NAVIGATION */
         .navbar {
             background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));

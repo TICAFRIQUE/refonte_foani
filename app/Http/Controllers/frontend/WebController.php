@@ -22,8 +22,12 @@ class WebController extends Controller
 
         //recuperer  la page presentation
         $presentation = Page::whereSlug('presentation')->with('media')->first();
+
+        //mot du directeur
+        $directeur = Page::whereSlug('mot-du-directeur')->with('media')->first();
+
         //
-        return view('web', compact('sliders', 'activites', 'presentation'));
+        return view('web', compact('sliders', 'activites', 'presentation', 'directeur'));
     }
 
     //contenu dynamique des pages

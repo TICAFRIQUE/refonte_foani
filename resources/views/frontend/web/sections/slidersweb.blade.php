@@ -29,7 +29,7 @@
         @media (max-width: 767px) {
             .owl-carousel .owl-item img {
                
-                padding-top: 100px
+                padding-top: 120px
             }
         }
         
@@ -37,7 +37,7 @@
     </style>
 @endpush
 
-<section class="slider-section">
+<section id="home" class="slider-section">
     {{-- Loading state --}}
     <div class="slider-loading d-none" id="slider-loading">
         <div class="spinner-slider"></div>

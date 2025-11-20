@@ -1,7 +1,7 @@
-   @push('styles')
+@push('styles')
        <style>
            .about-section {
-               padding: 50px 0;
+               padding: 20px 0;
                background: linear-gradient(135deg, #f8f9ff, #ffffff);
            }
 
@@ -49,8 +49,8 @@
 
            .about-image img {
                width: 100%;
-               height: 400px;
-               object-fit: cover;
+               height: 300px;
+               object-fit: contain;
                transition: transform 0.4s ease;
            }
 
@@ -71,10 +71,42 @@
                z-index: 1;
            }
 
+           .mot_directeur {
+               display: inline-block;
+               text-transform: uppercase;
+               margin-top: 15px;
+               font-weight: 600;
+               font-size: 1.1rem;
+               background-color: var(--color-primary);
+               padding: 10px 15px;
+               color: #fff;
+               text-decoration: none;
+               border-radius: 5px;
+               border-bottom: 2px solid var(--color-primary);
+               transition: color 0.3s, border-color 0.3s;
+
+           }
+
+           .mot_directeur:hover {
+               background-color: var(--color-secondary);
+               color: #fff;
+               border-color: #ffffff;
+           }
+
            @media (max-width: 768px) {
                .about-content {
                    grid-template-columns: 1fr;
                    gap: 40px;
+               }
+
+               /* MOBILE: Image en premier */
+               .about-image {
+                   order: 1;
+               }
+
+               /* MOBILE: Texte/description en second */
+               .about-text {
+                   order: 2;
                }
 
                .carousel-buttons {
@@ -101,15 +133,16 @@
 
            <div class="about-content">
                <div class="about-text" data-aos="fade-right" data-aos-delay="200">
-                   <h3>Notre Histoire</h3>
+                   {{-- <h3>Notre Histoire</h3> --}}
                    <p>
-                    {!!$presentation?->description!!}
+                       {!! $presentation?->description !!}
                    </p>
+                   <a href="{{ route('page.show', 'mot-du-directeur') }}" class="mot_directeur">Lire mot du directeur <i
+                           class="bi bi-caret-right-fill"></i></a>
                </div>
 
                <div class="about-image" data-aos="fade-left" data-aos-delay="300">
-                   <img src="{{$presentation?->getFirstMediaUrl('image') }}"
-                       alt="FOANI - Notre entreprise">
+                   <img src="{{ $presentation?->getFirstMediaUrl('image') }}" alt="FOANI - Notre entreprise">
                </div>
            </div>
        </div>

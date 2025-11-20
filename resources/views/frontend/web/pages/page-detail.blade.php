@@ -692,7 +692,7 @@
         <div class="detail-hero-content" data-aos="fade-up">
             <!-- Breadcrumb -->
             <div class="detail-breadcrumb">
-                <a href="{{ route('accueil') }}">
+                <a href="{{ route('web.index') }}">
                     <i class="bi bi-house-door"></i> 
                     <span>Accueil</span>
                 </a>
