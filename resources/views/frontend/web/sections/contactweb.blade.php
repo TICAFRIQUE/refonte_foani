@@ -319,7 +319,8 @@
 
             .contact-info {
                 padding: 40px 30px;
-                text-align: center; /* CENTRAGE MOBILE */
+                text-align: center;
+                /* CENTRAGE MOBILE */
             }
 
             /* MOBILE: Centrage des éléments header */
@@ -371,7 +372,8 @@
         @media (max-width: 480px) {
             .contact-info {
                 padding: 30px 20px;
-                text-align: center; /* CENTRAGE SMALL MOBILE */
+                text-align: center;
+                /* CENTRAGE SMALL MOBILE */
             }
 
             .contact-item {
@@ -458,8 +460,9 @@
                             <i class="bi bi-geo-alt-fill"></i>
                         </div>
                         <div class="contact-details">
+                            je parle de la section presentation sur mobile lordre placer l'image avant la description
                             <h4>Adresse</h4>
-                            <p>{{ $data_parametre->localisation }} </p>
+                            <p>{{ $data_parametre->localisation }}</p>
                         </div>
                     </div>
 

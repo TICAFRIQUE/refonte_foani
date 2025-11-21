@@ -17,7 +17,7 @@
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@yield('og_title', 'Foani - Services Côte d\'Ivoire')">
     <meta property="og:description" content="@yield('og_description', 'Découvrez Foani, votre spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits de qualité premium, livraison rapide et fraîcheur garantie.')">
-    <meta property="og:image" content="@yield('og_image', asset('images/foani-og-image.jpg'))">
+    <meta property="og:image" content="@yield('og_image', asset('front/images/logoweb.png'))">
     <meta property="og:url" content="@yield('og_url', url()->current())">
     <meta property="og:site_name" content="Foani">
     <meta property="og:locale" content="fr_CI">
@@ -26,7 +26,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('twitter_title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire')">
     <meta name="twitter:description" content="@yield('twitter_description', 'Découvrez Foani, votre spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits de qualité premium, livraison rapide et fraîcheur garantie.')">
-    <meta name="twitter:image" content="@yield('twitter_image', asset('images/foani-twitter-image.jpg'))">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('front/images/logoweb.png'))">
     <meta name="twitter:site" content="@FoaniCI">
     <meta name="twitter:creator" content="@FoaniCI">
 
