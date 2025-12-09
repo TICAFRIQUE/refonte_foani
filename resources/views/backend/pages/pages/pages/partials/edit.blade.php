@@ -47,7 +47,8 @@
                                 </div>
                                 <div class="mt-3">
                                     <label for="contenu" class="form-label fw-bold">Description</label>
-                                    <textarea name="description" id="ckeditor-classic">{{ $page->description }}</textarea>                                </div>
+                                    <textarea name="description" id="ckeditor-classic">{{ $page->description }}</textarea>
+                                </div>
                             </div>
                             {{-- Colonne droite : Image et options --}}
                             <div class="col-md-4">
@@ -76,6 +77,11 @@
                                     <label for="mot_cle" class="form-label fw-bold">Mot clé</label>
                                     <input type="text" name="mot_cle" id="mot_cle" class="form-control"
                                         value="{{ $page->mot_cle }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="position" class="form-label fw-bold">Position</label>
+                                    <input type="number" name="position" id="position" class="form-control"
+                                        value="{{ $page->position }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="statut" class="form-label fw-bold">Statut</label>

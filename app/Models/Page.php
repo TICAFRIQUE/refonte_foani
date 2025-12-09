@@ -21,6 +21,7 @@ class Page extends Model implements HasMedia
         'mot_cle',
         'categorie_page_id',
         'statut',
+        'position',
         'description',
     ];
 
@@ -59,5 +60,11 @@ class Page extends Model implements HasMedia
     public function scopeActive($query)
     {
         return $query->where('statut', true);
+    }
+
+    //scope position
+    public function scopePosition($query)
+    {
+        return $query->orderBy('position', 'asc');
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('mot_cle')->nullable();
             $table->foreignId('categorie_page_id')->nullable()->constrained('categorie_pages')->onUpdate('cascade')->onDelete('cascade'); // clé étrangère vers categorie_pages
             $table->boolean('statut')->default(true); // true = visible, false = cachée
+            // $table->integer('position')->default(1); // position pour l'ordre d'affichage
             $table->longText('description')->nullable();
             $table->timestamps();
         });

@@ -33,7 +33,7 @@ class PageDynamiqueController extends Controller
     {
         try {
             $categories_pages = CategoriePage::whereSlug('activites')->active()->first();
-            $activites = Page::where('categorie_page_id', $categories_pages->id)->get();
+            $activites = Page::where('categorie_page_id', $categories_pages->id)->position()->get();
             return view('frontend.pages.gestion_page.activites', compact('categories_pages', 'activites'));
         } catch (\Throwable $th) {
             //throw $th;

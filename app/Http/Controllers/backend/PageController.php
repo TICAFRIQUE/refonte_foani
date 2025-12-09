@@ -15,7 +15,7 @@ class PageController extends  Controller
     public function index()
     {
         try {
-            $pages = Page::with('categorie')->get();
+            $pages = Page::with('categorie')->position()->get();
             return view('backend.pages.pages.pages.index', compact('pages'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
@@ -46,6 +46,7 @@ class PageController extends  Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
             'description' => 'nullable|string',
             'statut' => 'required|boolean',
+            'position' => 'required|integer',
         ]);
 
         try {
@@ -55,7 +56,8 @@ class PageController extends  Controller
                 'mot_cle' => $request->mot_cle,
                 'categorie_page_id' => $request->categorie_page_id,
                 'description' => $request->description,
-                'statut' => $request->statut
+                'statut' => $request->statut,
+                'position' => $request->position
             ]);
 
             // enrgistrer l'image
@@ -98,6 +100,7 @@ class PageController extends  Controller
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
                 'description' => 'nullable|string',
                 'statut' => 'required|boolean',
+                'position' => 'required|integer',
             ]);
 
             // Vérifier le libellé unique
@@ -122,6 +125,7 @@ class PageController extends  Controller
                 'categorie_page_id' => $request->categorie_page_id,
                 'description' => $request->description,
                 'statut' => $request->statut,
+                'position' => $request->position,
             ]);
 
             return redirect()->route('pages.index')->with('success', 'La page a été mise à jour avec succès.');

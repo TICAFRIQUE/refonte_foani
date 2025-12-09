@@ -18,7 +18,7 @@ class WebController extends Controller
         $sliders = Slider::visible()->web()->orderBy('position', 'asc')->get();
 
         //recuperer les pages activites
-        $activites = Page::where('categorie_page_id', CategoriePage::whereSlug('activites')->first()->id)->get();
+        $activites = Page::where('categorie_page_id', CategoriePage::whereSlug('activites')->first()->id)->position()->get();
 
         //recuperer  la page presentation
         $presentation = Page::whereSlug('presentation')->with('media')->first();

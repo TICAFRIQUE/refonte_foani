@@ -35,7 +35,7 @@
                             style="width:100%">
                             <thead class="table-primary text-center">
                                 <tr>
-                                    <th class="d-none">#</th>
+                                    <th>Ordre</th>
                                     <th>Image</th>
                                     <th>Libelle</th>
                                     <th>Catégorie</th>
@@ -50,7 +50,7 @@
                             <tbody>
                                 @forelse ($pages as $key => $page)
                                     <tr id="row_{{ $page->id }}">
-                                        <td class="text-center d-none">{{ ++$key }}</td>
+                                        <td class="text-center">{{ $page->position }}</td>
                                          <td>
                                             <img class="rounded avatar-sm"
                                                 src="{{ $page->hasMedia('image') ? $page->getFirstMediaUrl('image') : asset('front/images/logo.png') }}"

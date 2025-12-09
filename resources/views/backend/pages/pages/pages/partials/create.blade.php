@@ -71,6 +71,12 @@
                                     <input type="text" name="mot_cle" id="mot_cle" class="form-control"
                                         value="{{ old('mot_cle') }}">
                                 </div>
+                                
+                                <div class="mb-3">
+                                    <label for="position" class="form-label fw-bold">Position</label>
+                                    <input type="number" name="position" id="position" class="form-control"
+                                        value="{{ old('position', 1) }}">
+                                </div>
                                 <div class="mb-3">
                                     <label for="statut" class="form-label fw-bold">Statut</label>
                                     <select name="statut" id="statut" class="form-select">
