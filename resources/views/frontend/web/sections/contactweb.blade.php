@@ -460,7 +460,6 @@
                             <i class="bi bi-geo-alt-fill"></i>
                         </div>
                         <div class="contact-details">
-                            je parle de la section presentation sur mobile lordre placer l'image avant la description
                             <h4>Adresse</h4>
                             <p>{{ $data_parametre?->localisation }}</p>
                         </div>

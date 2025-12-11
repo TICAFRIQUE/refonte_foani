@@ -715,8 +715,10 @@
                     <ul class="list-unstyled">
                         <li><i class="bi bi-geo-alt"></i> {{ $data_parametre?->localisation }}</li>
                         <li><i class="bi bi-telephone"></i> {{ $data_parametre?->contact1 }}</li>
+                        <li><i class="bi bi-telephone"></i> {{ $data_parametre?->contact2 }}</li>
+                        <li><i class="bi bi-telephone"></i> {{ $data_parametre?->contact3 }}</li>
                         <li><i class="bi bi-envelope"></i> {{ $data_parametre?->email1 }}</li>
-
+                        <li><i class="bi bi-envelope"></i> {{ $data_parametre?->email2 }}</li>
                     </ul>
                 </div>
             </div>

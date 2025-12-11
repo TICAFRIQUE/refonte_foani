@@ -547,7 +547,7 @@
                                 </div>
                                 <div class="contact-details">
                                     <h6>Adresse</h6>
-                                    <p>Zone industrielle de Yopougon, cité Bel Air, Abidjan, Côte d'Ivoire</p>
+                                    <p>{{ $data_parametre?->localisation }}</p>
                                 </div>
                             </div>
 
@@ -557,7 +557,8 @@
                                 </div>
                                 <div class="contact-details">
                                     <h6>Email</h6>
-                                    <p><a href="mailto:info@foani.ci">info@foani.ci</a></p>
+                                    <p><a href="mailto:{{ $data_parametre?->email1 }}">{{ $data_parametre?->email1 }}</a></p>
+                                    <p><a href="mailto:{{ $data_parametre?->email2 }}">{{ $data_parametre?->email2 }}</a></p>
                                 </div>
                             </div>
 
@@ -567,7 +568,7 @@
                                 </div>
                                 <div class="contact-details">
                                     <h6>Téléphone siège</h6>
-                                    <p><a href="tel:+2250505969625">+225 05 05 96 96 25</a></p>
+                                    <p><a href="tel:{{ $data_parametre?->contact1 }}">{{ $data_parametre?->contact1 }}</a></p>
                                 </div>
                             </div>
 
@@ -589,7 +590,7 @@
                                 </div>
                                 <div class="direction-contact">
                                     <i class="bi bi-telephone"></i>
-                                    <span>Cel: <a href="tel:+2250505969625">05 05 96 96 25</a></span>
+                                    <span>Cel: <a href="tel:{{ $data_parametre?->contact2 }}">{{ $data_parametre?->contact2 }}</a></span>
                                 </div>
                             </div>
 
@@ -600,11 +601,11 @@
                                 </div>
                                 <div class="direction-contact">
                                     <i class="bi bi-telephone"></i>
-                                    <span>Cel: <a href="tel:+2250505075727">05 05 07 57 27</a></span>
+                                    <span>Cel: <a href="tel:{{ $data_parametre?->contact1 }}">{{ $data_parametre?->contact1 }}</a></span>
                                 </div>
                                 <div class="direction-contact">
                                     <i class="bi bi-telephone"></i>
-                                    <span>Cel: <a href="tel:+2250102038662">01 02 03 86 62</a></span>
+                                    <span>Cel: <a href="tel:{{ $data_parametre?->contact3 }}">{{ $data_parametre?->contact3 }}</a></span>
                                 </div>
                             </div>
 
