@@ -71,7 +71,7 @@
                z-index: 1;
            }
 
-           .mot_directeur {
+           .presentation {
                display: inline-block;
                text-transform: uppercase;
                margin-top: 15px;
@@ -87,7 +87,7 @@
 
            }
 
-           .mot_directeur:hover {
+           .presentation:hover {
                background-color: var(--color-secondary);
                color: #fff;
                border-color: #ffffff;
@@ -137,7 +137,7 @@
                    <p>
                        {!! $presentation?->description !!}
                    </p>
-                   <a href="{{ route('page.show', 'mot-du-directeur') }}" class="mot_directeur">Lire mot du directeur <i
+                   <a href="{{ route('page.show', 'presentation') }}" class="presentation">Lire l'intégralité <i
                            class="bi bi-caret-right-fill"></i></a>
                </div>
 
