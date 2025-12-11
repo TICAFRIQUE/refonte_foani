@@ -6,7 +6,7 @@
     <!-- HERO CAROUSEL AVEC IMAGES UNSPLASH -->
     @include('frontend.web.sections.slidersweb')
     <!-- À PROPOS SIMPLIFIÉ -->
-    @include('frontend.web.sections.presentationweb')
+    {{-- @include('frontend.web.sections.presentationweb') --}}
 
     <!-- MOT DU DIRECTEUR - NOUVELLE SECTION -->
     @include('frontend.web.sections.motdirecteurweb')

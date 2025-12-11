@@ -3,7 +3,7 @@
     <style>
         /* MOT DU DIRECTEUR SECTION */
         .director-section {
-            padding: 100px 0;
+            padding: 50px 0;
             background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 50%, #ffffff 100%);
             position: relative;
             overflow: hidden;
@@ -162,7 +162,7 @@
         }
 
         .director-header {
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
 
         .director-label {
@@ -205,7 +205,7 @@
             color: #666;
             line-height: 1.8;
             font-style: italic;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             padding-left: 25px;
             border-left: 4px solid var(--color-secondary);
         }
@@ -433,9 +433,9 @@
                     <img src="{{ $directeur?->getFirstMediaUrl('image') }}" alt="Directeur FOANI">
                     
                     <!-- Badge citation -->
-                    <div class="quote-badge">
+                    {{-- <div class="quote-badge">
                         <i class="bi bi-quote"></i>
-                    </div>
+                    </div> --}}
 
                     <!-- Info directeur -->
                     <div class="director-info">

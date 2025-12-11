@@ -462,7 +462,7 @@
                         <div class="contact-details">
                             je parle de la section presentation sur mobile lordre placer l'image avant la description
                             <h4>Adresse</h4>
-                            <p>{{ $data_parametre->localisation }}</p>
+                            <p>{{ $data_parametre?->localisation }}</p>
                         </div>
                     </div>
 
@@ -473,8 +473,9 @@
                         </div>
                         <div class="contact-details">
                             <h4>Téléphone</h4>
-                            <p><a href="tel:+22507123456">+225 07 12 34 56 78</a><br>
-                                <a href="tel:+22505987654">+225 05 98 76 54 32</a>
+                            <p><a href="tel:{{ $data_parametre?->contact1 }}">{{ $data_parametre?->contact1 }}</a><br>
+                                <a href="tel:{{ $data_parametre?->contact2 }}">{{ $data_parametre?->contact2 }}</a><br>
+                                <a href="tel:{{ $data_parametre?->contact3 }}">{{ $data_parametre?->contact3 }}</a>
                             </p>
                         </div>
                     </div>
@@ -486,8 +487,8 @@
                         </div>
                         <div class="contact-details">
                             <h4>Email</h4>
-                            <p><a href="mailto:contact@foani.ci">contact@foani.ci</a><br>
-                                <a href="mailto:info@foani.ci">info@foani.ci</a>
+                            <p><a href="mailto:{{ $data_parametre?->email1 }}">{{ $data_parametre?->email1 }}</a><br>
+                                <a href="mailto:{{ $data_parametre?->email2 }}">{{ $data_parametre?->email2 }}</a>
                             </p>
                         </div>
                     </div>
@@ -547,9 +548,9 @@
                         <div class="map-overlay">
                             <div class="map-info">
                                 <h5><i class="bi bi-geo-alt-fill"></i> FOANI</h5>
-                                <p>{{ $data_parametre->localisation }}</p>
-                                <a href="https://maps.google.com/?q={{ $data_parametre->localisation }}" target="_blank"
-                                    class="btn btn-map">
+                                <p>{{ $data_parametre?->localisation }}</p>
+                                <a href="https://maps.google.com/?q={{ $data_parametre?->localisation }}"
+                                    target="_blank" class="btn btn-map">
                                     <i class="bi bi-map"></i> Voir sur Google Maps
                                 </a>
                             </div>

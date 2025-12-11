@@ -617,7 +617,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('boutique.accueil') }}" target="_blank">
+                        <a class="nav-link" href="{{ route('boutique.accueil') }}">
                             <i class="bi bi-bag-fill me-2"></i> Boutique</a>
                     </li>
                     {{-- <li class="nav-item">

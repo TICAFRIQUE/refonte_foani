@@ -1,4 +1,3 @@
-{{-- filepath: c:\laragon\www\foani\resources\views\frontend\layouts\app.blade.php --}}
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -169,191 +168,32 @@
             --color-vert2: #345e24;
             --color-rouge: #a61c1c;
             --color-jaune: #f1c40f;
-            --color-primary: #284093;
-            --color-secondary: #6c7ae0;
         }
 
-        /* MENU DESKTOP AVEC ICÔNES ET ESPACEMENT */
-        @media (min-width: 992px) {
-            /* Espacement entre les liens */
-            .navbar-nav {
-                gap: 35px; /* Espace entre chaque lien */
-            }
-
-            .navbar-nav .nav-item {
-                position: relative;
-            }
-
-            /* Style des liens avec icônes */
-            .navbar-nav .nav-link {
-                display: inline-flex;
-                align-items: center;
-                gap: 10px; /* Espace entre icône et texte */
-                padding: 12px 20px;
-                font-weight: 600;
-                font-size: 0.95rem;
-                letter-spacing: 0.3px;
-                color: white;
-                background: rgba(255, 255, 255, 0.05);
-                border-radius: 12px;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                overflow: hidden;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            /* Icônes dans les liens */
-            .navbar-nav .nav-link i {
-                font-size: 1.2rem;
-                transition: all 0.3s ease;
-            }
-
-            /* Effet brillant au survol */
-            .navbar-nav .nav-link::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-                transition: left 0.5s;
-            }
-
-            .navbar-nav .nav-link:hover::before {
-                left: 100%;
-            }
-
-            /* Effet au survol */
-            .navbar-nav .nav-link:hover {
-                background: rgba(255, 255, 255, 0.15);
-                transform: translateY(-3px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-                border-color: rgba(255, 255, 255, 0.3);
-                color: white;
-            }
-
-            .navbar-nav .nav-link:hover i {
-                transform: scale(1.15) rotate(5deg);
-            }
-
-            /* Lien actif */
-            .navbar-nav .nav-link.active {
-                background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15));
-                border-color: rgba(255, 255, 255, 0.3);
-                color: white;
-                font-weight: 700;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            }
-
-            .navbar-nav .nav-link.active i {
-                animation: bounce 0.5s;
-            }
-
-            /* Style dropdown avec icônes */
-            .navbar-nav .dropdown-toggle::after {
-                margin-left: 8px;
-                transition: transform 0.3s ease;
-            }
-
-            .navbar-nav .dropdown:hover .dropdown-toggle::after {
-                transform: rotate(180deg);
-            }
-
-            /* Menu dropdown amélioré */
-            .navbar-nav .dropdown-menu {
-                border: none;
-                border-radius: 15px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-                padding: 12px;
-                margin-top: 12px;
-                background: white;
-                min-width: 250px;
-            }
-
-            .navbar-nav .dropdown-item {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 12px 18px;
-                border-radius: 10px;
-                transition: all 0.3s ease;
-                font-weight: 500;
-                color: #333;
-            }
-
-            .navbar-nav .dropdown-item i {
-                font-size: 1.1rem;
-                color: var(--color-primary);
-                transition: all 0.3s ease;
-            }
-
-            .navbar-nav .dropdown-item:hover {
-                background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-                color: white;
-                transform: translateX(8px);
-                padding-left: 24px;
-            }
-
-            .navbar-nav .dropdown-item:hover i {
-                color: white;
-                transform: scale(1.2);
-            }
-
-            /* Animation bounce pour icône active */
-            @keyframes bounce {
-                0%, 100% { transform: scale(1) rotate(0deg); }
-                25% { transform: scale(1.2) rotate(-5deg); }
-                50% { transform: scale(1.1) rotate(5deg); }
-                75% { transform: scale(1.15) rotate(-3deg); }
-            }
-
-            /* Ligne de soulignement animée */
-            .navbar-nav .nav-link::after {
-                content: '';
-                position: absolute;
-                bottom: 8px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 0;
-                height: 2px;
-                background: rgba(255, 255, 255, 0.8);
-                border-radius: 2px;
-                transition: width 0.3s ease;
-            }
-
-            .navbar-nav .nav-link:hover::after,
-            .navbar-nav .nav-link.active::after {
-                width: 60%;
-            }
+        /* Effets pour les liens de navigation */
+        .navbar-nav .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
         }
 
-        /* Effets pour les liens de navigation MOBILE */
-        @media (max-width: 991.98px) {
-            .navbar-nav .nav-link {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 15px 20px;
-                margin: 5px 0;
-                border-radius: 12px;
-                transition: all 0.3s ease;
-            }
-
-            .navbar-nav .nav-link i {
-                font-size: 1.3rem;
-            }
-
-            .navbar-nav .nav-link:hover {
-                background-color: rgba(255, 255, 255, 0.15);
-                transform: translateX(5px);
-            }
+        /* Effet au survol */
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transform: translateY(-2px);
         }
 
         /* Effet au clic */
         .navbar-nav .nav-link:active {
             transform: scale(0.95);
             background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Lien actif */
+        .navbar-nav .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
+            font-weight: bold;
         }
 
         /* Effets pour les éléments dropdown */
@@ -844,7 +684,7 @@
             <!-- Logo -->
             <a class="navbar-brand fw-bold" href="{{ route('web.index') }}">
                 <div id="logo" class="logo-wrapper rounded-circle">
-                    <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
+                    <img src="{{ $data_parametre ? URL::asset($data_parametre?->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
                         alt="Foani" class="logo-image">
                 </div>
             </a>
@@ -857,6 +697,14 @@
                 </button>
             </form>
 
+            <!-- Panier mobile (visible uniquement sur mobile) -->
+            {{-- <a href="{{ route('panier.index') }}" class="mobile-cart-link d-lg-none">
+                <i class="bi bi-cart"></i>
+                @if(($count ?? 0) > 0)
+                    <span class="mobile-cart-badge">{{ $count }}</span>
+                @endif
+            </a> --}}
+
             <!-- Menu burger -->
             <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -865,51 +713,55 @@
             <!-- Menu desktop -->
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-bold">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('web.index') }}">
-                            <i class="bi bi-house-door-fill"></i>
-                            <span>ACCUEIL</span>
-                        </a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link text-white "
+                            href="{{ route('web.index') }}"> ACCUEIL</a></li>
 
-                    <!-- Boutique -->
-                    <li class="nav-item">
-                        <a class="nav-link text-white {{ Route::is('boutique.index') || Route::is('boutique.categorie') || Route::is('boutique.accueil') ? 'active' : '' }}"
-                            href="{{ route('boutique.accueil') }}">   
-                            <i class="bi bi-cart-fill"></i>
-                            <span>BOUTIQUE</span>
-                        </a>
-                    </li>
+                    {{-- @foreach ($categories_pages->where('slug', '!=', 'activites') as $categorie_page)
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white px-1 {{ Route::is('page.show') ? 'active' : '' }}"
+                                href="#" id="navbar{{ $categorie_page->id }}" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ $categorie_page->libelle }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbar{{ $categorie_page->id }}">
+                                @foreach ($categorie_page->pages as $page)
+                                    <li><a class="dropdown-item"
+                                            href="{{ route('page.show', ['slug' => $page->slug]) }}">{{ $page->libelle }}</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endforeach --}}
 
+                    {{-- <li class="nav-item"><a
+                            class="nav-link text-white {{ Route::is('page.activites') ? 'active' : '' }}"
+                            href="{{ route('page.activites') }}">
+                            ACTIVITES</a></li> --}}
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white {{ Route::is('points_de_vente') ? 'active' : '' }}"
+                        <a class="nav-link dropdown-toggle text-white px-1 {{ Route::is('points_de_vente') ? 'active' : '' }}"
                             href="#" id="navbar" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="bi bi-geo-alt-fill"></i>
-                            <span>POINTS DE VENTE</span>
+                            POINTS DE VENTE
                         </a>
                         @php
                             $points_de_vente = \App\Models\CategoriePointVente::active()->alphabetique()->get();
                         @endphp
                         <ul class="dropdown-menu" aria-labelledby="navbar">
                             @foreach ($points_de_vente as $item)
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('points_de_vente', ['slug' => $item->slug]) }}">
-                                        <i class="bi bi-pin-map"></i>
-                                        {{ $item->libelle }}
-                                    </a>
+                                <li><a class="dropdown-item"
+                                        href="{{ route('points_de_vente', ['slug' => $item->slug]) }}">{{ $item->libelle }}</a>
                                 </li>
                             @endforeach
                         </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link text-white {{ Route::is('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
-                            <i class="bi bi-telephone-fill"></i>
-                            <span>CONTACT</span>
-                        </a>
-                    </li>
+                    {{-- <li class="nav-item"><a
+                            class="nav-link text-white {{ Route::is('boutique.index') ? 'active' : '' }}"
+                            href="{{ route('boutique.index') }}">BOUTIQUE</a></li> --}}
+
+                    <li class="nav-item"><a class="nav-link text-white {{ Route::is('contact') ? 'active' : '' }}"
+                            href="{{ route('contact') }}">CONTACT</a></li>
                 </ul>
 
                 <!-- Actions desktop -->
@@ -960,7 +812,7 @@
                         <div class="dropdown">
                             <a class="btn btn-outline-light dropdown-toggle fw-bold" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> {{ Auth::user()->username }}
+                                <i class="bi bi-person-circle"></i> {{ Auth::user()?->username }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
@@ -997,7 +849,7 @@
                         <div class="dropdown">
                             <a class="btn btn-outline-light dropdown-toggle fw-bold w-100" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> {{ Auth::user()->username }}
+                                <i class="bi bi-person-circle"></i> {{ Auth::user()?->username }}
                             </a>
                             <ul class="dropdown-menu w-100">
                                 <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
@@ -1041,6 +893,18 @@
         <i class="bi bi-whatsapp fs-3"></i>
     </a>
 
+    {{-- <a href="{{ route('panier.index') }}" id="btnPanier"
+        class="btn btn-warning rounded-circle shadow position-fixed d-flex align-items-center justify-content-center mt-4"
+        style="bottom: 25px; right: 25px; z-index: 999; width: 56px; height: 56px;">
+        <span class="position-relative">
+            <i class="bi bi-cart fs-3 text-white"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                style="font-size:0.8rem;">
+                {{ $count ?? 0 }}
+            </span>
+        </span>
+    </a> --}}
+
     {{-- ...MOBILE BAR --}}
     @include('frontend.components.mobile_navBarV1')
 
@@ -1066,6 +930,8 @@
     <!-- Custom JS -->
 
     <script src="{{ asset('myJs/js/cart_add.js') }}"></script>
+    {{-- <script src="{{ asset('myJs/js/cart_update.js') }}"></script>
+    <script src="{{ asset('myJs/js/cart_remove.js') }}"></script> --}}
     @stack('scripts')
 
     <!-- bootstrap form validation -->
@@ -1128,12 +994,13 @@
     <script>
         // Toggle barre de recherche desktop amélioré
         document.getElementById('searchToggleBtn').addEventListener('click', function(e) {
-            e.stopPropagation();
+            e.stopPropagation(); // Empêche la propagation du clic
             const container = document.getElementById('navbarSearchContainer');
             const input = document.getElementById('navbarSearchInput');
             const toggleBtn = this;
 
             if (container.style.display === 'none' || container.style.display === '') {
+                // Afficher la barre et cacher l'icône
                 container.style.display = 'block';
                 container.classList.remove('closing');
                 toggleBtn.style.opacity = '0';
@@ -1142,13 +1009,14 @@
 
                 setTimeout(() => {
                     input.focus();
-                    input.select();
+                    input.select(); // Sélectionne le texte existant
                 }, 150);
             } else {
                 closeSearchBar();
             }
         });
 
+        // Fonction pour fermer la barre de recherche avec animation
         function closeSearchBar() {
             const container = document.getElementById('navbarSearchContainer');
             const toggleBtn = document.getElementById('searchToggleBtn');
@@ -1160,24 +1028,30 @@
                 container.classList.remove('closing');
                 toggleBtn.classList.remove('active');
 
+                // Réafficher l'icône avec animation
                 toggleBtn.style.opacity = '1';
                 toggleBtn.style.visibility = 'visible';
             }, 300);
         }
 
+        // Empêcher TOUS les clics dans le container de recherche de se propager
         document.getElementById('navbarSearchContainer').addEventListener('click', function(e) {
             e.stopPropagation();
         });
 
+        // Gestion spécifique du formulaire de recherche DESKTOP
         const searchForm = document.querySelector('.navbar-search-form');
         const searchSubmitBtn = document.querySelector('.btn-search-submit');
 
+        // Empêcher la propagation sur le formulaire et ajouter scroll=true
         searchForm.addEventListener('submit', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
+            // Récupérer la valeur de recherche
             const searchValue = document.getElementById('navbarSearchInput').value;
 
+            // Construire l'URL avec le paramètre scroll=true
             let url = '{{ route('boutique.index') }}';
             if (searchValue.trim()) {
                 url += '?recherche=' + encodeURIComponent(searchValue) + '&scroll=true';
@@ -1185,24 +1059,31 @@
                 url += '?scroll=true';
             }
 
+            // Rediriger vers la boutique
             window.location.href = url;
         });
 
+        // Empêcher la propagation sur le bouton de soumission
         searchSubmitBtn.addEventListener('click', function(e) {
             e.stopPropagation();
+            // Le formulaire va gérer la soumission
         });
 
+        // Empêcher la propagation sur l'input
         document.getElementById('navbarSearchInput').addEventListener('click', function(e) {
             e.stopPropagation();
         });
 
+        // Gestion du formulaire de recherche MOBILE
         const mobileSearchForm = document.querySelector('#mobile-search-form');
         if (mobileSearchForm) {
             mobileSearchForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
+                // Récupérer la valeur de recherche mobile
                 const mobileSearchValue = this.querySelector('input[name="recherche"]').value;
 
+                // Construire l'URL avec le paramètre scroll=true
                 let url = '{{ route('boutique.index') }}';
                 if (mobileSearchValue.trim()) {
                     url += '?recherche=' + encodeURIComponent(mobileSearchValue) + '&scroll=true';
@@ -1210,14 +1091,17 @@
                     url += '?scroll=true';
                 }
 
+                // Rediriger vers la boutique
                 window.location.href = url;
             });
         }
 
+        // Fermer la barre de recherche en cliquant ailleurs
         document.addEventListener('click', function(e) {
             const container = document.getElementById('navbarSearchContainer');
             const toggleBtn = document.getElementById('searchToggleBtn');
 
+            // Vérifier si le clic est en dehors du container ET du bouton toggle
             if (!container.contains(e.target) && !toggleBtn.contains(e.target)) {
                 if (container.style.display === 'block') {
                     closeSearchBar();
@@ -1225,6 +1109,7 @@
             }
         });
 
+        // Fermer avec la touche Escape
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const container = document.getElementById('navbarSearchContainer');
@@ -1235,6 +1120,7 @@
             }
         });
 
+        // Toggle barre de recherche mobile
         function toggleMobileSearch() {
             const searchBar = document.getElementById('mobile-search-bar');
             if (searchBar.style.display === 'none' || searchBar.style.display === '') {

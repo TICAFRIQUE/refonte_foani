@@ -331,6 +331,7 @@
         .btn-shop:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(42, 107, 42, 0.3);
+            color: white;
         }
 
         /* Alert personnalisée */
@@ -498,7 +499,7 @@
                                 <i class="bi bi-cart-x"></i>
                                 <h3>Votre panier est vide</h3>
                                 <p>Découvrez nos délicieux produits et commencez vos achats !</p>
-                                <a href="{{ route('boutique.index') }}" class="btn btn-shop">
+                                <a href="{{ route('boutique.accueil') }}" class="btn btn-shop">
                                    Découvrir nos produits
                                 </a>
                             </div>
@@ -583,7 +584,7 @@
                             </div>
 
                             <div class="action-buttons">
-                                <a href="{{ route('boutique.index') }}" class="btn btn-continue">
+                                <a href="{{ route('boutique.accueil') }}" class="btn btn-continue">
                                     <i class="bi bi-arrow-left me-2"></i>Continuer mes achats
                                 </a>
                                 <a href="{{ route('panier.caisse') }}" class="btn btn-validate btn-valide-cmd">

@@ -278,7 +278,7 @@ Route::controller(UserController::class)->group(function () {
 
 
 Route::controller(HomeController::class)->group(function () {
-    Route::get('/boutique.accueil', 'accueil')->name('boutique.accueil'); // page d'accueil
+    Route::get('/boutique', 'accueil')->name('boutique.accueil'); // page d'accueil
     Route::get('/contact', 'contact')->name('contact'); // page contact
     Route::get('/points-de-vente/{slug}', 'pointsDeVente')->name('points_de_vente'); // points de vente
     Route::get('/categories', 'categories')->name('categories'); // liste des categories
@@ -292,7 +292,7 @@ Route::controller(PageDynamiqueController::class)->group(function () {
 
 // boutique
 Route::controller(BoutiqueController::class)->group(function () {
-    Route::get('/boutique', 'index')->name('boutique.index'); // page boutique
+    Route::get('/boutique/tous-nos-produits', 'index')->name('boutique.index'); // page boutique
     Route::get('/boutique/categorie/{slug}', 'categorie')->name('boutique.categorie'); // page boutique par categorie', 'show')->name('boutique.show'); // page detail produit
 });
 
