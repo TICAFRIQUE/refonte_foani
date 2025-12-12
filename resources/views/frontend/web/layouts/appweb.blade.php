@@ -28,7 +28,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('twitter_title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire')">
     <meta name="twitter:description" content="@yield('twitter_description', 'Découvrez Foani, votre spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits de qualité premium, livraison rapide et fraîcheur garantie.')">
-    <meta name="twitter:image" content="@yield('twitter_image', asset('images/foani-twitter-image.jpg'))">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('front/images/logoweb.png'))">
     <meta name="twitter:site" content="@FoaniCI">
     <meta name="twitter:creator" content="@FoaniCI">
     <!-- Bootstrap CSS -->
@@ -715,10 +715,10 @@
                     <ul class="list-unstyled">
                         <li><i class="bi bi-geo-alt"></i> {{ $data_parametre?->localisation }}</li>
                         <li><i class="bi bi-telephone"></i> {{ $data_parametre?->contact1 }}</li>
-                        <li><i class="bi bi-telephone"></i> {{ $data_parametre?->contact2 }}</li>
-                        <li><i class="bi bi-telephone"></i> {{ $data_parametre?->contact3 }}</li>
+                        {{-- <li><i class="bi bi-telephone"></i> {{ $data_parametre?->contact2 }}</li>
+                        <li><i class="bi bi-telephone"></i> {{ $data_parametre?->contact3 }}</li> --}}
                         <li><i class="bi bi-envelope"></i> {{ $data_parametre?->email1 }}</li>
-                        <li><i class="bi bi-envelope"></i> {{ $data_parametre?->email2 }}</li>
+                        {{-- <li><i class="bi bi-envelope"></i> {{ $data_parametre?->email2 }}</li> --}}
                     </ul>
                 </div>
             </div>
