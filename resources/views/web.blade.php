@@ -22,3 +22,4 @@
     {{-- @include('frontend.web.sections.equipesweb') --}}
     <!-- CONTACT -->
     @include('frontend.web.sections.contactweb')
+@endsection

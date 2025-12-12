@@ -1,83 +1,52 @@
-{{-- filepath: c:\laragon\www\foani\resources\views\frontend\web\layouts\appweb.blade.php --}}
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
-    <!-- META STANDARD -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FOANI & SERVICES - @yield('title', 'FOANI & SERVICES')</title>
+    <title>FOANI & SERVICES - @yield('title')</title>
+    <meta name="description" content="FOANI - Leader dans l'industrie alimentaire, volailles et œufs de qualité premium">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="@yield('meta_description', 'Foani - Spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits premium, livraison rapide, fraîcheur garantie.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'Foani, volaille, œufs frais, poulets, aviculture, livraison')">
+    {{-- SEO Meta Tags --}}
+    <meta name="description" content="@yield('meta_description', 'Foani - Spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Découvrez nos produits de qualité premium : poulets, œufs, et volailles diverses. Livraison rapide et fraîcheur garantie.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'Foani, volaille Côte d\'Ivoire, œufs frais, poulets, aviculture, ferme, livraison volaille, boutique en ligne, produits frais, élevage, volaille premium, œufs bio, poussins, alimentation volaille')">
     <meta name="author" content="Foani - Aviculture Côte d'Ivoire">
     <meta name="robots" content="@yield('meta_robots', 'index, follow')">
 
-    <!-- OpenGraph -->
-    <meta property="og:type" content="website">
+    {{-- Open Graph Meta Tags --}}
+    <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@yield('og_title', 'Foani - Services Côte d\'Ivoire')">
-    <meta property="og:description" content="@yield('og_description', 'Volaille & œufs frais, livraison rapide et qualité premium.')">
+    <meta property="og:description" content="@yield('og_description', 'Découvrez Foani, votre spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits de qualité premium, livraison rapide et fraîcheur garantie.')">
     <meta property="og:image" content="@yield('og_image', asset('front/images/logoweb.png'))">
-    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:url" content="@yield('og_url', url()->current())">
     <meta property="og:site_name" content="Foani&Services">
     <meta property="og:locale" content="fr_CI">
 
-    <!-- Twitter -->
+    {{-- Twitter Card Meta Tags --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('twitter_title', 'Foani - Volaille & Œufs Frais Côte d\'Ivoire')">
-    <meta name="twitter:description" content="@yield('twitter_description', 'Produits frais, livraison rapide, volaille premium en Côte d\'Ivoire.')">
+    <meta name="twitter:title" content="@yield('twitter_title', 'Foani - Spécialiste Volaille & Œufs Frais Côte d\'Ivoire')">
+    <meta name="twitter:description" content="@yield('twitter_description', 'Découvrez Foani, votre spécialiste de la volaille et des œufs frais en Côte d\'Ivoire. Produits de qualité premium, livraison rapide et fraîcheur garantie.')">
     <meta name="twitter:image" content="@yield('twitter_image', asset('front/images/logoweb.png'))">
-
-    <!-- ========== OPTIMISATION CDN ========== -->
-
-    <!-- Preconnect pour accélérer -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://unpkg.com">
-
-    <!-- Bootstrap CSS (preload + fallback noscript) -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    </noscript>
-
+    <meta name="twitter:site" content="@FoaniCI">
+    <meta name="twitter:creator" content="@FoaniCI">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
-        as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    </noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- OwlCarousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 
-    <!-- AOS -->
-    <link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
-    </noscript>
-
-    <!-- Owl Carousel -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
-        as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-
-    <noscript>
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-    </noscript>
-
-    <!-- FAVICONS -->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('front/favicon/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('front/favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('front/favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('front/favicon/site.webmanifest') }}">
 
+    @stack('styles')
 
     <style>
         :root {
@@ -595,8 +564,6 @@
             transition: width 0.3s ease;
         }
     </style>
-
-      @stack('styles')
 </head>
 
 <body>
