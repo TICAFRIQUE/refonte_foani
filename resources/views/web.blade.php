@@ -1,6 +1,6 @@
 @extends('frontend.web.layouts.appweb')
 
-@section('title', 'Accueil Web')
+@section('title', 'Accueil')
 
 @section('content')
     <!-- HERO CAROUSEL AVEC IMAGES UNSPLASH -->
