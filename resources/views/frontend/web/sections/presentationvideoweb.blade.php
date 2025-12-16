@@ -466,10 +466,9 @@
                 <i class="bi bi-play-circle me-2"></i>
                 Découvrez FOANI
             </span>
-            <h2>Notre Présentation en Vidéo</h2>
-            <p>
-                Découvrez l'univers FOANI, notre engagement pour l'excellence et notre vision 
-                à travers cette présentation en vidéo.
+            {{-- <h2>Notre Présentation en Vidéo</h2> --}}
+            <p class="fw-bold">
+               Découvrez l'univers FOANI, un engagement pour l'excellence
             </p>
         </div>
 
@@ -561,9 +560,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Démarrage automatique avec son après un court délai
     setTimeout(() => {
         video.muted = false;
+        video.volume = 0.8; // Volume à 80%
         video.play().catch(err => {
             console.log('Autoplay bloqué:', err);
+            // Si bloqué, on démarre en muet et on informe l'utilisateur
             video.muted = true;
+            video.play();
         });
         
         // Cacher le badge autoplay après 3 secondes
@@ -575,9 +577,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }, 500);
 
+    // Quand la vidéo se termine, afficher le bouton play
+    video.addEventListener('ended', () => {
+        playPauseBtn.classList.remove('playing');
+        playPauseBtn.classList.add('paused');
+        playPauseControl.innerHTML = '<i class="bi bi-play-fill"></i>';
+        // Ne pas revenir au début, rester sur la dernière image
+    });
+
     // Play/Pause toggle
     function togglePlayPause() {
-        if (video.paused) {
+        if (video.paused || video.ended) {
+            // Si la vidéo est terminée, la recommencer depuis le début
+            if (video.ended) {
+                video.currentTime = 0;
+            }
             video.play();
             playPauseBtn.classList.remove('paused');
             playPauseBtn.classList.add('playing');
