@@ -9,7 +9,10 @@
     {{-- @include('frontend.web.sections.presentationweb') --}}
 
     <!-- MOT DU DIRECTEUR - NOUVELLE SECTION -->
-    @include('frontend.web.sections.motdirecteurweb')
+    {{-- @include('frontend.web.sections.motdirecteurweb') --}}
+
+    <!-- VIDEO PRÉSENTATION -->
+    @include('frontend.web.sections.presentationvideoweb')
     <!-- ACTIVITÉS -->
     @include('frontend.web.sections.activitesweb')
     <!-- VALEURS -->
