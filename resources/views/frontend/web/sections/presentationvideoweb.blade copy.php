@@ -368,6 +368,44 @@
             animation: blink 1.5s infinite;
         }
 
+        /* Badge activation son pour mobile */
+        .sound-activation-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .sound-activation-badge:hover {
+            background: rgba(0, 0, 0, 1);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .sound-activation-badge i {
+            font-size: 3rem;
+            color: var(--color-primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        .sound-activation-badge.active {
+            display: flex;
+        }
+
         @keyframes blink {
             0%, 50%, 100% { opacity: 1; }
             25%, 75% { opacity: 0.3; }
@@ -381,19 +419,11 @@
         /* Responsive */
         @media (max-width: 768px) {
             .video-presentation-section {
-                padding: 40px 0;
-            }
-
-            .video-container-wrapper {
-                padding: 0 10px;
+                padding: 60px 0;
             }
 
             .video-main-container {
-                padding: 15px;
-            }
-
-            .video-header {
-                margin-bottom: 30px;
+                padding: 20px;
             }
 
             .video-header h2 {
@@ -402,11 +432,6 @@
 
             .video-header p {
                 font-size: 1rem;
-            }
-
-            /* Augmenter la taille de la vidéo sur mobile */
-            .video-wrapper {
-                padding-bottom: 65%; /* Ratio plus grand pour mobile */
             }
 
             .video-play-button {
@@ -494,6 +519,12 @@
             </div>
 
             <div class="video-wrapper" id="videoWrapper">
+                <!-- Badge activation son (mobile) -->
+                <div class="sound-activation-badge" id="soundActivationBadge">
+                    <i class="bi bi-volume-up-fill"></i>
+                    <span>Touchez pour activer le son</span>
+                </div>
+
                 <!-- Vidéo player -->
                 <video 
                     id="foaniVideo" 
@@ -569,26 +600,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const fullscreenBtn = document.getElementById('fullscreenBtn');
     const videoWrapper = document.getElementById('videoWrapper');
     const autoplayBadge = document.getElementById('autoplayBadge');
+    const soundActivationBadge = document.getElementById('soundActivationBadge');
 
-    // Démarrage automatique avec son après un court délai
+    // Détection mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+    // Démarrage automatique selon le type d'appareil
     setTimeout(() => {
-        video.muted = false;
-        video.volume = 0.8; // Volume à 80%
-        video.play().catch(err => {
-            console.log('Autoplay bloqué:', err);
-            // Si bloqué, on démarre en muet et on informe l'utilisateur
+        if (isMobile) {
+            // Mobile: démarrer en muet et afficher le badge son
             video.muted = true;
-            video.play();
-        });
-        
-        // Cacher le badge autoplay après 3 secondes
-        setTimeout(() => {
-            autoplayBadge.style.opacity = '0';
+            video.play().catch(err => {
+                console.log('Autoplay bloqué:', err);
+            });
+            
+            // Afficher le badge d'activation du son
+            soundActivationBadge.classList.add('active');
+            
+            // Masquer le badge autoplay sur mobile
+            autoplayBadge.style.display = 'none';
+        } else {
+            // Desktop: démarrer avec son
+            video.muted = false;
+            video.volume = 0.8;
+            video.play().catch(err => {
+                console.log('Autoplay bloqué:', err);
+                video.muted = true;
+                video.play();
+            });
+            
+            // Cacher le badge autoplay après 3 secondes
             setTimeout(() => {
-                autoplayBadge.style.display = 'none';
-            }, 300);
-        }, 3000);
+                autoplayBadge.style.opacity = '0';
+                setTimeout(() => {
+                    autoplayBadge.style.display = 'none';
+                }, 300);
+            }, 3000);
+        }
     }, 500);
+
+    // Activation du son sur mobile au clic
+    soundActivationBadge.addEventListener('click', () => {
+        video.muted = false;
+        video.volume = 0.8;
+        soundActivationBadge.classList.remove('active');
+        updateMuteButton();
+    });
 
     // Quand la vidéo se termine, afficher le bouton play
     video.addEventListener('ended', () => {
