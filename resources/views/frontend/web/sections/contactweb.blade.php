@@ -447,11 +447,7 @@
         <div class="contact-content">
             <!-- INFORMATIONS DE CONTACT -->
             <div class="contact-info" data-aos="fade-right" data-aos-delay="200">
-                <div class="contact-header">
-                    <h3>Informations de Contact</h3>
-                    <p>N'hésitez pas à nous contacter par l'un des moyens ci-dessous. Notre équipe est à votre
-                        disposition pour répondre à toutes vos questions.</p>
-                </div>
+                
 
                 <div class="contact-items">
                     <!-- ADRESSE -->
@@ -499,8 +495,8 @@
                         </div>
                         <div class="contact-details">
                             <h4>Heures d'ouverture</h4>
-                            <p>Lundi - Vendredi : 8h00 - 17h30<br>
-                                Samedi : 8h00 - 12h00<br>
+                            <p>Lundi - Vendredi : 9h00 - 16h00<br>
+                                Samedi : 9h00 - 12h00<br>
                                 Dimanche : Fermé</p>
                         </div>
                     </div>
