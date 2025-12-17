@@ -96,7 +96,8 @@
         .video-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* Ratio 16:9 */
+            padding-bottom: 56.25%;
+            /* Ratio 16:9 */
             border-radius: 20px;
             overflow: hidden;
             background: #000;
@@ -119,11 +120,11 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(180deg, 
-                rgba(0, 0, 0, 0.3) 0%, 
-                transparent 30%, 
-                transparent 70%, 
-                rgba(0, 0, 0, 0.5) 100%);
+            background: linear-gradient(180deg,
+                    rgba(0, 0, 0, 0.3) 0%,
+                    transparent 30%,
+                    transparent 70%,
+                    rgba(0, 0, 0, 0.5) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -165,11 +166,13 @@
         }
 
         .video-play-button.paused i::before {
-            content: "\f144"; /* bi-play-fill */
+            content: "\f144";
+            /* bi-play-fill */
         }
 
         .video-play-button.playing i::before {
-            content: "\f147"; /* bi-pause-fill */
+            content: "\f147";
+            /* bi-pause-fill */
             margin-left: 0;
         }
 
@@ -369,13 +372,29 @@
         }
 
         @keyframes blink {
-            0%, 50%, 100% { opacity: 1; }
-            25%, 75% { opacity: 0.3; }
+
+            0%,
+            50%,
+            100% {
+                opacity: 1;
+            }
+
+            25%,
+            75% {
+                opacity: 0.3;
+            }
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         /* Responsive */
@@ -406,7 +425,8 @@
 
             /* Augmenter la taille de la vidéo sur mobile */
             .video-wrapper {
-                padding-bottom: 65%; /* Ratio plus grand pour mobile */
+                padding-bottom: 65%;
+                /* Ratio plus grand pour mobile */
             }
 
             .video-play-button {
@@ -481,7 +501,7 @@
             </span>
             {{-- <h2>Notre Présentation en Vidéo</h2> --}}
             <p class="fw-bold">
-               Découvrez l'univers FOANI, un engagement pour l'excellence
+                Découvrez l'univers FOANI, un engagement pour l'excellence
             </p>
         </div>
 
@@ -495,12 +515,7 @@
 
             <div class="video-wrapper" id="videoWrapper">
                 <!-- Vidéo player -->
-                <video 
-                    id="foaniVideo" 
-                    class="video-player"
-                    autoplay
-                    muted
-                    playsinline
+                <video id="foaniVideo" class="video-player" autoplay playsinline
                     poster="{{ asset('front/images/logoweb.png') }}">
                     <source src="{{ asset('video/spot_foani.mp4') }}" type="video/mp4">
                     <source src="{{ asset('video/spot_foani.webm') }}" type="video/webm">
@@ -548,197 +563,245 @@
                 </div>
             </div>
 
-           
+
         </div>
     </div>
 </section>
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const video = document.getElementById('foaniVideo');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const playPauseControl = document.getElementById('playPauseControl');
-    const progressContainer = document.getElementById('progressContainer');
-    const progressBar = document.getElementById('progressBar');
-    const currentTimeEl = document.getElementById('currentTime');
-    const durationEl = document.getElementById('duration');
-    const muteBtn = document.getElementById('muteBtn');
-    const volumeSlider = document.getElementById('volumeSlider');
-    const volumeBar = document.getElementById('volumeBar');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
-    const videoWrapper = document.getElementById('videoWrapper');
-    const autoplayBadge = document.getElementById('autoplayBadge');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('foaniVideo');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const playPauseControl = document.getElementById('playPauseControl');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const currentTimeEl = document.getElementById('currentTime');
+            const durationEl = document.getElementById('duration');
+            const muteBtn = document.getElementById('muteBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const volumeBar = document.getElementById('volumeBar');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const videoWrapper = document.getElementById('videoWrapper');
+            const autoplayBadge = document.getElementById('autoplayBadge');
 
-    // Démarrage automatique avec son après un court délai
-    setTimeout(() => {
-        video.muted = false;
-        video.volume = 0.8; // Volume à 80%
-        video.play().catch(err => {
-            console.log('Autoplay bloqué:', err);
-            // Si bloqué, on démarre en muet et on informe l'utilisateur
-            video.muted = true;
-            video.play();
-        });
-        
-        // Cacher le badge autoplay après 3 secondes
-        setTimeout(() => {
-            autoplayBadge.style.opacity = '0';
-            setTimeout(() => {
-                autoplayBadge.style.display = 'none';
-            }, 300);
-        }, 3000);
-    }, 500);
-
-    // Quand la vidéo se termine, afficher le bouton play
-    video.addEventListener('ended', () => {
-        playPauseBtn.classList.remove('playing');
-        playPauseBtn.classList.add('paused');
-        playPauseControl.innerHTML = '<i class="bi bi-play-fill"></i>';
-        // Ne pas revenir au début, rester sur la dernière image
-    });
-
-    // Play/Pause toggle
-    function togglePlayPause() {
-        if (video.paused || video.ended) {
-            // Si la vidéo est terminée, la recommencer depuis le début
-            if (video.ended) {
-                video.currentTime = 0;
+            // Fonctions de mise à jour des contrôles (définir avant utilisation)
+            function updateMuteButton() {
+                if (video.muted || video.volume === 0) {
+                    muteBtn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
+                } else if (video.volume < 0.5) {
+                    muteBtn.innerHTML = '<i class="bi bi-volume-down-fill"></i>';
+                } else {
+                    muteBtn.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
+                }
             }
-            video.play();
-            playPauseBtn.classList.remove('paused');
-            playPauseBtn.classList.add('playing');
-            playPauseControl.innerHTML = '<i class="bi bi-pause-fill"></i>';
-        } else {
-            video.pause();
-            playPauseBtn.classList.remove('playing');
-            playPauseBtn.classList.add('paused');
-            playPauseControl.innerHTML = '<i class="bi bi-play-fill"></i>';
-        }
-    }
 
-    playPauseBtn.addEventListener('click', togglePlayPause);
-    playPauseControl.addEventListener('click', togglePlayPause);
-    video.addEventListener('click', togglePlayPause);
+            function updateVolumeBar() {
+                const volume = video.muted ? 0 : video.volume;
+                volumeBar.style.width = (volume * 100) + '%';
+            }
 
-    // Update progress bar
-    video.addEventListener('timeupdate', () => {
-        const progress = (video.currentTime / video.duration) * 100;
-        progressBar.style.width = progress + '%';
-        currentTimeEl.textContent = formatTime(video.currentTime);
-    });
+            // Variable pour suivre si le son est activé
+            let soundEnabled = false;
 
-    // Set duration
-    video.addEventListener('loadedmetadata', () => {
-        durationEl.textContent = formatTime(video.duration);
-    });
+            // Configuration initiale du volume
+            video.volume = 0.8;
+            video.muted = false;
 
-    // Seek video
-    progressContainer.addEventListener('click', (e) => {
-        const rect = progressContainer.getBoundingClientRect();
-        const pos = (e.clientX - rect.left) / rect.width;
-        video.currentTime = pos * video.duration;
-    });
+            // Fonction pour activer le son
+            function enableSound() {
+                video.muted = false;
+                video.volume = 0.8;
+                soundEnabled = true;
+                updateMuteButton();
+                updateVolumeBar();
+                console.log('🔊 Son activé - Volume:', video.volume, 'Muted:', video.muted);
+            }
 
-    // Mute/Unmute
-    muteBtn.addEventListener('click', () => {
-        video.muted = !video.muted;
-        updateMuteButton();
-        updateVolumeBar();
-    });
-
-    function updateMuteButton() {
-        if (video.muted || video.volume === 0) {
-            muteBtn.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
-        } else if (video.volume < 0.5) {
-            muteBtn.innerHTML = '<i class="bi bi-volume-down-fill"></i>';
-        } else {
-            muteBtn.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
-        }
-    }
-
-    // Volume control
-    volumeSlider.addEventListener('click', (e) => {
-        const rect = volumeSlider.getBoundingClientRect();
-        const pos = (e.clientX - rect.left) / rect.width;
-        video.volume = pos;
-        video.muted = false;
-        updateVolumeBar();
-        updateMuteButton();
-    });
-
-    function updateVolumeBar() {
-        const volume = video.muted ? 0 : video.volume;
-        volumeBar.style.width = (volume * 100) + '%';
-    }
-
-    video.addEventListener('volumechange', () => {
-        updateVolumeBar();
-        updateMuteButton();
-    });
-
-    // Fullscreen
-    fullscreenBtn.addEventListener('click', () => {
-        if (!document.fullscreenElement) {
-            videoWrapper.requestFullscreen().catch(err => {
-                console.log('Erreur fullscreen:', err);
+            // Attendre que la vidéo soit prête et forcer l'autoplay avec son
+            video.addEventListener('loadeddata', () => {
+                enableSound();
+                
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log('✓ Autoplay réussi avec son');
+                        if (!soundEnabled) {
+                            enableSound();
+                        }
+                    }).catch(err => {
+                        console.log('⚠ Autoplay bloqué par le navigateur:', err.message);
+                        // Fallback: démarrer en muet puis activer le son au premier clic
+                        video.muted = true;
+                        soundEnabled = false;
+                        video.play().then(() => {
+                            console.log('✓ Vidéo démarrée en muet (cliquez pour activer le son)');
+                            updateMuteButton();
+                        });
+                    });
+                }
             });
-            fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
-        } else {
-            document.exitFullscreen();
-            fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen"></i>';
-        }
-    });
 
-    document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-            fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen"></i>';
-        }
-    });
+            // Réactiver le son dès la première interaction utilisateur
+            const enableSoundOnInteraction = () => {
+                console.log('👆 Interaction détectée');
+                enableSound();
+                
+                // Si la vidéo est en pause, la démarrer
+                if (video.paused) {
+                    video.play().then(() => {
+                        console.log('▶️ Vidéo démarrée');
+                    });
+                }
+            };
 
-    // Format time helper
-    function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    }
+            // Écouter plusieurs événements pour activer le son
+            ['click', 'touchstart', 'scroll'].forEach(eventType => {
+                document.addEventListener(eventType, enableSoundOnInteraction, { once: true });
+            });
 
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        
-        switch(e.key) {
-            case ' ':
-            case 'k':
-                e.preventDefault();
-                togglePlayPause();
-                break;
-            case 'f':
-                fullscreenBtn.click();
-                break;
-            case 'm':
-                muteBtn.click();
-                break;
-            case 'ArrowLeft':
-                video.currentTime -= 5;
-                break;
-            case 'ArrowRight':
-                video.currentTime += 5;
-                break;
-            case 'ArrowUp':
-                e.preventDefault();
-                video.volume = Math.min(1, video.volume + 0.1);
-                break;
-            case 'ArrowDown':
-                e.preventDefault();
-                video.volume = Math.max(0, video.volume - 0.1);
-                break;
-        }
-    });
+            // Cacher le badge autoplay après 3 secondes
+            setTimeout(() => {
+                autoplayBadge.style.opacity = '0';
+                setTimeout(() => {
+                    autoplayBadge.style.display = 'none';
+                }, 300);
+            }, 3000);
 
-    // Initial volume setup
-    updateVolumeBar();
-    updateMuteButton();
-});
-</script>
+            // Quand la vidéo se termine, afficher le bouton play
+            video.addEventListener('ended', () => {
+                playPauseBtn.classList.remove('playing');
+                playPauseBtn.classList.add('paused');
+                playPauseControl.innerHTML = '<i class="bi bi-play-fill"></i>';
+                // Ne pas revenir au début, rester sur la dernière image
+            });
+
+            // Play/Pause toggle
+            function togglePlayPause() {
+                if (video.paused || video.ended) {
+                    // Si la vidéo est terminée, la recommencer depuis le début
+                    if (video.ended) {
+                        video.currentTime = 0;
+                    }
+                    video.play();
+                    playPauseBtn.classList.remove('paused');
+                    playPauseBtn.classList.add('playing');
+                    playPauseControl.innerHTML = '<i class="bi bi-pause-fill"></i>';
+                } else {
+                    video.pause();
+                    playPauseBtn.classList.remove('playing');
+                    playPauseBtn.classList.add('paused');
+                    playPauseControl.innerHTML = '<i class="bi bi-play-fill"></i>';
+                }
+            }
+
+            playPauseBtn.addEventListener('click', togglePlayPause);
+            playPauseControl.addEventListener('click', togglePlayPause);
+            video.addEventListener('click', togglePlayPause);
+
+            // Update progress bar
+            video.addEventListener('timeupdate', () => {
+                const progress = (video.currentTime / video.duration) * 100;
+                progressBar.style.width = progress + '%';
+                currentTimeEl.textContent = formatTime(video.currentTime);
+            });
+
+            // Set duration
+            video.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(video.duration);
+            });
+
+            // Seek video
+            progressContainer.addEventListener('click', (e) => {
+                const rect = progressContainer.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                video.currentTime = pos * video.duration;
+            });
+
+            // Mute/Unmute
+            muteBtn.addEventListener('click', () => {
+                video.muted = !video.muted;
+                updateMuteButton();
+                updateVolumeBar();
+            });
+
+            // Volume control
+            volumeSlider.addEventListener('click', (e) => {
+                const rect = volumeSlider.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                video.volume = pos;
+                video.muted = false;
+                updateVolumeBar();
+                updateMuteButton();
+            });
+
+            video.addEventListener('volumechange', () => {
+                updateVolumeBar();
+                updateMuteButton();
+            });
+
+            // Fullscreen
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    videoWrapper.requestFullscreen().catch(err => {
+                        console.log('Erreur fullscreen:', err);
+                    });
+                    fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+                } else {
+                    document.exitFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen"></i>';
+                }
+            });
+
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen"></i>';
+                }
+            });
+
+            // Format time helper
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+                switch (e.key) {
+                    case ' ':
+                    case 'k':
+                        e.preventDefault();
+                        togglePlayPause();
+                        break;
+                    case 'f':
+                        fullscreenBtn.click();
+                        break;
+                    case 'm':
+                        muteBtn.click();
+                        break;
+                    case 'ArrowLeft':
+                        video.currentTime -= 5;
+                        break;
+                    case 'ArrowRight':
+                        video.currentTime += 5;
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        video.volume = Math.min(1, video.volume + 0.1);
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        video.volume = Math.max(0, video.volume - 0.1);
+                        break;
+                }
+            });
+
+            // Initial volume setup
+            updateVolumeBar();
+            updateMuteButton();
+        });
+    </script>
 @endpush
