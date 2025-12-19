@@ -621,7 +621,7 @@
             // Attendre que la vidéo soit prête et forcer l'autoplay avec son
             video.addEventListener('loadeddata', () => {
                 enableSound();
-                
+
                 const playPromise = video.play();
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
@@ -635,7 +635,9 @@
                         video.muted = true;
                         soundEnabled = false;
                         video.play().then(() => {
-                            console.log('✓ Vidéo démarrée en muet (cliquez pour activer le son)');
+                            console.log(
+                                '✓ Vidéo démarrée en muet (cliquez pour activer le son)'
+                                );
                             updateMuteButton();
                         });
                     });
@@ -646,7 +648,7 @@
             const enableSoundOnInteraction = () => {
                 console.log('👆 Interaction détectée');
                 enableSound();
-                
+
                 // Si la vidéo est en pause, la démarrer
                 if (video.paused) {
                     video.play().then(() => {
@@ -657,7 +659,9 @@
 
             // Écouter plusieurs événements pour activer le son
             ['click', 'touchstart', 'scroll'].forEach(eventType => {
-                document.addEventListener(eventType, enableSoundOnInteraction, { once: true });
+                document.addEventListener(eventType, enableSoundOnInteraction, {
+                    once: true
+                });
             });
 
             // Cacher le badge autoplay après 3 secondes
