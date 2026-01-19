@@ -9,6 +9,7 @@ use App\Models\Commande;
 use App\Services\smsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\TicAfriqueSms;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -208,7 +209,8 @@ class PanierController extends Controller
             });
 
             // 📱 Envoi SMS à l'administrateur après succès de la transaction
-            $this->envoyerSmsAdministrateur($commande, $request);
+            $ticAfriqueService = new TicAfriqueSms();
+            $ticAfriqueService->sendNewOrderSms($commande);
 
             // ✅ Si tout s'est bien passé
             return redirect()
@@ -227,6 +229,8 @@ class PanierController extends Controller
 
 
     ################################# SMS ADMINISTRATEUR #################################
+
+
 
 
 
@@ -272,126 +276,8 @@ class PanierController extends Controller
         }
     }
 
-    /**
-     * 📝 Construire le message SMS pour l'administrateur
-     */
-    // private function construireMessageAdmin($commande, $request)
-    // {
-    //     // En-tête du message
-    //     $message = "NOUVELLE COMMANDE FOANI\n";
-    //     $message .= "-----------------------------\n";
-    //     $message .= "Commande: {$commande->code}\n";
-    //     $message .= "Client: {$commande->nom}\n";
-    //     $message .= "Tel: {$commande->telephone}\n";
-    //     $message .= "Livraison: {$commande->adresse}, {$commande->commune}\n";
-    //     $message .= "Total: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
-
-    //     // Détails des produits (limités pour éviter un SMS trop long)
-    //     if (isset($commande->produits_details) && !empty($commande->produits_details)) {
-    //         $message .= "-----------------------------\n";
-    //         $message .= "PRODUITS:\n";
-
-    //         $produits_count = 0;
-    //         foreach ($commande->produits_details as $produit) {
-    //             if ($produits_count >= 3) { // Limiter à 3 produits
-    //                 $remaining = count($commande->produits_details) - 3;
-    //                 $message .= "... et {$remaining} autre(s) produit(s)\n";
-    //                 break;
-    //             }
-
-    //             $nom = substr($produit['nom'], 0, 20);
-    //             if (strlen($produit['nom']) > 20) $nom .= "...";
-    //             $message .= "- {$nom} x{$produit['quantite']}\n";
-    //             $produits_count++;
-    //         }
-    //     }
-
-    //     // Récapitulatif financier
-    //     $message .= "-----------------------------\n";
-    //     $message .= "Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
-    //     $message .= "Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
-    //     $message .= "TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
-
-    //     // Informations temporelles
-    //     $message .= "-----------------------------\n";
-    //     $message .= "Date: " . $commande->date_commande->format('d/m/Y H:i') . "\n";
-    //     $message .= "Paiement: " . ucfirst($commande->mode_paiement) . "\n";
-
-    //     // Appel à l’action
-    //     $message .= "-----------------------------\n";
-    //     $message .= "Action requise: Valider la commande\n";
-    //     $message .= "Voir details sur";
-
-    //     return $message;
-    // }
 
 
-
-    // private function construireMessageAdmin($commande, $request)
-    // {
-    //     // Base du message
-    //     $message  = "NOUVELLE COMMANDE";
-    //     // $message .= "------------------------------\n";
-    //     $message .= "Commande: {$commande->code}\n";
-    //     $message .= "Client: {$commande->nom}\n";
-    //     $message .= "Tel: {$commande->telephone}\n";
-    //     $message .= "Adresse: {$commande->commune}, {$commande->adresse}\n";
-    //     $message .= "Frais de livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
-    //     $message .= "Total: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
-
-    //     // Détails produits (max 3)
-    //     if (!empty($commande->produits_details)) {
-    //         // $message .= "------------------------------\n";
-    //         $message .= "Produits:\n";
-    //         $produits_count = 0;
-
-    //         foreach ($commande->produits_details as $produit) {
-    //             if ($produits_count >= 2) {
-    //                 $remaining = count($commande->produits_details) - 3;
-    //                 $message .= "... et {$remaining} autre(s)\n";
-    //                 break;
-    //             }
-
-    //             $nom = substr($produit['nom'], 0, 20);
-    //             if (strlen($produit['nom']) > 20) $nom .= "...";
-    //             $message .= "- {$nom} x{$produit['quantite']}\n";
-    //             $produits_count++;
-    //         }
-    //     }
-
-    //     // Totaux
-    //     // $message .= "------------------------------\n";
-    //     // $message .= "Sous-total: " . number_format($commande->sous_total, 0, ',', ' ') . " FCFA\n";
-    //     // $message .= "Livraison: " . number_format($commande->frais_livraison, 0, ',', ' ') . " FCFA\n";
-    //     // $message .= "TOTAL: " . number_format($commande->total, 0, ',', ' ') . " FCFA\n";
-
-    //     // Infos temporelles
-    //     // $message .= "------------------------------\n";
-    //     // $message .= "Date: " . $commande->date_commande->format('d/m/Y H:i') . "\n";
-    //     // $message .= "Paiement: " . ucfirst($commande->mode_paiement) . "\n";
-
-    //     // 🔗 Lien vers la commande
-    //     $baseUrl = rtrim(env('APP_URL'), '/');
-    //     $fullUrl = "{$baseUrl}/admin/commandes/{$commande->id}";
-
-    //     try {
-    //         // Raccourcir le lien avec TinyURL
-    //         $shortUrl = Http::get("https://tinyurl.com/api-create.php", [
-    //             'url' => $fullUrl
-    //         ])->body();
-
-    //         if (!filter_var($shortUrl, FILTER_VALIDATE_URL)) {
-    //             $shortUrl = $fullUrl; // fallback si erreur
-    //         }
-    //     } catch (\Exception $e) {
-    //         $shortUrl = $fullUrl;
-    //     }
-
-    //     $message .= "------------------------------\n";
-    //     $message .= "Voir commande: {$shortUrl}";
-
-    //     return $message;
-    // }
 
 
 
@@ -416,7 +302,7 @@ class PanierController extends Controller
             ->map(function ($p) use ($clean) {
                 $nom = $clean($p['nom']);
                 $nom = substr($nom, 0, 20); // raccourcir
-                $nom = strtolower($nom);//mettre en lowercase
+                $nom = strtolower($nom); //mettre en lowercase
                 return $nom . 'x' . $p['quantite'] . ' de ' . $p['prix_unitaire'];
             })
             ->implode(',');

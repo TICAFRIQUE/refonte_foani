@@ -60,7 +60,7 @@
                                         <td>{{ $loop->iteration }}</td>
 
                                         {{-- Image --}}
-                                       <td>
+                                        <td>
                                             @if ($slider->hasMedia('image'))
                                                 <img src="{{ $slider->getFirstMediaUrl('image') }}" alt="Image Slider"
                                                     class="img-thumbnail"
@@ -160,10 +160,8 @@
 
     <script>
         $(document).ready(function() {
-           var route = "sliders"
-           delete_row(route);
+            var route = "sliders"
+            delete_row(route);
         });
-
-
     </script>
 @endsection

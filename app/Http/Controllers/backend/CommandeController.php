@@ -51,8 +51,8 @@ class CommandeController extends Controller
             } else {
                 // Aucun filtre : commandes du jour et en_attente
                 $query
-                // ->whereDate('created_at', now()->toDateString())
-                      ->where('statut', 'en_attente');
+                    // ->whereDate('created_at', now()->toDateString())
+                    ->where('statut', 'en_attente');
             }
 
             $commandes = $query->orderBy('created_at', 'desc')->get();
