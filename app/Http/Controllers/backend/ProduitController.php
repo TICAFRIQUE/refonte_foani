@@ -77,6 +77,7 @@ class ProduitController extends Controller
                 'description' => 'nullable|string',
                 'image_principale' => 'required|image|mimes:jpg,jpeg,png,gif|max:1024',
                 'autre_images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:1024',
+                'is_special_offer' => 'nullable|boolean'
 
             ]);
 
@@ -170,6 +171,7 @@ class ProduitController extends Controller
                 'autre_images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:1024',
                 'supprimer_image_principale' => 'nullable|boolean',
                 'supprimer_autres_images' => 'nullable|array',
+                'is_special_offer' => 'nullable|boolean',
             ]);
 
             $produit = Produit::findOrFail($id);

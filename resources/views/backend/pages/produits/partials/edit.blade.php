@@ -83,7 +83,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="type_offre_id" class="form-label">Type d'offre <span class="text-danger">*</span></label>
+                                        <label for="type_offre_id" class="form-label">Type d'offre </label>
                                         <select name="type_offre_id" id="type_offre_id" class="form-select">
                                             <option value="">-- Sélectionner un type d'offre --</option>
                                             @foreach ($typeoffres as $offre)
@@ -104,6 +104,21 @@
                                         <h6 class="mb-0">Gestion des réductions</h6>
                                     </div>
                                     <div class="card-body">
+
+                                        <div class="row g-3 mt-3">
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input type="hidden" name="is_special_offer" value="0">
+                                                    <input type="checkbox" name="is_special_offer" id="is_special_offer" 
+                                                        class="form-check-input" value="1" 
+                                                        {{ old('is_special_offer', $produit->is_special_offer) ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="is_special_offer">
+                                                        <strong>Offre spéciale</strong>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
                                         <div class="row g-3 mb-3">
                                             <div class="col-md-6">
                                                 <label for="type_reduction" class="form-label">Type de réduction</label>
@@ -123,18 +138,8 @@
                                                     class="form-control" value="{{ old('valeur_reduction', $produit->valeur_reduction) }}">
                                             </div>
                                         </div>
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label for="date_debut_reduction" class="form-label">Date début réduction</label>
-                                                <input type="date" name="date_debut_reduction" id="date_debut_reduction"
-                                                    class="form-control" value="{{ old('date_debut_reduction', $produit->date_debut_reduction) }}">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="date_fin_reduction" class="form-label">Date fin réduction</label>
-                                                <input type="date" name="date_fin_reduction" id="date_fin_reduction"
-                                                    class="form-control" value="{{ old('date_fin_reduction', $produit->date_fin_reduction) }}">
-                                            </div>
-                                        </div>
+                                        
+                                        
                                     </div>
                                 </div>
                                 <!-- Paramètres -->

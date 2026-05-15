@@ -43,7 +43,7 @@ class TicAfriqueSms
     public function sendNewOrderSms($commande)
     {
         // Préparer le numéro (ajouter +225 si besoin)
-        $numero = '+2250757242237';
+        $numero = '+2250779613593';
         
         // Construire le message
         $message = $this->construireMessageAdmin($commande);

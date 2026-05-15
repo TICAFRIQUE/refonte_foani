@@ -32,7 +32,8 @@ class Produit extends Model implements HasMedia
         'visibilite',
         'statut',
         'categorie_id',
-        'type_offre_id',
+        'type_offre_id', //ex: '1' pour "Offre spéciale", '2' pour "Promotion", etc.
+        'is_special_offer', //ex: true ou false pour indiquer si le produit est une offre spéciale
         'user_id'
     ];
 
@@ -100,4 +101,11 @@ class Produit extends Model implements HasMedia
     {
         return $query->where('statut', true);
     }
+
+    // Scope pour recuperer le produit en speciale offre
+    public function scopeSpecialOffer($query)
+    {
+        return $query->where('is_special_offer', true);
+    }
+    
 }

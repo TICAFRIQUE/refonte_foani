@@ -10,6 +10,10 @@
 @section('content')
     <!-- Slider animé -->
     @include('frontend.sections.slider')
+
+    <!-- Section Offres Spéciales -->
+    @include('frontend.sections.offres_speciales')
+
     <!-- Section Catégories -->
     @include('frontend.sections.categories_liste')
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Models\Slider;
+use App\Models\Produit;
 use App\Models\Contact;
 use App\Models\Categorie;
 use App\Models\PointVente;
@@ -27,9 +28,15 @@ class HomeController extends Controller
             //recuperer les sliders visibles
             $sliders = Slider::visible()->boutique()->orderBy('position', 'asc')->get();
 
+            // Récupérer le premier produit en offre spéciale avec ses médias
+            $offreSpeciale = Produit::specialOffer()
+                ->active()
+                ->with('categorie')
+                ->first();
+
             // dd($sliders->toArray());
 
-            return view('index', compact('categories', 'sliders'));
+            return view('index', compact('categories', 'sliders', 'offreSpeciale'));
         } catch (\Throwable $th) {
             //throw $th;
             return view('backend.utility.auth-404-basic');

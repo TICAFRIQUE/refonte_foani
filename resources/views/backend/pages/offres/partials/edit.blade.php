@@ -22,11 +22,6 @@
                             value="{{ $offre->libelle }}" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="slug{{ $offre->id }}" class="form-label">Slug</label>
-                        <input type="text" name="slug" id="slug{{ $offre->id }}" class="form-control"
-                            value="{{ $offre->slug }}" required>
-                    </div>
 
                     <div class="mb-3">
                         <label for="description{{ $offre->id }}" class="form-label">Description</label>

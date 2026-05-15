@@ -112,9 +112,6 @@
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            const route = "offre";
-            delete_row(route);
-        });
+        window.routeName = "offre";
     </script>
 @endsection

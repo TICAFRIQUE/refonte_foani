@@ -98,8 +98,7 @@
                                     </div>
 
                                     <div class="col-md-4">
-                                        <label for="type_offre_id" class="form-label">Type d'offre <span
-                                                class="text-danger">*</span></label>
+                                        <label for="type_offre_id" class="form-label">Type d'offre </label>
                                         <select name="type_offre_id" id="type_offre_id" class="form-select">
                                             <option value="">-- Sélectionner un type d'offre --</option>
                                             @foreach ($typeoffres as $offre)
@@ -118,9 +117,23 @@
                                 <!-- Réduction -->
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <h6 class="mb-0">Gestion des réductions</h6>
+                                        <h6 class="mb-0">Gestion des réductions & promotions</h6>
                                     </div>
                                     <div class="card-body">
+                                         <div class="row g-3 mt-3">
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input type="hidden" name="is_special_offer" value="0">
+                                                    <input type="checkbox" name="is_special_offer" id="is_special_offer" 
+                                                        class="form-check-input" value="1" 
+                                                        {{ old('is_special_offer') ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="is_special_offer">
+                                                        <strong>Offre spéciale</strong>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
                                         <div class="row g-3 mb-3">
                                             <div class="col-md-6">
                                                 <label for="type_reduction" class="form-label">Type de réduction</label>
@@ -157,6 +170,7 @@
                                                     class="form-control" value="{{ old('date_fin_reduction') }}">
                                             </div>
                                         </div>
+                                       
                                     </div>
                                 </div>
 

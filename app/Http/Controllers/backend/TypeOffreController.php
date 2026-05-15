@@ -41,7 +41,7 @@ class TypeOffreController extends Controller
             'libelle' => convertToMajuscule::toUpperNoAccent($request->libelle),
             'description' => $request->description,
             'statut' => $request->statut,
-            'slug' => $request->slug,
+            // 'slug' => $request->slug,
         ]);
         return redirect()->route('offre.index')
             ->with('success', 'L\'offre a été ajoutée avec succès.');
@@ -83,13 +83,22 @@ class TypeOffreController extends Controller
     public function delete($id)
     {
         try {
-            TypeOffre::findOrFail($id)->forceDelete();
+            dd($id);
+
+            $offre = TypeOffre::findOrFail($id);
+
+            $offre->delete(); // inutile d'utiliser forceDelete ici
+
             return response()->json([
                 'status' => 200,
+                'message' => 'Suppression réussie'
             ]);
         } catch (\Exception $e) {
-            return redirect()->route('offre.index')
-                ->with('error', 'Impossible de supprimer cette offre : ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 500,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 }

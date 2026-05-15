@@ -25,7 +25,14 @@ class TypeOffre extends Model
         return $this->hasMany(Produit::class, 'type_offre_id');
     }
 
-
+ public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'libelle'
+            ]
+        ];
+    }
 
 
     //ID GENERERATED

@@ -114,7 +114,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
 
     //    offre
     Route::prefix('offre')->controller(TypeOffreController::class)->group(function () {
-        Route::get('offre', 'index')->name('offre.index');
+        Route::get('', 'index')->name('offre.index');
         Route::post('offre', 'store')->name('offre.store');
         // Route::get('show/{id}', 'show')->name('offre.show');
         Route::get('offre/{id}', 'edit')->name('offre.edit');

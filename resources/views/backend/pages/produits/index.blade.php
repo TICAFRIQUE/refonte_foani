@@ -51,7 +51,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($produits as $produit)
-                                    <tr id="row_{{ $produit->id }}">
+                                    <tr id="row_{{ $produit->id }}" class="{{ $produit->is_special_offer ? 'table-warning' : '' }}">
                                         <td>{{ $loop->iteration }}</td>
 
                                         {{-- Statut --}}
@@ -75,7 +75,14 @@
                                         </td>
 
                                         {{-- Informations produit --}}
-                                        <td>{{ $produit->libelle }}</td>
+                                        <td>
+                                            {{ $produit->libelle }}
+                                            @if ($produit->is_special_offer)
+                                                <span class="badge bg-danger ms-2">
+                                                    <i class="bi bi-star-fill"></i> Offre spéciale
+                                                </span>
+                                            @endif
+                                        </td>
                                         <td>{{ $produit->categorie->libelle ?? '—' }}</td>
                                         <td>{{ number_format($produit->prix_de_vente, 0, ',', ' ') }} F</td>
                                         <td>{{ $produit->stock }}</td>
