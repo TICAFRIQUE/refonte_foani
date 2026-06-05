@@ -2,15 +2,21 @@
 
 namespace App\Providers;
 
-use Throwable;
-use App\Models\Page;
-use App\Models\Contact;
-use App\Models\Parametre;
+use App\Models\Categorie;
 use App\Models\CategoriePage;
-use Spatie\Permission\Models\Role;
+use App\Models\Contact;
+use App\Models\Page;
+use App\Models\Parametre;
+use App\Models\Produit;
+use App\Models\Slider;
+use App\Observers\CategorieObserver;
+use App\Observers\ProduitObserver;
+use App\Observers\SliderObserver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+         Categorie::observe(CategorieObserver::class);
+        Produit::observe(ProduitObserver::class);
+        Slider::observe(SliderObserver::class);
 
         //pagination par defaut a 10
         \Illuminate\Pagination\Paginator::useBootstrapFive();
