@@ -19,7 +19,7 @@
                         </ul>
                     </div>
                 @endif
-                <form action="{{ route('user.profil') }}" method="POST" class="needs-validation" novalidate>
+                <form action="{{ route('user.profil.update') }}" method="POST" class="needs-validation" novalidate>
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Nom & Prénoms <span class="text-danger">*</span></label>

@@ -271,7 +271,7 @@ Route::controller(UserController::class)->group(function () {
     route::get('mes-reservations', 'mesReservations')->name('user.reservations')->middleware('client');
     route::get('mes-reservations/{id}', 'mesReservationsShow')->name('user.reservations.show')->middleware('client');
     route::get('profil', 'profil')->name('user.profil')->middleware('client');
-    route::post('profil', 'profil')->name('user.profil')->middleware('client');
+    route::post('profil', 'profil')->name('user.profil.update')->middleware('client'); // mise à jour du profil
     route::get('logout', 'logout')->name('user.logout')->middleware('client');
 });
 
