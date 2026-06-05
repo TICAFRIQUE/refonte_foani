@@ -217,12 +217,12 @@
                         </div>
                     @endif
 
-                    @if ($offreSpeciale->stock > 0)
+                   {{-- @if ($offreSpeciale->stock > 0)
                         <div style="color:#ffc107;margin-bottom:20px;">
                             <i class="bi bi-check-circle-fill"></i>
                             {{ $offreSpeciale->stock }} unité(s) en stock
                         </div>
-                    @endif
+                    @endif--}}
 
                     <div class="offre-banner-actions">
 
@@ -250,11 +250,6 @@
         </div>
     </section>
 
-    {{-- FLOATING BUTTON --}}
-    @if ($offreSpeciale->stock > 0)
-        <button class="floating-btn-commander btn-ajouter-panier" data-id="{{ $offreSpeciale->id }}">
-            <i class="bi bi-cart-plus"></i>
-        </button>
-    @endif
+   
 
 @endif

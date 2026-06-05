@@ -47,7 +47,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     // login and logout
     Route::controller(AdminController::class)->group(function () {
         route::get('/login', 'login')->name('admin.login')->withoutMiddleware('admin'); // page formulaire de connexion
-        route::post('/login', 'login')->name('admin.login')->withoutMiddleware('admin'); // envoi du formulaire
+        route::post('/login', 'login')->name('admin.login.submit')->withoutMiddleware('admin'); // envoi du formulaire
         route::post('/logout', 'logout')->name('admin.logout');
     });
 
