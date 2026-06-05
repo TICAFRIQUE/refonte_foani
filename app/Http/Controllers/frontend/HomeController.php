@@ -53,13 +53,13 @@ class HomeController extends Controller
                 fn() =>
                 Categorie::with(['produits' => function ($query) {
                     $query->where('statut', true)
-                        ->select('id', 'categorie_id', 'nom', 'prix', 'slug')
+                        // ->select('id', 'categorie_id', 'nom', 'prix', 'slug')
                         ->with('media')
                         ->limit(4);
                 }])
                     ->active()
                     ->position()
-                    ->select('id', 'nom', 'slug', 'position')
+                    // ->select('id', 'nom', 'slug', 'position')
                     ->get()
             );
 
@@ -70,7 +70,7 @@ class HomeController extends Controller
                 Slider::visible()
                     ->boutique()
                     ->orderBy('position', 'asc')
-                    ->select('id', 'image', 'titre', 'lien', 'position')
+                    // ->select('id', 'image', 'titre', 'lien', 'position')
                     ->get()
             );
 
@@ -80,8 +80,8 @@ class HomeController extends Controller
                 fn() =>
                 Produit::specialOffer()
                     ->active()
-                    ->with('categorie:id,nom,slug')
-                    ->select('id', 'nom', 'prix', 'slug', 'categorie_id')
+                    ->with('categorie')
+                    // ->select('id', 'nom', 'prix', 'slug', 'categorie_id')
                     ->first()
             );
 
