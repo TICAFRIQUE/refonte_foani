@@ -75,7 +75,7 @@
 
 @section('content')
 <div class="container py-5 commandes-section">
-    <h2 class="fw-bold mb-4 text-center" style="color:#559e33;">Mes commandes</h2>
+    @include('frontend.components.account-nav')
 
     <div class="row justify-content-center">
         <div class="col-lg-10">

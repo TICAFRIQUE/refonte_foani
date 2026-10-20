@@ -515,8 +515,9 @@
 
             <div class="video-wrapper" id="videoWrapper">
                 <!-- Vidéo player -->
-                <video id="foaniVideo" class="video-player" autoplay playsinline
-                    poster="{{ asset('front/images/logoweb.png') }}">
+                {{-- preload="none" : la vidéo (lourde) n'est téléchargée que lorsqu'elle devient visible --}}
+                <video id="foaniVideo" class="video-player" preload="none" muted playsinline
+                    poster="{{ (isset($sliders) ? $sliders->first()?->getFirstMediaUrl('image', 'large') : null) ?: asset('front/images/logoweb.png') }}">
                     <source src="{{ asset('video/spot_foani.mp4') }}" type="video/mp4">
                     <source src="{{ asset('video/spot_foani.webm') }}" type="video/webm">
                     Votre navigateur ne supporte pas la lecture de vidéos.
@@ -604,9 +605,25 @@
             // Variable pour suivre si le son est activé
             let soundEnabled = false;
 
-            // Configuration initiale du volume
+            // Configuration initiale du volume (muet tant que l'utilisateur n'a pas interagi)
             video.volume = 0.8;
-            video.muted = false;
+
+            // Masque le gros bouton lecture pendant la lecture
+            video.addEventListener('play', () => videoWrapper.classList.add('is-playing'));
+            video.addEventListener('pause', () => videoWrapper.classList.remove('is-playing'));
+
+            // Lecture uniquement quand la vidéo est visible, pause quand elle sort de l'écran
+            if ('IntersectionObserver' in window) {
+                new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            video.play().catch(function() {});
+                        } else if (!video.paused) {
+                            video.pause();
+                        }
+                    });
+                }, { threshold: 0.4 }).observe(video);
+            }
 
             // Fonction pour activer le son
             function enableSound() {
@@ -620,8 +637,6 @@
 
             // Attendre que la vidéo soit prête et forcer l'autoplay avec son
             video.addEventListener('loadeddata', () => {
-                enableSound();
-
                 const playPromise = video.play();
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
@@ -644,24 +659,16 @@
                 }
             });
 
-            // Réactiver le son dès la première interaction utilisateur
+            // Activer le son à la première interaction, seulement si la vidéo a déjà démarré
+            // (ne déclenche plus le téléchargement de la vidéo au premier défilement)
             const enableSoundOnInteraction = () => {
-                console.log('👆 Interaction détectée');
+                if (video.readyState === 0) return;
                 enableSound();
-
-                // Si la vidéo est en pause, la démarrer
-                if (video.paused) {
-                    video.play().then(() => {
-                        console.log('▶️ Vidéo démarrée');
-                    });
-                }
+                ['click', 'touchstart'].forEach(t => document.removeEventListener(t, enableSoundOnInteraction));
             };
 
-            // Écouter plusieurs événements pour activer le son
-            ['click', 'touchstart', 'scroll'].forEach(eventType => {
-                document.addEventListener(eventType, enableSoundOnInteraction, {
-                    once: true
-                });
+            ['click', 'touchstart'].forEach(eventType => {
+                document.addEventListener(eventType, enableSoundOnInteraction, { passive: true });
             });
 
             // Cacher le badge autoplay après 3 secondes

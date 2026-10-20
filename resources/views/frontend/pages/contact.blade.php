@@ -515,16 +515,7 @@
     </style>
 
     {{-- Hero Section --}}
-    <section class="contact-hero">
-        <div class="container">
-            <div class="contact-hero-content">
-                <h1>
-                    <i class="bi bi-envelope-heart me-3"></i>Contactez-nous
-                </h1>
-                <p>Nous sommes à votre écoute pour répondre à toutes vos questions et vous accompagner dans vos projets</p>
-            </div>
-        </div>
-    </section>
+    {{-- bandeau remplacé par frontend.components.page-hero (layout) --}}
 
     {{-- Container principal --}}
     <section class="contact-container">

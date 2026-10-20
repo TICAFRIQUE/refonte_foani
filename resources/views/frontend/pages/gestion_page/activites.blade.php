@@ -468,16 +468,7 @@
     </style>
 
     {{-- Hero Section --}}
-    <section class="activites-hero">
-        <div class="container">
-            <div class="activites-hero-content">
-                <h1>
-                    <i class="bi bi-gear-fill me-3"></i>Nos Activités
-                </h1>
-                <p>Découvrez l'ensemble de nos services et réalisations</p>
-            </div>
-        </div>
-    </section>
+    {{-- bandeau remplacé par frontend.components.page-hero (layout) --}}
 
     {{-- Container principal --}}
     <section class="activites-container">
@@ -488,7 +479,7 @@
                         {{-- Image --}}
                         <div class="activite-image-container">
                             @if($activite->getFirstMediaUrl('image'))
-                                <img src="{{ $activite->getFirstMediaUrl('image') }}" 
+                                <img src="{{ $activite->getFirstMediaUrl('image', 'large') }}" decoding="async" 
                                      alt="{{ $activite->libelle }}"
                                      class="activite-image"
                                      loading="lazy">

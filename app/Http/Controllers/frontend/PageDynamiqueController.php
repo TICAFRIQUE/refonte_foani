@@ -20,7 +20,7 @@ class PageDynamiqueController extends Controller
 
             return view('frontend.pages.gestion_page.detail', compact('page'));
         } catch (\Throwable $th) {
-            return $th->getMessage();
+            abort(404);
 
             //throw $th;
             // return redirect()->route('accueil')->with('error', 'La page demandée n\'existe pas ou a été supprimée !');
@@ -33,7 +33,7 @@ class PageDynamiqueController extends Controller
     {
         try {
             $categories_pages = CategoriePage::whereSlug('activites')->active()->first();
-            $activites = Page::where('categorie_page_id', $categories_pages->id)->position()->get();
+            $activites = Page::with('media')->where('categorie_page_id', $categories_pages->id)->position()->get();
             return view('frontend.pages.gestion_page.activites', compact('categories_pages', 'activites'));
         } catch (\Throwable $th) {
             //throw $th;

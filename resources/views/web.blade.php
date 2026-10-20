@@ -3,26 +3,15 @@
 @section('title', 'Accueil')
 
 @section('content')
-    <!-- HERO CAROUSEL AVEC IMAGES UNSPLASH -->
-    @include('frontend.web.sections.slidersweb')
-    <!-- À PROPOS SIMPLIFIÉ -->
-    {{-- @include('frontend.web.sections.presentationweb') --}}
-
-    <!-- MOT DU DIRECTEUR - NOUVELLE SECTION -->
-    {{-- @include('frontend.web.sections.motdirecteurweb') --}}
-
-    <!-- VIDEO PRÉSENTATION -->
-    @include('frontend.web.sections.presentationvideoweb')
-    <!-- ACTIVITÉS -->
-    @include('frontend.web.sections.activitesweb')
-    <!-- VALEURS -->
-    @include('frontend.web.sections.valeursweb')
-    <!-- STATISTIQUES -->
-    @include('frontend.web.sections.statistiquesweb')
-    <!-- ACTUALITÉS -->
-    {{-- @include('frontend.web.sections.actualitesweb') --}}
-    <!-- ÉQUIPE -->
-    {{-- @include('frontend.web.sections.equipesweb') --}}
-    <!-- CONTACT -->
-    @include('frontend.web.sections.contactweb')
+    @include('frontend.web.home.hero')
+    @include('frontend.web.home.video')
+    @include('frontend.web.home.about')
+    @include('frontend.web.home.process')
+    @include('frontend.web.home.activities')
+    @include('frontend.web.home.products')
+    @include('frontend.web.home.stats')
+    @include('frontend.web.home.values')
+    @include('frontend.web.home.points')
+    @include('frontend.web.home.shop')
+    @include('frontend.web.home.contact')
 @endsection

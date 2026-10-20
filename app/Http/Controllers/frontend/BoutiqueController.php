@@ -2,72 +2,87 @@
 
 namespace App\Http\Controllers\frontend;
 
-use App\Models\Produit;
-use App\Models\Categorie;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Categorie;
+use App\Models\Produit;
+use App\Support\SiteCache;
+use Illuminate\Http\Request;
 
 class BoutiqueController extends Controller
 {
-    // Page pour voir tous les produits groupés par catégorie (query string)
+    private const PAR_PAGE = 16;
+
+    // Tous les produits (filtres optionnels ?categorie= et ?recherche=)
     public function index(Request $request)
     {
         try {
-            $categorieSlug = $request->categorie;
-            $recherche = $request->recherche;
-            $categorie = null;
-            $query = Produit::with('categorie')->active();
+            $recherche = trim((string) $request->recherche);
+            $categorie = $request->categorie
+                ? Categorie::where('slug', $request->categorie)->first()
+                : null;
 
-            // Filtre par catégorie
-            if ($categorieSlug) {
-                $categorie = Categorie::where('slug', $categorieSlug)->first();
-                if ($categorie) {
-                    $query->where('categorie_id', $categorie->id);
-                }
-            }
+            $produits = $this->produitsQuery($categorie, $recherche, true)
+                ->paginate(self::PAR_PAGE);
 
-            // Filtre par recherche
-            if ($recherche) {
-                $query->where(function($q) use ($recherche) {
-                    $q->where('libelle', 'LIKE', '%' . $recherche . '%')
-                      ->orWhere('description', 'LIKE', '%' . $recherche . '%')
-                      ->orWhereHas('categorie', function($catQuery) use ($recherche) {
-                          $catQuery->where('libelle', 'LIKE', '%' . $recherche . '%');
-                      });
-                });
-            }
-
-            $produits = $query->paginate(16);
-
-            return view('frontend.pages.boutique', compact('produits', 'categorie', 'recherche'));
+            return $this->render($produits, $categorie, $recherche);
         } catch (\Throwable $th) {
+            report($th);
+
             return redirect()->route('boutique.accueil')->with('error', 'Une erreur est survenue. Veuillez réessayer plus tard.');
         }
     }
 
-    // Page pour voir les produits d'une catégorie via slug dans l'URL
+    // Produits d'une catégorie (slug dans l'URL)
     public function categorie($slug)
     {
-        try {
-            $categorie = Categorie::where('slug', $slug)->firstOrFail();
-            $recherche = request('recherche');
-            $query = Produit::with('categorie')
-                ->where('categorie_id', $categorie->id)
-                ->active();
+        $categorie = Categorie::with('media')->where('slug', $slug)->first();
 
-            // Filtre par recherche dans la catégorie
-            if ($recherche) {
-                $query->where(function($q) use ($recherche) {
-                    $q->where('libelle', 'LIKE', '%' . $recherche . '%')
-                      ->orWhere('description', 'LIKE', '%' . $recherche . '%');
-                });
-            }
-
-            $produits = $query->paginate(16);
-
-            return view('frontend.pages.boutique', compact('produits', 'categorie', 'recherche'));
-        } catch (\Throwable $th) {
+        if (! $categorie) {
             return redirect()->route('boutique.accueil')->with('error', 'Catégorie introuvable.');
         }
+
+        try {
+            $recherche = trim((string) request('recherche'));
+            $produits = $this->produitsQuery($categorie, $recherche, false)
+                ->paginate(self::PAR_PAGE);
+
+            return $this->render($produits, $categorie, $recherche);
+        } catch (\Throwable $th) {
+            report($th);
+
+            return redirect()->route('boutique.accueil')->with('error', 'Une erreur est survenue. Veuillez réessayer plus tard.');
+        }
+    }
+
+    private function produitsQuery(?Categorie $categorie, string $recherche, bool $chercherDansCategories)
+    {
+        return Produit::query()
+            ->select(['id', 'slug', 'libelle', 'stock', 'prix_de_vente', 'categorie_id', 'statut'])
+            ->with(['media', 'categorie:id,libelle,slug'])
+            ->active()
+            ->when($categorie, fn ($q) => $q->where('categorie_id', $categorie->id))
+            ->when($recherche !== '', function ($q) use ($recherche, $chercherDansCategories) {
+                $q->where(function ($q) use ($recherche, $chercherDansCategories) {
+                    $q->where('libelle', 'LIKE', "%{$recherche}%")
+                        ->orWhere('description', 'LIKE', "%{$recherche}%");
+
+                    if ($chercherDansCategories) {
+                        $q->orWhereHas('categorie', fn ($c) => $c->where('libelle', 'LIKE', "%{$recherche}%"));
+                    }
+                });
+            })
+            ->orderByRaw('stock > 0 DESC') // produits disponibles en premier
+            ->latest();
+    }
+
+    private function render($produits, ?Categorie $categorie, string $recherche)
+    {
+        return view('frontend.pages.boutique', [
+            'produits' => $produits,
+            'categorie' => $categorie,
+            'recherche' => $recherche !== '' ? $recherche : null,
+            'categories' => SiteCache::shopCategories(),
+            'totalProduits' => SiteCache::shopTotal(),
+        ]);
     }
 }

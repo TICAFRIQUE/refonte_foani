@@ -291,7 +291,7 @@
 
         <div class="row g-4">
             <!-- PERSÉVÉRANCE ET PASSION -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
                 <div class="value-card perseverance">
                     <div class="value-icon">
                         <i class="bi bi-fire"></i>
@@ -304,7 +304,7 @@
             </div>
 
             <!-- PROFESSIONNALISME ET RIGUEUR -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
                 <div class="value-card professionnalisme">
                     <div class="value-icon">
                         <i class="bi bi-gear-fill"></i>
@@ -317,7 +317,7 @@
             </div>
 
             <!-- INTÉGRITÉ -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
                 <div class="value-card integrite">
                     <div class="value-icon">
                         <i class="bi bi-shield-fill-check"></i>
@@ -330,7 +330,7 @@
             </div>
 
             <!-- SATISFACTION TOTALE DES CLIENTS -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="500">
                 <div class="value-card satisfaction">
                     <div class="value-icon">
                         <i class="bi bi-heart-fill"></i>

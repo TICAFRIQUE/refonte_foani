@@ -13,6 +13,7 @@ use App\Services\TicAfriqueSms;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 
@@ -22,17 +23,7 @@ class PanierController extends Controller
     // Afficher le panier
     public function index()
     {
-        $panier_sessions = Session::get('panier', []);
-        $panier = [];
-
-        foreach ($panier_sessions as $id => $item) {
-            $produit = Produit::find($id);
-            if ($produit) {
-                // On ajoute la quantité stockée en session à l'objet produit
-                $produit->quantite = $item['quantite'];
-                $panier[] = $produit;
-            }
-        }
+        $panier = $this->produitsDuPanier();
 
         return view('frontend.pages.commande.panier', compact('panier'));
     }
@@ -57,6 +48,7 @@ class PanierController extends Controller
         return response()->json([
             'success' => true,
             'count' => $count,
+            'quantite' => $panier[$produit_id]['quantite'], // quantité de ce produit dans le panier
             'message' => 'Produit ajouté au panier.'
         ]);
     }
@@ -91,16 +83,7 @@ class PanierController extends Controller
     //caisse
     public function caisse()
     {
-        $panier_sessions = Session::get('panier', []);
-        $panier = [];
-
-        foreach ($panier_sessions as $id => $item) {
-            $produit = Produit::find($id);
-            if ($produit) {
-                $produit->quantite = $item['quantite'];
-                $panier[] = $produit;
-            }
-        }
+        $panier = $this->produitsDuPanier();
 
         // recuperer les communes et villes de livraison
         $villes = Ville::active()->alphabetique()->get();
@@ -130,6 +113,7 @@ class PanierController extends Controller
             'frais_livraison' => 'required|numeric',
             'sous_total'      => 'required|numeric|min:10000',
             'total_general'   => 'required|numeric|min:10000',
+            'idempotency_key' => 'nullable|uuid',
         ], [
             'commune.exists' => 'La commune choisie n\'existe pas.',
             'phone.required' => 'Le numéro de téléphone est obligatoire pour vous contacter.',
@@ -145,10 +129,45 @@ class PanierController extends Controller
             'sous_total.min' => 'Le sous-total doit etre au moins 10 000 FCFA.',
         ]);
 
+        // 🔁 Idempotence : chaque affichage de la caisse génère une clé unique (champ caché).
+        // Un double clic, un double envoi ou un rafraîchissement renvoie la même clé :
+        // la commande n'est alors créée qu'une seule fois.
+        $cleIdempotence = $request->filled('idempotency_key')
+            ? 'commande:idem:' . Auth::id() . ':' . $request->idempotency_key
+            : null;
+
+        if ($cleIdempotence) {
+            $etat = Cache::get($cleIdempotence);
+
+            if (is_string($etat) && str_starts_with($etat, 'ok:')) {
+                return redirect()->route('panier.index')
+                    ->with('success', 'Votre commande a bien été enregistrée.');
+            }
+
+            // add() est atomique : un seul envoi « gagne », les suivants sont refusés
+            if (! Cache::add($cleIdempotence, 'en_cours', now()->addMinutes(10))) {
+                return redirect()->route('panier.index')
+                    ->with('info', 'Votre commande est déjà en cours de validation, merci de patienter.');
+            }
+        }
+
         // 🛒 Vérification du panier en session
         $panier_sessions = Session::get('panier', []);
         if (empty($panier_sessions)) {
+            if ($cleIdempotence) {
+                Cache::forget($cleIdempotence);
+            }
             return redirect()->back()->with('error', 'Votre panier est vide.');
+        }
+
+        // 🔒 Un client ne peut valider qu'une commande à la fois (ex. deux onglets ouverts)
+        $verrou = Cache::lock('commande:client:' . Auth::id(), 30);
+        if (! $verrou->get()) {
+            if ($cleIdempotence) {
+                Cache::forget($cleIdempotence);
+            }
+            return redirect()->back()->withInput()
+                ->with('warning', 'Une commande est déjà en cours de validation. Patientez quelques secondes puis réessayez.');
         }
 
         // 📍 Récupération des infos de la commune et ville
@@ -208,20 +227,36 @@ class PanierController extends Controller
                 return $commande;
             });
 
-            // 📱 Envoi SMS à l'administrateur après succès de la transaction
-            $ticAfriqueService = new TicAfriqueSms();
-            $ticAfriqueService->sendNewOrderSms($commande);
+            // La clé est marquée « traitée » : un renvoi éventuel affichera le succès sans recréer la commande
+            if ($cleIdempotence) {
+                Cache::put($cleIdempotence, 'ok:' . $commande->id, now()->addDay());
+            }
+        } catch (\Throwable $e) {
+            // ❌ Rien n'a été enregistré (transaction annulée) : le client peut réessayer
+            if ($cleIdempotence) {
+                Cache::forget($cleIdempotence);
+            }
+            report($e);
 
-            // ✅ Si tout s'est bien passé
-            return redirect()
-                ->route('panier.index')
-                ->with('success', 'Commande enregistrée avec succès !');
-        } catch (\Exception $e) {
-            // ❌ En cas d'erreur
             return redirect()
                 ->back()
-                ->with('error', "Erreur lors de l'enregistrement de la commande : " . $e->getMessage());
+                ->withInput()
+                ->with('error', "Votre commande n'a pas pu être enregistrée. Veuillez réessayer dans un instant.");
+        } finally {
+            $verrou->release();
         }
+
+        // 📱 SMS à l'administrateur : un échec d'envoi ne doit pas faire croire que la commande a échoué
+        try {
+            (new TicAfriqueSms())->sendNewOrderSms($commande);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        // ✅ Commande enregistrée
+        return redirect()
+            ->route('panier.index')
+            ->with('success', 'Commande ' . $commande->code . ' enregistrée avec succès ! Nous vous contactons rapidement.');
     }
 
 
@@ -417,5 +452,32 @@ class PanierController extends Controller
             'status' => 'ok',
             'response' => $response
         ]);
+    }
+
+    /**
+     * Produits du panier (session) en une seule requête, avec images et catégorie.
+     * Chaque produit reçoit sa quantité dans ->quantite. Ordre d'ajout conservé.
+     */
+    private function produitsDuPanier(): array
+    {
+        $session = Session::get('panier', []);
+        if (empty($session)) {
+            return [];
+        }
+
+        $produits = Produit::with(['media', 'categorie'])
+            ->whereIn('id', array_keys($session))
+            ->get()
+            ->keyBy('id');
+
+        $panier = [];
+        foreach ($session as $id => $item) {
+            if ($produit = $produits->get($id)) {
+                $produit->quantite = $item['quantite'];
+                $panier[] = $produit;
+            }
+        }
+
+        return $panier;
     }
 }

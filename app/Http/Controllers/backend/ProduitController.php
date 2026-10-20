@@ -21,7 +21,7 @@ class ProduitController extends Controller
     {
         try {
             // Récupérer les produits actifs avec leurs relations
-            $produits = Produit::with(['categorie', 'typeOffres'])
+            $produits = Produit::with(['categorie', 'typeOffres', 'media'])
                 ->where('statut', 1)
                 ->orderByDesc('created_at')
                 ->get();

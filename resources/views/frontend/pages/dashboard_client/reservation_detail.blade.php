@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="fw-bold mb-4 text-center" style="color:#2a6b2a;">Détail de la réservation</h2>
+    @include('frontend.components.account-nav')
     <div class="row justify-content-center">
         <div class="col-lg-8">
             @include('frontend.components.message_session')

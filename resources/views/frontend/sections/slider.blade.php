@@ -459,8 +459,9 @@
     <div class="owl-carousel owl-theme" id="mainSliderOwl">
         @forelse ($sliders as $index => $slider)
             <div class="item" data-slide="{{ $index }}">
-                <img src="{{ $slider->getFirstMediaUrl('image') ?: asset('front/images/sliders/default.jpg') }}"
-                    alt="{{ $slider->libelle }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+                <img src="{{ $slider->getFirstMediaUrl('image', 'large') ?: asset('front/images/sliders/default.jpg') }}"
+                    alt="{{ $slider->libelle }}" decoding="async"
+                    @if ($index === 0) fetchpriority="high" @else loading="lazy" @endif>
 
                 @if (isset($slider->btn_nom))
                     <div class="main-slider-caption-center">
@@ -493,6 +494,11 @@
         @endforelse
     </div>
 </section>
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+@endpush
 
 @push('scripts')
     <!-- OwlCarousel JS -->

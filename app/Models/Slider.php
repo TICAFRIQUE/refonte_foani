@@ -5,11 +5,14 @@ namespace App\Models;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\Concerns\HasOptimizedImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Slider extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, HasOptimizedImages {
+        HasOptimizedImages::registerMediaConversions insteadof InteractsWithMedia;
+    }
 
     /**
      * Les attributs pouvant être remplis massivement.

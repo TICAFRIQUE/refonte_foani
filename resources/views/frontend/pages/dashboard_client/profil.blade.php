@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="fw-bold mb-4 text-center" style="color:#559e33;">Mon profil</h2>
+    @include('frontend.components.account-nav')
     <div class="row justify-content-center">
         <div class="col-md-7 col-lg-6">
             <div class="bg-white p-4 rounded shadow-sm">

@@ -10,10 +10,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\Concerns\HasOptimizedImages;
 
 class Produit extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, Sluggable;
+    use HasFactory, InteractsWithMedia, HasOptimizedImages, Sluggable {
+        HasOptimizedImages::registerMediaConversions insteadof InteractsWithMedia;
+    }
     // decrementer l'incrementation automatique de l'id
     public $incrementing = false;
     protected $fillable = [

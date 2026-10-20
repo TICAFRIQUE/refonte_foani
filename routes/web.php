@@ -246,7 +246,8 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     // messages contact
     Route::prefix('contact')->name('contact.')->controller(ContactController::class)->group(function () {
         Route::get('/', 'index')->name('index');       // Liste des contacts
-        Route::post('/', 'store')->name('store');      // Ajouter un contact
+        // Envoi du formulaire de contact : public (visiteurs), limité contre le spam
+        Route::post('/', 'store')->name('store')->withoutMiddleware('admin')->middleware('throttle:5,1');
         Route::get('/{id}', 'show')->name('show');     // Voir un contact
         Route::get('delete/{id}', 'delete')->name('delete'); // Supprimer un contact
     });

@@ -1,51 +1,66 @@
+// Ajout au panier (boutons .btn-ajouter-panier data-id="...")
 $(function() {
-    // Ajouter au panier
-    $('.btn-ajouter-panier').on('click', function(e) {
+    $(document).on('click', '.btn-ajouter-panier', function(e) {
         e.preventDefault();
-        var produitId = $(this).data('id');
         var btn = $(this);
-        btn.prop('disabled', true);
+        if (btn.prop('disabled')) return;
+
+        var produitId = btn.data('id');
+        var card = btn.closest('.pcard, .offer-card, .card');
+        var nom = $.trim(card.find('.pcard__title, .offer-card__title, .card-title, h3, h2').first().text()) || 'Produit';
+        var image = card.find('img').first().attr('src');
+        var original = btn.html();
+
+        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Ajout…');
 
         $.ajax({
             url: "/panier/add/" + produitId,
             type: "POST",
             data: { _token: $('meta[name="csrf-token"]').attr('content') },
             success: function(response) {
-                btn.prop('disabled', false);
-
-                // Affiche une alerte verte en haut de la page
-                let alert = $(`
-                    <div class="alert alert-success alert-dismissible fade show position-fixed w-100 text-center" 
-                         style="top: 0; left: 0; z-index: 2000;">
-                        Le produit a bien été ajouté à votre panier.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                    </div>
-                `);
-                $('body').append(alert);
+                // Retour visuel sur le bouton
+                btn.addClass('is-added').html('<i class="bi bi-check2-circle"></i> Ajouté');
                 setTimeout(function() {
-                    alert.fadeOut(300, function() { $(this).remove(); });
-                }, 500);
+                    btn.removeClass('is-added').html(original).prop('disabled', false);
+                }, 1600);
 
-                // Met à jour le badge panier
-                $('.bi-cart').next('span.badge').text(response.count);
-                $('#cart-badge-bottom').text(response.count);
-                $('#cart-badge-mobile').text(response.count);
+                // Compteurs du panier
+                if (typeof updateCartBadges === 'function') {
+                    updateCartBadges(response.count);
+                } else {
+                    $('[data-cart-count], #cart-badge-bottom, #cart-badge-mobile').text(response.count);
+                }
+
+                var texte = nom + (response.quantite > 1 ? ' (× ' + response.quantite + ' dans votre panier)' : '');
+                if (window.FoaniToast) {
+                    FoaniToast.success('Ajouté au panier', texte, {
+                        image: image,
+                        actions: [
+                            { label: 'Voir mon panier', href: '/panier' },
+                            { label: 'Continuer', href: '#', ghost: true }
+                        ]
+                    });
+                }
             },
-            error: function() {
-                btn.prop('disabled', false);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erreur',
-                    text: 'Une erreur est survenue lors de l’ajout au panier.'
-                });
+            error: function(xhr) {
+                btn.html(original).prop('disabled', false);
+                var message = (xhr.responseJSON && xhr.responseJSON.message) ||
+                    "Impossible d'ajouter ce produit pour le moment. Vérifiez votre connexion et réessayez.";
+                if (xhr.status === 419) {
+                    message = 'Votre session a expiré. Rechargez la page puis réessayez.';
+                }
+                if (window.FoaniToast) {
+                    FoaniToast.error('Ajout impossible', message);
+                } else if (window.Swal) {
+                    Swal.fire({ icon: 'error', title: 'Erreur', text: message });
+                }
             }
         });
     });
 
-    // Fonction pour recharger le contenu du panier (optionnel)
-    // function loadPanierContent() {
-    //     $.get("/panier/content", function(html) {
-    //         $('#panier-content').html(html);
-    //     });
-    // }
+    // Le bouton « Continuer » d'une notification la ferme simplement
+    $(document).on('click', '.ftoast__actions a[href="#"]', function(e) {
+        e.preventDefault();
+        $(this).closest('.ftoast').find('.ftoast__close').trigger('click');
+    });
 });

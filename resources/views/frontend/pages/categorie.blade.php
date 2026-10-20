@@ -6,16 +6,7 @@
 
 @section('content')
 <div class="container py-4">
-    <!-- Header de la page -->
-    <div class="row mb-4">
-        <div class="col-12 text-center">
-            <h1 class="display-6 fw-bold text-success mb-3">
-                <i class="bi bi-grid-3x3-gap me-2"></i>
-                Nos Catégories
-            </h1>
-            <p class="lead text-muted">Explorez notre gamme complète de produits avicoles</p>
-        </div>
-    </div>
+    {{-- Titre affiché dans le bandeau (frontend.components.page-hero) --}}
 
     <!-- Grille des catégories -->
     <div class="row g-4">
@@ -25,7 +16,7 @@
                     <!-- Image de la catégorie -->
                     <div class="category-image-wrapper position-relative overflow-hidden">
                         @if($categorie->getFirstMediaUrl('image'))
-                            <img src="{{ $categorie->getFirstMediaUrl('image') }}" 
+                            <img src="{{ $categorie->getFirstMediaUrl('image', 'thumb') }}" decoding="async" 
                                  class="card-img-top category-image" 
                                  alt="{{ $categorie->libelle }}"
                                  loading="lazy">

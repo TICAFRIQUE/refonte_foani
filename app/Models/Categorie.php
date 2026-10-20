@@ -6,12 +6,15 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\Concerns\HasOptimizedImages;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Categorie extends Model implements HasMedia
 {
-    use InteractsWithMedia, Sluggable, HasFactory;
+    use InteractsWithMedia, HasOptimizedImages, Sluggable, HasFactory {
+        HasOptimizedImages::registerMediaConversions insteadof InteractsWithMedia;
+    }
 
     public $incrementing = false;  // decrementer l'incrementation automatique de l'id
 

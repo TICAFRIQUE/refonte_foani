@@ -1,4 +1,4 @@
-{{-- filepath: c:\laragon\www\foani\resources\views\frontend\layouts\app.blade.php --}}
+{{-- Layout boutique --}}
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -64,35 +64,41 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('images/favicon/site.webmanifest') }}">
 
-    {{-- Preconnect for performance --}}
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    {{-- Connexions anticipées vers les CDN --}}
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    {{-- DNS Prefetch --}}
-    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
-
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('front/css/categorie.css') }}">
-
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <!-- OwlCarousel CSS -->
+    {{-- Polices : Poppins (titres, menu, boutons) + Inter (texte) --}}
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=Caveat:wght@600;700&display=swap">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('front/css/carousel-animate.css') }}">
+    {{-- Mêmes versions que le site vitrine : le navigateur réutilise son cache entre les deux --}}
+    <link href="{{ asset('front/vendor/bootstrap-5.3.3/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front/vendor/bootstrap-icons-1.11.3/bootstrap-icons.min.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}?v={{ filemtime(public_path('front/css/custom.css')) }}">
+    <link rel="stylesheet" href="{{ asset('front/css/shop.css') }}?v={{ filemtime(public_path('front/css/shop.css')) }}">
+    <script>document.documentElement.classList.add('js');</script>
+    <script src="{{ asset('front/js/shop.js') }}?v={{ filemtime(public_path('front/js/shop.js')) }}" defer></script>
 
     @stack('styles')
+
+    {{-- Pré-chargement des pages au survol des liens (navigation quasi instantanée, Chrome/Edge) --}}
+    <script type="speculationrules">
+    {
+        "prefetch": [{
+            "source": "document",
+            "where": { "and": [
+                { "href_matches": "/*" },
+                { "not": { "href_matches": "/admin*" } },
+                { "not": { "href_matches": "/logout*" } },
+                { "not": { "href_matches": "/panier/*" } }
+            ]},
+            "eagerness": "moderate"
+        }]
+    }
+    </script>
 
     {{-- Structured Data JSON-LD --}}
     <script type="application/ld+json">
@@ -149,897 +155,198 @@
         }(window, document, 'script',
             'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '5121195344601135');
+        // Seul PageView est envoyé ici. Les autres événements (AddToCart, Search...)
+        // étaient déclenchés sur toutes les pages, ce qui faussait les statistiques.
         fbq('track', 'PageView');
-        fbq('track', 'Search');
-        fbq('track', 'AddToCart');
-        fbq('track', 'ViewContent');
-        fbq('track', 'SubmitApplication');
     </script>
     <noscript>
-        <img height="1" width="1"
-            src="https://www.facebook.com/tr?id=5121195344601135&ev=PageView
-&noscript=1" />
+        <img height="1" width="1" alt=""
+            src="https://www.facebook.com/tr?id=5121195344601135&ev=PageView&noscript=1" />
     </noscript>
     <!-- End Facebook Pixel Code -->
-
-
-    <style>
-        :root {
-            --color-vert: #559e33;
-            --color-vert2: #345e24;
-            --color-rouge: #a61c1c;
-            --color-jaune: #f1c40f;
-            --color-primary: #284093;
-            --color-secondary: #6c7ae0;
-        }
-
-        /* MENU DESKTOP AVEC ICÔNES ET ESPACEMENT */
-        @media (min-width: 992px) {
-            /* Espacement entre les liens */
-            .navbar-nav {
-                gap: 35px; /* Espace entre chaque lien */
-            }
-
-            .navbar-nav .nav-item {
-                position: relative;
-            }
-
-            /* Style des liens avec icônes */
-            .navbar-nav .nav-link {
-                display: inline-flex;
-                align-items: center;
-                gap: 10px; /* Espace entre icône et texte */
-                padding: 12px 20px;
-                font-weight: 600;
-                font-size: 0.95rem;
-                letter-spacing: 0.3px;
-                color: white;
-                background: rgba(255, 255, 255, 0.05);
-                border-radius: 12px;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                overflow: hidden;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            /* Icônes dans les liens */
-            .navbar-nav .nav-link i {
-                font-size: 1.2rem;
-                transition: all 0.3s ease;
-            }
-
-            /* Effet brillant au survol */
-            .navbar-nav .nav-link::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-                transition: left 0.5s;
-            }
-
-            .navbar-nav .nav-link:hover::before {
-                left: 100%;
-            }
-
-            /* Effet au survol */
-            .navbar-nav .nav-link:hover {
-                background: rgba(255, 255, 255, 0.15);
-                transform: translateY(-3px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-                border-color: rgba(255, 255, 255, 0.3);
-                color: white;
-            }
-
-            .navbar-nav .nav-link:hover i {
-                transform: scale(1.15) rotate(5deg);
-            }
-
-            /* Lien actif */
-            .navbar-nav .nav-link.active {
-                background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15));
-                border-color: rgba(255, 255, 255, 0.3);
-                color: white;
-                font-weight: 700;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            }
-
-            .navbar-nav .nav-link.active i {
-                animation: bounce 0.5s;
-            }
-
-            /* Style dropdown avec icônes */
-            .navbar-nav .dropdown-toggle::after {
-                margin-left: 8px;
-                transition: transform 0.3s ease;
-            }
-
-            .navbar-nav .dropdown:hover .dropdown-toggle::after {
-                transform: rotate(180deg);
-            }
-
-            /* Menu dropdown amélioré */
-            .navbar-nav .dropdown-menu {
-                border: none;
-                border-radius: 15px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-                padding: 12px;
-                margin-top: 12px;
-                background: white;
-                min-width: 250px;
-            }
-
-            .navbar-nav .dropdown-item {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 12px 18px;
-                border-radius: 10px;
-                transition: all 0.3s ease;
-                font-weight: 500;
-                color: #333;
-            }
-
-            .navbar-nav .dropdown-item i {
-                font-size: 1.1rem;
-                color: var(--color-primary);
-                transition: all 0.3s ease;
-            }
-
-            .navbar-nav .dropdown-item:hover {
-                background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-                color: white;
-                transform: translateX(8px);
-                padding-left: 24px;
-            }
-
-            .navbar-nav .dropdown-item:hover i {
-                color: white;
-                transform: scale(1.2);
-            }
-
-            /* Animation bounce pour icône active */
-            @keyframes bounce {
-                0%, 100% { transform: scale(1) rotate(0deg); }
-                25% { transform: scale(1.2) rotate(-5deg); }
-                50% { transform: scale(1.1) rotate(5deg); }
-                75% { transform: scale(1.15) rotate(-3deg); }
-            }
-
-            /* Ligne de soulignement animée */
-            .navbar-nav .nav-link::after {
-                content: '';
-                position: absolute;
-                bottom: 8px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 0;
-                height: 2px;
-                background: rgba(255, 255, 255, 0.8);
-                border-radius: 2px;
-                transition: width 0.3s ease;
-            }
-
-            .navbar-nav .nav-link:hover::after,
-            .navbar-nav .nav-link.active::after {
-                width: 60%;
-            }
-        }
-
-        /* Effets pour les liens de navigation MOBILE */
-        @media (max-width: 991.98px) {
-            .navbar-nav .nav-link {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 15px 20px;
-                margin: 5px 0;
-                border-radius: 12px;
-                transition: all 0.3s ease;
-            }
-
-            .navbar-nav .nav-link i {
-                font-size: 1.3rem;
-            }
-
-            .navbar-nav .nav-link:hover {
-                background-color: rgba(255, 255, 255, 0.15);
-                transform: translateX(5px);
-            }
-        }
-
-        /* Effet au clic */
-        .navbar-nav .nav-link:active {
-            transform: scale(0.95);
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Effets pour les éléments dropdown */
-        .dropdown-item {
-            transition: all 0.3s ease;
-        }
-
-        .dropdown-item:hover {
-            background-color: #559e33;
-            color: white;
-            transform: translateX(5px);
-        }
-
-        /* Effets pour les boutons */
-        .btn {
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Effet pour le badge du panier */
-        .badge {
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover .badge {
-            transform: scale(1.2);
-        }
-
-        /**LOGO***/
-        .logo-wrapper {
-            width: 90px;
-            height: 90px;
-            overflow: hidden;
-            border-radius: 50%;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .logo-wrapper:hover {
-            transform: scale(1.07);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-        }
-
-        .logo-image {
-            width: 90%;
-            height: 90%;
-            object-fit: contain;
-            border-radius: 50%;
-        }
-
-        /* Responsive pour le logo */
-        @media (max-width: 768px) {
-            .logo-wrapper {
-                width: 60px;
-                height: 60px;
-            }
-
-            .logo-image {
-                width: 88%;
-                height: 88%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-wrapper {
-                width: 55px;
-                height: 55px;
-            }
-
-            .logo-image {
-                width: 85%;
-                height: 85%;
-            }
-        }
-
-        .card {
-            transition: transform 0.3s cubic-bezier(.4, 2, .3, 1), box-shadow 0.3s cubic-bezier(.4, 2, .3, 1);
-            border-radius: 18px;
-        }
-
-        .card:hover {
-            transform: scale(1.04) translateY(-4px);
-            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
-            border-color: #559e33;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card-icon {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, #559e33 60%, #f7c948 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 1.5rem;
-            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-        }
-
-        .card-text {
-            color: #555;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .btn-success {
-            background: linear-gradient(90deg, #559e33 80%, #f7c948 100%);
-            border: none;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        .btn-success:hover {
-            background: linear-gradient(90deg, #f7c948 60%, #559e33 100%);
-            transform: scale(1.07);
-            color: #fff;
-        }
-
-        .card-footer {
-            background: none;
-            border-top: none;
-            padding-top: 0;
-        }
-
-        @media (max-width: 767px) {
-            .card-title {
-                font-size: 1.1rem;
-            }
-
-            .card-icon {
-                width: 32px;
-                height: 32px;
-                font-size: 1.2rem;
-            }
-        }
-
-        /* MOBILE - Barre de recherche améliorée */
-        @media (max-width: 991.98px) {
-            /* Container principal mobile */
-            .navbar .container {
-                padding: 0.75rem 1rem;
-            }
-
-            /* Logo mobile - plus compact */
-            .navbar .navbar-brand {
-                margin-right: 12px;
-                flex-shrink: 0;
-            }
-
-            /* Barre de recherche mobile moderne */
-            #mobile-search-form {
-                display: flex !important;
-                flex: 1;
-                max-width: none;
-                margin: 0 12px;
-                background: rgba(255, 255, 255, 0.15);
-                border-radius: 25px;
-                padding: 4px;
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
-
-            #mobile-search-form:focus-within {
-                background: rgba(255, 255, 255, 0.25);
-                border-color: rgba(255, 255, 255, 0.4);
-                transform: translateY(-1px);
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            }
-
-            /* Input de recherche mobile */
-            #mobile-search-form input {
-                border: none !important;
-                background: transparent !important;
-                color: white !important;
-                font-size: 14px !important;
-                padding: 8px 16px !important;
-                box-shadow: none !important;
-                outline: none !important;
-                font-weight: 500;
-            }
-
-            #mobile-search-form input::placeholder {
-                color: rgba(255, 255, 255, 0.8) !important;
-                font-weight: 400;
-            }
-
-            #mobile-search-form input:focus {
-                color: white !important;
-                background: transparent !important;
-            }
-
-            /* Bouton de recherche mobile */
-            #mobile-search-form button {
-                background: rgba(255, 255, 255, 0.2) !important;
-                border: none !important;
-                color: white !important;
-                border-radius: 50% !important;
-                width: 36px !important;
-                height: 36px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                transition: all 0.3s ease !important;
-                flex-shrink: 0;
-            }
-
-            #mobile-search-form button:hover {
-                background: rgba(255, 255, 255, 0.3) !important;
-                transform: scale(1.1) !important;
-                color: white !important;
-            }
-
-            #mobile-search-form button i {
-                font-size: 14px !important;
-            }
-
-            /* Menu burger - plus compact */
-            .navbar-toggler {
-                margin-left: 12px !important;
-                padding: 8px !important;
-                border: 1px solid rgba(255, 255, 255, 0.3) !important;
-                border-radius: 8px !important;
-                background: rgba(255, 255, 255, 0.1) !important;
-                transition: all 0.3s ease !important;
-                flex-shrink: 0;
-            }
-
-            .navbar-toggler:hover {
-                background: rgba(255, 255, 255, 0.2) !important;
-                border-color: rgba(255, 255, 255, 0.5) !important;
-                transform: scale(1.05) !important;
-            }
-
-            .navbar-toggler:focus {
-                box-shadow: none !important;
-            }
-
-            .navbar-toggler-icon {
-                width: 20px !important;
-                height: 20px !important;
-                background-size: 20px 20px !important;
-            }
-
-            /* Panier mobile dans la barre */
-            .mobile-cart-link {
-                color: white;
-                text-decoration: none;
-                background: rgba(255, 255, 255, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s ease;
-                position: relative;
-                margin-left: 8px;
-                flex-shrink: 0;
-            }
-
-            .mobile-cart-link:hover {
-                color: white;
-                background: rgba(255, 255, 255, 0.25);
-                transform: scale(1.05);
-            }
-
-            .mobile-cart-badge {
-                position: absolute;
-                top: -6px;
-                right: -6px;
-                background: #ff4757;
-                color: white;
-                border-radius: 50%;
-                width: 18px;
-                height: 18px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 10px;
-                font-weight: 600;
-                border: 2px solid white;
-                animation: pulse 2s infinite;
-            }
-
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.1); }
-            }
-
-            /* Responsive breakpoints */
-            @media (max-width: 576px) {
-                .navbar .container {
-                    padding: 0.5rem 0.75rem;
-                }
-
-                .navbar .navbar-brand {
-                    margin-right: 8px;
-                }
-
-                #mobile-search-form {
-                    margin: 0 8px;
-                }
-
-                .navbar-toggler {
-                    margin-left: 8px !important;
-                }
-
-                .mobile-cart-link {
-                    margin-left: 6px;
-                }
-            }
-
-            @media (max-width: 375px) {
-                #mobile-search-form input {
-                    font-size: 13px !important;
-                    padding: 6px 12px !important;
-                }
-
-                #mobile-search-form button {
-                    width: 32px !important;
-                    height: 32px !important;
-                }
-
-                #mobile-search-form button i {
-                    font-size: 13px !important;
-                }
-            }
-        }
-
-        /* DESKTOP - Cacher la barre mobile */
-        @media (min-width: 992px) {
-            #mobile-search-form {
-                display: none !important;
-            }
-
-            .mobile-cart-link {
-                display: none !important;
-            }
-        }
-
-        /* Desktop - Barre de recherche avec toggle */
-        .navbar-search-container {
-            position: absolute;
-            top: 50%;
-            right: 54px;
-            transform: translateY(-50%);
-            z-index: 1000;
-            background: linear-gradient(135deg, #ffffff, #f8f9fa);
-            border-radius: 30px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            animation: slideInRight 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            backdrop-filter: blur(20px);
-            overflow: hidden;
-        }
-
-        .btn-search-toggle {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.25));
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            z-index: 1001;
-        }
-
-        .btn-search-toggle:hover {
-            transform: translateY(-2px) scale(1.05);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.35));
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .navbar-search-form {
-            display: flex !important;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar-search-form .form-control {
-            border: none;
-            border-radius: 30px 0 0 30px;
-            width: 280px;
-            padding: 14px 20px;
-            background: transparent;
-            font-size: 0.95rem;
-            color: #333;
-            transition: all 0.3s ease;
-            margin: 0;
-            flex: 1;
-        }
-
-        .navbar-search-form .form-control:focus {
-            box-shadow: none;
-            background: rgba(255, 255, 255, 0.9);
-            outline: none;
-            width: 320px;
-        }
-
-        .btn-search-submit {
-            background: linear-gradient(135deg, #2a6b2a, #1e5a1e);
-            border: none;
-            padding: 14px 18px;
-            color: white;
-            transition: all 0.3s ease;
-            border-radius: 0 30px 30px 0;
-            margin: 0;
-            flex-shrink: 0;
-        }
-
-        .btn-search-submit:hover {
-            background: linear-gradient(135deg, #1e5a1e, #164a16);
-            transform: scale(1.05);
-            color: white;
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateY(-50%) translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(-50%) translateX(0);
-            }
-        }
-
-        .navbar-search-container.closing {
-            animation: slideOutRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-        }
-
-        @keyframes slideOutRight {
-            0% {
-                opacity: 1;
-                transform: translateY(-50%) translateX(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-50%) translateX(30px) scale(0.9);
-            }
-        }
-
-        @media (max-width: 991px) {
-            .navbar-search-container {
-                display: none !important;
-            }
-        }
-    </style>
 </head>
 
 <body>
-    <!-- Header & Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
-        <div class="container d-flex align-items-center">
-            <!-- Logo -->
-            <a class="navbar-brand fw-bold" href="{{ route('web.index') }}">
-                <div id="logo" class="logo-wrapper rounded-circle">
-                    <img src="{{ $data_parametre ? URL::asset($data_parametre->getFirstMediaUrl('logo_header')) : URL::asset('images/camera-icon.png') }}"
-                        alt="Foani" class="logo-image">
-                </div>
-            </a>
+    @php
+        $logoUrl = $data_parametre?->getFirstMediaUrl('logo_header') ?: asset('front/images/logo.png');
+        $boutiqueActive = Route::is('boutique.*') || Route::is('categories');
+    @endphp
 
-            <!-- Barre de recherche mobile (visible uniquement sur mobile) -->
-            <form method="GET" action="{{ route('boutique.index') }}" id="mobile-search-form">
-                <input type="text" name="recherche" class="form-control" placeholder="Rechercher..." value="{{ request('recherche') }}">
-                <button type="submit">
-                    <i class="bi bi-search"></i>
-                </button>
-            </form>
-
-            <!-- Menu burger -->
-            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Menu desktop -->
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-bold">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('web.index') }}">
-                            <i class="bi bi-house-door-fill"></i>
-                            <span>ACCUEIL</span>
-                        </a>
-                    </li>
-
-                    <!-- Boutique -->
-                    <li class="nav-item">
-                        <a class="nav-link text-white {{ Route::is('boutique.index') || Route::is('boutique.categorie') || Route::is('boutique.accueil') ? 'active' : '' }}"
-                            href="{{ route('boutique.accueil') }}">   
-                            <i class="bi bi-cart-fill"></i>
-                            <span>BOUTIQUE</span>
-                        </a>
-                    </li>
-
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white {{ Route::is('points_de_vente') ? 'active' : '' }}"
-                            href="#" id="navbar" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="bi bi-geo-alt-fill"></i>
-                            <span>POINTS DE VENTE</span>
-                        </a>
-                        @php
-                            $points_de_vente = \App\Models\CategoriePointVente::active()->alphabetique()->get();
-                        @endphp
-                        <ul class="dropdown-menu" aria-labelledby="navbar">
-                            @foreach ($points_de_vente as $item)
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('points_de_vente', ['slug' => $item->slug]) }}">
-                                        <i class="bi bi-pin-map"></i>
-                                        {{ $item->libelle }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-white {{ Route::is('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
-                            <i class="bi bi-telephone-fill"></i>
-                            <span>CONTACT</span>
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Actions desktop -->
-                <div class="d-none d-lg-flex align-items-center gap-3">
-                    <!-- Barre de recherche desktop avec toggle -->
-                    <div class="position-relative">
-                        <button class="btn btn-search-toggle rounded-circle" id="searchToggleBtn" type="button">
-                            <i class="bi bi-search"></i>
-                        </button>
-
-                        <div class="navbar-search-container" id="navbarSearchContainer" style="display: none;">
-                            <form method="GET" action="{{ route('boutique.index') }}" class="navbar-search-form d-flex">
-                                <input type="text" name="recherche" class="form-control navbar-search-input"
-                                    placeholder="Rechercher un produit..." value="{{ request('recherche') }}"
-                                    id="navbarSearchInput">
-                                <button class="btn btn-search-submit" type="submit">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Panier desktop -->
-                    <a href="{{ route('panier.index') }}" class="btn btn-outline-light rounded-circle position-relative">
-                        <i class="bi bi-cart"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ $count ?? 0 }}
-                        </span>
+    <!-- Barre d'infos -->
+    <div class="topbar d-none d-md-block">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                @if ($data_parametre?->contact1)
+                    <a href="tel:{{ preg_replace('/\s+/', '', $data_parametre->contact1) }}">
+                        <i class="bi bi-telephone me-1"></i>{{ $data_parametre->contact1 }}
                     </a>
-
-                    <!-- Compte utilisateur -->
-                    @guest
-                        <div class="dropdown">
-                            <a class="btn btn-outline-light dropdown-toggle fw-bold" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> Mon Compte
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ route('user.loginForm') }}">
-                                        <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
-                                    </a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.registerForm') }}">
-                                        <i class="bi bi-person-plus me-2"></i> Créer un compte
-                                    </a></li>
-                            </ul>
-                        </div>
-                    @else
-                        <div class="dropdown">
-                            <a class="btn btn-outline-light dropdown-toggle fw-bold" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> {{ Auth::user()->username }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.commandes') }}">Mes commandes</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.reservations') }}">Mes reservations</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                @role('developpeur')
-                                    <li><a class="dropdown-item" href="{{ route('dashboard.index') }}">Admin Panel</a></li>
-                                @endrole
-                                <li><a class="dropdown-item" href="{{ route('user.logout') }}">Déconnexion</a></li>
-                            </ul>
-                        </div>
-                    @endguest
-                </div>
-
-                <!-- Section auth mobile dans collapse -->
-                <div class="d-lg-none mt-3 px-3">
-                    @guest
-                        <div class="dropdown">
-                            <a class="btn btn-outline-light dropdown-toggle fw-bold w-100" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> Mon Compte
-                            </a>
-                            <ul class="dropdown-menu w-100">
-                                <li><a class="dropdown-item" href="{{ route('user.loginForm') }}">
-                                        <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
-                                    </a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.registerForm') }}">
-                                        <i class="bi bi-person-plus me-2"></i> Créer un compte
-                                    </a></li>
-                            </ul>
-                        </div>
-                    @else
-                        <div class="dropdown">
-                            <a class="btn btn-outline-light dropdown-toggle fw-bold w-100" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle"></i> {{ Auth::user()->username }}
-                            </a>
-                            <ul class="dropdown-menu w-100">
-                                <li><a class="dropdown-item" href="{{ route('user.profil') }}">Mon profil</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.commandes') }}">Mes commandes</a></li>
-                                <li><a class="dropdown-item" href="{{ route('user.reservations') }}">Mes reservations</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                @role('developpeur')
-                                    <li><a class="dropdown-item" href="{{ route('dashboard.index') }}">Admin Panel</a></li>
-                                @endrole
-                                <li><a class="dropdown-item" href="{{ route('user.logout') }}">Déconnexion</a></li>
-                            </ul>
-                        </div>
-                    @endguest
-                </div>
+                    <span class="sep">|</span>
+                @endif
+                <span><i class="bi bi-truck me-1"></i>Livraison rapide · Produits frais garantis</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="{{ route('web.index') }}"><i class="bi bi-arrow-left-short"></i>Site Foani &amp; Services</a>
+                @if ($data_parametre?->contact2)
+                    <span class="sep">|</span>
+                    <a href="https://wa.me/225{{ $data_parametre->contact2 }}" target="_blank" rel="noopener">
+                        <i class="bi bi-whatsapp me-1"></i>Commander sur WhatsApp
+                    </a>
+                @endif
             </div>
         </div>
-    </nav>
+    </div>
 
-    <!--placer le breadcrumb ici si la route est different de accueil-->
-    @if (Request::routeIs('boutique.accueil') == false)
-        @include('frontend.components.breadcrumb')
+    <!-- Header -->
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg" aria-label="Navigation principale">
+            <div class="container flex-wrap">
+                <!-- Logo -->
+                <a class="navbar-brand me-3 me-xl-4 py-2" href="{{ route('boutique.accueil') }}" aria-label="Foani - Boutique">
+                    <span class="brand-logo">
+                        <img src="{{ $logoUrl }}" alt="Foani" width="56" height="56" fetchpriority="high">
+                    </span>
+                </a>
+
+                <!-- Actions mobiles : panier + menu -->
+                <div class="d-flex d-lg-none align-items-center gap-2 ms-auto">
+                    <a href="{{ route('web.index') }}" class="btn-vitrine" title="Découvrir le site Foani &amp; Services">
+                        <i class="bi bi-house-heart-fill"></i><span>Le site</span>
+                    </a>
+                    <a href="{{ route('panier.index') }}" class="header-action icon-only" aria-label="Panier">
+                        <i class="bi bi-basket2-fill"></i>
+                        <span class="cart-count" data-cart-count>{{ $count ?? 0 }}</span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false"
+                        aria-label="Ouvrir le menu">
+                        <i class="bi bi-list"></i>
+                    </button>
+                </div>
+
+                <!-- Recherche mobile : toujours visible, pleine largeur -->
+                <div class="w-100 d-lg-none mobile-search-row">
+                    <form method="GET" action="{{ route('boutique.index') }}" class="header-search" role="search">
+                        <input type="search" name="recherche" placeholder="Rechercher un produit…"
+                            value="{{ request('recherche') }}" aria-label="Rechercher un produit">
+                        <button type="submit" aria-label="Rechercher"><i class="bi bi-search"></i></button>
+                    </form>
+                </div>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <!-- Menu -->
+                    <ul class="navbar-nav main-nav me-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::is('boutique.accueil') ? 'active' : '' }}"
+                                href="{{ route('boutique.accueil') }}">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ $boutiqueActive && !Route::is('boutique.accueil') ? 'active' : '' }}"
+                                href="{{ route('boutique.index') }}">Nos produits</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ Route::is('points_de_vente') ? 'active' : '' }}"
+                                href="#" id="menuPointsVente" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">Points de vente</a>
+                            <ul class="dropdown-menu" aria-labelledby="menuPointsVente">
+                                @foreach ($menu_points_vente ?? [] as $item)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('points_de_vente', ['slug' => $item->slug]) }}">
+                                            <i class="bi bi-geo-alt me-2"></i>{{ $item->libelle }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::is('contact') ? 'active' : '' }}"
+                                href="{{ route('contact') }}">Contact</a>
+                        </li>
+                        <li class="nav-item d-md-none">
+                            <a class="nav-link" href="{{ route('web.index') }}">
+                                <i class="bi bi-arrow-left-short"></i> Site Foani &amp; Services
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Recherche desktop -->
+                    <form method="GET" action="{{ route('boutique.index') }}"
+                        class="header-search d-none d-lg-block mx-lg-3" role="search">
+                        <input type="search" name="recherche" placeholder="Rechercher…"
+                            value="{{ request('recherche') }}" aria-label="Rechercher un produit">
+                        <button type="submit" aria-label="Rechercher"><i class="bi bi-search"></i></button>
+                    </form>
+
+                    <!-- Compte + panier -->
+                    <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                        <a href="{{ route('web.index') }}" class="btn-vitrine d-none d-lg-inline-flex" title="Découvrir le site Foani &amp; Services">
+                            <i class="bi bi-house-heart-fill"></i><span class="d-none d-xl-inline">Site Foani &amp; Services</span><span class="d-xl-none">Le site</span>
+                        </a>
+                        <div class="dropdown">
+                            <button class="header-action header-action--account" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false" title="{{ Auth::check() ? Auth::user()->username : 'Mon compte' }}">
+                                <i class="bi {{ Auth::check() ? 'bi-person-check-fill' : 'bi-person-circle' }}"></i>
+                                {{-- libellé visible seulement dans le menu mobile --}}
+                                <span class="d-lg-none">{{ Auth::check() ? Str::limit(Auth::user()->username, 14) : 'Mon compte' }}</span>
+                                <span class="visually-hidden">Mon compte</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-lg-end">
+                                @guest
+                                    <li><a class="dropdown-item" href="{{ route('user.loginForm') }}">
+                                            <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.registerForm') }}">
+                                            <i class="bi bi-person-plus me-2"></i>Créer un compte</a></li>
+                                @else
+                                    <li><a class="dropdown-item" href="{{ route('user.profil') }}">
+                                            <i class="bi bi-person me-2"></i>Mon profil</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.commandes') }}">
+                                            <i class="bi bi-bag-check me-2"></i>Mes commandes</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.reservations') }}">
+                                            <i class="bi bi-calendar-check me-2"></i>Mes réservations</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    @role('developpeur')
+                                        <li><a class="dropdown-item" href="{{ route('dashboard.index') }}">
+                                                <i class="bi bi-speedometer2 me-2"></i>Admin Panel</a></li>
+                                    @endrole
+                                    <li><a class="dropdown-item text-danger" href="{{ route('user.logout') }}">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
+                                @endguest
+                            </ul>
+                        </div>
+
+                        <a href="{{ route('panier.index') }}" class="header-action icon-only d-none d-lg-inline-flex" aria-label="Panier" title="Mon panier">
+                            <i class="bi bi-basket2-fill"></i>
+                            <span class="cart-count" data-cart-count>{{ $count ?? 0 }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    {{-- Bandeau + fil d'Ariane (sauf accueil et liste des produits, qui ont le leur) --}}
+    @if (!Request::routeIs('boutique.accueil') && !Request::routeIs('boutique.index') && !Request::routeIs('boutique.categorie'))
+        @include('frontend.components.page-hero')
     @endif
-
-
-    <!-- Yield content -->
 
     @yield('content')
 
     <!-- sweetalert-->
     @include('sweetalert::alert')
 
-
-    <!-- Bouton remonter en haut, WhatsApp & Panier flottant -->
-    <a href="#" id="btnScrollTop" class="btn btn-success rounded-circle shadow position-fixed"
-        style="bottom: 140px; right: 25px; z-index: 999; width: 48px; height: 48px; display: none;">
-        <i class="bi bi-arrow-up fs-4"></i>
-    </a>
-    <a href="https://wa.me/225{{ $data_parametre?->contact2 }}?text=Bonjour%20je%20veux%20commander%20un%20de%20vos%20produits"
-        target="_blank" id="btnWhatsapp" class="btn btn-success rounded-circle shadow position-fixed"
-        style="bottom: 80px; right: 25px; z-index: 999; width: 48px; height: 48px;">
-        <i class="bi bi-whatsapp fs-3"></i>
-    </a>
+    <!-- Boutons flottants (empilés) : retour en haut, Facebook, WhatsApp -->
+    <div class="fab-stack">
+        <a href="#" id="btnScrollTop" class="fab fab--top" style="display: none;" aria-label="Remonter en haut">
+            <i class="bi bi-arrow-up"></i>
+        </a>
+        <a href="https://www.facebook.com/foaniservices" target="_blank" rel="noopener" class="fab fab--fb"
+            aria-label="Suivez-nous sur Facebook" title="Suivez-nous sur Facebook">
+            <i class="bi bi-facebook"></i>
+        </a>
+        <a href="https://wa.me/225{{ $data_parametre?->contact2 }}?text=Bonjour%20je%20veux%20commander%20un%20de%20vos%20produits"
+            target="_blank" rel="noopener" id="btnWhatsapp" class="fab fab--wa" aria-label="Commander sur WhatsApp" title="Commander sur WhatsApp">
+            <i class="bi bi-whatsapp"></i>
+        </a>
+    </div>
 
     {{-- ...MOBILE BAR --}}
     @include('frontend.components.mobile_navBarV1')
@@ -1047,15 +354,12 @@
     <!-- Footer -->
     @include('frontend.layouts.footer')
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('front/vendor/bootstrap-5.3.3/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('front/vendor/jquery-3.7.1/jquery.min.js') }}"></script>
+    <script src="{{ asset('front/vendor/sweetalert2-11.14.5/sweetalert2.all.min.js') }}" defer></script>
 
-
-    <!-- jQuery (pour les requêtes AJAX) -->
     <script>
-        // Configuration globale pour AJAX avec le token CSRF
+        // Token CSRF pour toutes les requêtes AJAX
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1063,188 +367,52 @@
         });
     </script>
 
-    <!-- Custom JS -->
-
-    <script src="{{ asset('myJs/js/cart_add.js') }}"></script>
+    <script src="{{ asset('myJs/js/cart_add.js') }}?v={{ filemtime(public_path('myJs/js/cart_add.js')) }}"></script>
     @stack('scripts')
 
-    <!-- bootstrap form validation -->
     <script>
+        // Validation des formulaires Bootstrap
+        document.querySelectorAll('.needs-validation').forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        // Bouton remonter en haut (écoute passive : ne ralentit pas le défilement)
         (function() {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-            Array.prototype.slice.call(forms)
-                .forEach(function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
+            const btn = document.getElementById('btnScrollTop');
+            let visible = false;
+            window.addEventListener('scroll', function() {
+                const show = window.scrollY > 300;
+                if (show !== visible) {
+                    visible = show;
+                    btn.style.display = show ? 'flex' : 'none';
+                }
+            }, { passive: true });
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         })();
     </script>
-    <script>
-        // Bouton remonter en haut
-        const btnScrollTop = document.getElementById('btnScrollTop');
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 200) {
-                btnScrollTop.style.display = 'flex';
-            } else {
-                btnScrollTop.style.display = 'none';
-            }
-        });
-        btnScrollTop.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    </script>
-    <script>
-        function updateCartBadges(newCount) {
-            // Badge header desktop
-            const badgeHeader = document.querySelector('.navbar .badge');
-            if (badgeHeader) badgeHeader.textContent = newCount;
 
-            // Badge mobile
-            const badgeMobile = document.querySelector('.mobile-cart-badge');
-            if (badgeMobile) {
-                if (newCount > 0) {
-                    badgeMobile.textContent = newCount;
-                    badgeMobile.style.display = 'flex';
-                } else {
-                    badgeMobile.style.display = 'none';
-                }
-            }
-
-            // Badge bottom nav
-            const badgeBottom = document.getElementById('cart-badge-bottom');
-            if (badgeBottom) badgeBottom.textContent = newCount;
-        }
-    </script>
-    <script>
-        // Toggle barre de recherche desktop amélioré
-        document.getElementById('searchToggleBtn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const container = document.getElementById('navbarSearchContainer');
-            const input = document.getElementById('navbarSearchInput');
-            const toggleBtn = this;
-
-            if (container.style.display === 'none' || container.style.display === '') {
-                container.style.display = 'block';
-                container.classList.remove('closing');
-                toggleBtn.style.opacity = '0';
-                toggleBtn.style.visibility = 'hidden';
-                toggleBtn.classList.add('active');
-
-                setTimeout(() => {
-                    input.focus();
-                    input.select();
-                }, 150);
-            } else {
-                closeSearchBar();
-            }
-        });
-
-        function closeSearchBar() {
-            const container = document.getElementById('navbarSearchContainer');
-            const toggleBtn = document.getElementById('searchToggleBtn');
-
-            container.classList.add('closing');
-
-            setTimeout(() => {
-                container.style.display = 'none';
-                container.classList.remove('closing');
-                toggleBtn.classList.remove('active');
-
-                toggleBtn.style.opacity = '1';
-                toggleBtn.style.visibility = 'visible';
-            }, 300);
-        }
-
-        document.getElementById('navbarSearchContainer').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        const searchForm = document.querySelector('.navbar-search-form');
-        const searchSubmitBtn = document.querySelector('.btn-search-submit');
-
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const searchValue = document.getElementById('navbarSearchInput').value;
-
-            let url = '{{ route('boutique.index') }}';
-            if (searchValue.trim()) {
-                url += '?recherche=' + encodeURIComponent(searchValue) + '&scroll=true';
-            } else {
-                url += '?scroll=true';
-            }
-
-            window.location.href = url;
-        });
-
-        searchSubmitBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        document.getElementById('navbarSearchInput').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        const mobileSearchForm = document.querySelector('#mobile-search-form');
-        if (mobileSearchForm) {
-            mobileSearchForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const mobileSearchValue = this.querySelector('input[name="recherche"]').value;
-
-                let url = '{{ route('boutique.index') }}';
-                if (mobileSearchValue.trim()) {
-                    url += '?recherche=' + encodeURIComponent(mobileSearchValue) + '&scroll=true';
-                } else {
-                    url += '?scroll=true';
-                }
-
-                window.location.href = url;
-            });
-        }
-
-        document.addEventListener('click', function(e) {
-            const container = document.getElementById('navbarSearchContainer');
-            const toggleBtn = document.getElementById('searchToggleBtn');
-
-            if (!container.contains(e.target) && !toggleBtn.contains(e.target)) {
-                if (container.style.display === 'block') {
-                    closeSearchBar();
-                }
-            }
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const container = document.getElementById('navbarSearchContainer');
-
-                if (container.style.display === 'block') {
-                    closeSearchBar();
-                }
-            }
-        });
-
-        function toggleMobileSearch() {
-            const searchBar = document.getElementById('mobile-search-bar');
-            if (searchBar.style.display === 'none' || searchBar.style.display === '') {
-                searchBar.style.display = 'block';
-                setTimeout(() => searchBar.querySelector('input').focus(), 100);
-            } else {
-                searchBar.style.display = 'none';
+    {{-- Messages de session affichés en notifications (voir front/js/shop.js) --}}
+    @php
+        $flashTitres = ['success' => 'Succès', 'error' => 'Oups…', 'warning' => 'Attention', 'info' => 'Information'];
+        $flash = [];
+        foreach ($flashTitres as $type => $titre) {
+            if (session()->has($type) && is_string(session($type))) {
+                $flash[] = ['type' => $type, 'title' => $titre, 'text' => session($type)];
             }
         }
-    </script>
+    @endphp
+    @if ($flash)
+        <script type="application/json" id="flash-messages">@json($flash)</script>
+    @endif
 </body>
 
 </html>

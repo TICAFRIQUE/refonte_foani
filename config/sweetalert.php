@@ -232,7 +232,7 @@ return [
     'customClass' => [
 
         'container' => env('SWEET_ALERT_CONTAINER_CLASS'),
-        'popup' => env('SWEET_ALERT_POPUP_CLASS'),
+        'popup' => env('SWEET_ALERT_POPUP_CLASS', 'farm-swal'), // thème « ferme » (front/css/shop.css)
         'header' => env('SWEET_ALERT_HEADER_CLASS'),
         'title' => env('SWEET_ALERT_TITLE_CLASS'),
         'closeButton' => env('SWEET_ALERT_CLOSE_BUTTON_CLASS'),

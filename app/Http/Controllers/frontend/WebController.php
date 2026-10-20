@@ -2,49 +2,40 @@
 
 namespace App\Http\Controllers\frontend;
 
+use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\Slider;
-use Illuminate\Http\Request;
-use App\Models\CategoriePage;
-use App\Http\Controllers\Controller;
+use App\Support\SiteCache;
+use Illuminate\Support\Facades\Cache;
 
 class WebController extends Controller
 {
-    //
-
+    // Accueil du site vitrine
     public function index()
     {
-        //recuperer les sliders visibles
-        $sliders = Slider::visible()->web()->orderBy('position', 'asc')->get();
+        // Vidé automatiquement par SiteCache::flush() quand une page / un slider change
+        $data = Cache::remember('web.accueil', 3600, fn () => [
+            'sliders' => Slider::visible()->web()->with('media')->orderBy('position')->get(),
+            'activites' => Page::with('media')
+                ->whereHas('categorie', fn ($q) => $q->where('slug', 'activites'))
+                ->position()
+                ->get(),
+            'presentation' => Page::whereSlug('presentation')->with('media')->first(),
+            'directeur' => Page::whereSlug('mot-du-directeur')->with('media')->first(),
+        ]);
 
-        //recuperer les pages activites
-        $activites = Page::where('categorie_page_id', CategoriePage::whereSlug('activites')->first()->id)->position()->get();
+        // Données déjà en cache (communes avec la boutique)
+        $data['categories'] = SiteCache::shopCategories();
+        $data['zonesPointsVente'] = SiteCache::pointsVente();
 
-        //recuperer  la page presentation
-        $presentation = Page::whereSlug('presentation')->with('media')->first();
-
-        //mot du directeur
-        $directeur = Page::whereSlug('mot-du-directeur')->with('media')->first();
-
-        //
-        return view('web', compact('sliders', 'activites', 'presentation', 'directeur'));
+        return view('web', $data);
     }
 
-    //contenu dynamique des pages
+    // Contenu dynamique des pages
     public function pageShow($slug)
     {
-        try {
+        $page = Page::with('media')->where('slug', $slug)->firstOrFail();
 
-            if (isset($slug)) {
-                $page = Page::where('slug', $slug)->firstOrFail();
-            }
-
-            return view('frontend.web.pages.page-detail', compact('page'));
-        } catch (\Throwable $th) {
-            return $th->getMessage();
-
-            //throw $th;
-            // return redirect()->route('accueil')->with('error', 'La page demandée n\'existe pas ou a été supprimée !');
-        }
+        return view('frontend.web.pages.page-detail', compact('page'));
     }
 }

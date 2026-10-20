@@ -65,19 +65,21 @@
 
  <section id="activities" class="section">
      <div class="container">
+         <span class="v-eyebrow" data-aos="fade-up">Ce que nous faisons</span>
          <h2 class="section-title" data-aos="fade-up">Nos Activités</h2>
          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
              Découvrez l'étendue de notre expertise dans différents domaines
          </p>
 
-         <div class="row g-4">
+         <div class="row g-4 justify-content-center">
 
              @foreach ($activites as $item)
-                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                 <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ 100 + $loop->index * 100 }}">
                      <div class="activity-card">
                          <div class="activity-image">
+                             <span class="activity-num">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                              @if ($item->getFirstMediaUrl('image'))
-                                 <img src="{{ $item->getFirstMediaUrl('image') }}" alt="{{ $item->libelle }}"
+                                 <img src="{{ $item->getFirstMediaUrl('image', 'thumb') }}" alt="{{ $item->libelle }}" decoding="async"
                                      class="activite-image" loading="lazy">
                              @else
                                  <img src="{{ asset('front/images/default.jpg') }}" alt="Activité par défaut"
@@ -91,7 +93,7 @@
 
                          </div>
                          <div class="my-3 text-center">
-                             <a href="{{ route('page.show', $item->slug) }}" class="btn-plus">En savoir plus</a>
+                             <a href="{{ route('page.show', $item->slug) }}" class="btn-plus">En savoir plus <i class="bi bi-arrow-right"></i></a>
                          </div>
                      </div>
                  </div>

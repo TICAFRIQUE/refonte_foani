@@ -4,140 +4,126 @@ namespace App\Providers;
 
 use App\Models\Categorie;
 use App\Models\CategoriePage;
+use App\Models\CategoriePointVente;
+use App\Models\Commande;
 use App\Models\Contact;
 use App\Models\Page;
 use App\Models\Parametre;
 use App\Models\Produit;
+use App\Models\Reservation;
 use App\Models\Slider;
 use App\Observers\CategorieObserver;
 use App\Observers\ProduitObserver;
 use App\Observers\SliderObserver;
+use App\Support\SiteCache;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    // Rôles qui ont toujours toutes les permissions
+    private const SUPER_ROLES = ['developpeur', 'superadmin'];
+
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
-         Categorie::observe(CategorieObserver::class);
+        Categorie::observe(CategorieObserver::class);
         Produit::observe(ProduitObserver::class);
         Slider::observe(SliderObserver::class);
 
-        //pagination par defaut a 10
-        \Illuminate\Pagination\Paginator::useBootstrapFive();
-
+        Paginator::useBootstrapFive();
         Schema::defaultStringLength(191);
 
+        $this->registerCacheInvalidation();
+        $this->registerSuperRoles();
+        $this->registerViewData();
+    }
 
-        $this->app->booted(function () {
-            try {
-                if (Schema::hasTable('permissions') && Schema::hasTable('roles')) {
-                    $permissions = Permission::pluck('id')->toArray();
+    /**
+     * Vide le cache du site dès qu'une donnée affichée sur le front change
+     * (y compris un changement d'image).
+     */
+    private function registerCacheInvalidation(): void
+    {
+        $models = [
+            Parametre::class, CategoriePage::class, Page::class, CategoriePointVente::class,
+            Categorie::class, Produit::class, Slider::class, Media::class,
+        ];
 
-                    $developpeurRole = Role::where('name', 'developpeur')->first();
-                    $superadminRole = Role::where('name', 'superadmin')->first();
+        foreach ($models as $model) {
+            $model::saved(fn () => SiteCache::flush());
+            $model::deleted(fn () => SiteCache::flush());
+        }
+    }
 
-                    if ($developpeurRole) {
-                        $developpeurRole->permissions()->sync($permissions);
-                    }
-
-                    if ($superadminRole) {
-                        $superadminRole->permissions()->sync($permissions);
-                    }
-                }
-            } catch (\Exception $e) {
-                // Optionnel : log de l'erreur si besoin
-                return back()->withErrors('Une erreur est survenue lors de la synchronisation des permissions.', 'Message d\'erreur:' . $e->getMessage());
+    /**
+     * Avant : les permissions des super-rôles étaient re-synchronisées à CHAQUE requête.
+     * Maintenant : synchro uniquement quand une permission est créée,
+     * et Gate::before garantit l'accès total à ces rôles.
+     */
+    private function registerSuperRoles(): void
+    {
+        Gate::before(function ($user) {
+            if (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(self::SUPER_ROLES)) {
+                return true;
             }
+
+            return null;
         });
 
+        Permission::created(function () {
+            $ids = Permission::pluck('id');
+            Role::whereIn('name', self::SUPER_ROLES)->get()
+                ->each(fn (Role $role) => $role->permissions()->sync($ids));
+        });
+    }
 
+    private function registerViewData(): void
+    {
+        // Paramètres du site : partagés partout, lus une seule fois puis mis en cache
+        view()->composer('*', function ($view) {
+            $view->with('data_parametre', once(fn () => $this->safe(fn () => SiteCache::parametre())));
+        });
 
-        //recuperer les parametres
-        $data_parametre = [];
-        if (Schema::hasTable('parametres')) {
-            $data_parametre = Parametre::with('media')->first();
-        }
-
-        //partager le nombre d'éléments dans le panier dans toutes les vues(frontend)
+        // Front (boutique + site vitrine) : panier, menus, points de vente
         view()->composer(['frontend.layouts.app', 'frontend.web.layouts.appweb'], function ($view) {
-            $count = 0;
             $panier = session('panier', []);
-            if (!empty($panier)) {
-                $count = array_sum(array_column($panier, 'quantite'));
-            }
 
-
-
-            //partager les categories page et les pages dans toutes les vues
-            if (Schema::hasTable('categorie_pages')) {
-                $categories_pages = CategoriePage::with('pages')->active()->orderBy('created_at', 'asc')->get();
-            }
-            if (Schema::hasTable('pages')) {
-                $pages = Page::where('statut', 1)->get();
-            }
-            $categories_pages = [];
-            $pages = [];
-
-            if (Schema::hasTable('categorie_pages')) {
-                $categories_pages = CategoriePage::with('pages')->active()->orderBy('created_at', 'asc')->get();
-            }
-            if (Schema::hasTable('pages')) {
-                $pages = Page::where('statut', 1)->get();
-            }
-
-
-
-            //detail de la page
-            $page_detail = null;
-
-            $view->with(['count' => $count, 'categories_pages' => $categories_pages, 'pages' => $pages, 'page_detail' => $page_detail]);
+            $view->with([
+                'count' => $panier ? array_sum(array_column($panier, 'quantite')) : 0,
+                'categories_pages' => $this->safe(fn () => SiteCache::menuPages(), collect()),
+                'menu_points_vente' => $this->safe(fn () => SiteCache::pointsVente(), collect()),
+                'page_detail' => null,
+            ]);
         });
 
+        // Back-office uniquement : compteurs de la sidebar
+        view()->composer('backend.layouts.sidebar', function ($view) {
+            $view->with([
+                'newMessagesCount' => $this->safe(fn () => Contact::where('is_read', false)->count(), 0),
+                'pendingReservationsCount' => $this->safe(fn () => Reservation::where('statut', 'en_attente')->count(), 0),
+                'pendingCommandesCount' => $this->safe(fn () => Commande::where('statut', 'en_attente')->count(), 0),
+            ]);
+        });
+    }
 
-
-
-
-        if (Schema::hasTable('contacts')) {
-            $newMessagesCount = Contact::where('is_read', false)->count();
-        } else {
-            $newMessagesCount = 0;
+    // Évite de casser l'app si une table n'existe pas encore (installation, migrations)
+    private function safe(callable $callback, mixed $default = null): mixed
+    {
+        try {
+            return $callback();
+        } catch (Throwable) {
+            return $default;
         }
-
-        //compter les reservations en attente
-        if (Schema::hasTable('reservations')) {
-            $pendingReservationsCount = \App\Models\Reservation::where('statut', 'en_attente')->count();
-        } else {
-            $pendingReservationsCount = 0;
-        }
-
-        //compter les commandes en attente
-        if (Schema::hasTable('commandes')) {
-            $pendingCommandesCount = \App\Models\Commande::where('statut', 'en_attente')->count();
-        } else {
-            $pendingCommandesCount = 0;
-        }
-
-        view()->share([
-            'data_parametre' => $data_parametre,
-            'newMessagesCount' => $newMessagesCount,
-            'pendingReservationsCount' => $pendingReservationsCount,
-            'pendingCommandesCount' => $pendingCommandesCount
-        ]);
     }
 }

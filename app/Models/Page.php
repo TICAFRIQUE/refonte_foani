@@ -7,11 +7,14 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\Concerns\HasOptimizedImages;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class Page extends Model implements HasMedia
 {
-    use InteractsWithMedia ,  Sluggable;
+    use InteractsWithMedia, HasOptimizedImages, Sluggable {
+        HasOptimizedImages::registerMediaConversions insteadof InteractsWithMedia;
+    }
     public $incrementing = false;  // decrementer l'incrementation automatique de l'id
 
 

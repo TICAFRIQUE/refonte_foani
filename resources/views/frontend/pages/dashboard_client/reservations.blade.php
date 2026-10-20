@@ -78,7 +78,7 @@
 
 @section('content')
     <div class="container py-5 reservations-section">
-        <h2 class="fw-bold mb-4 text-center title">Mes réservations</h2>
+        @include('frontend.components.account-nav')
         @include('frontend.components.message_session')
 
         <div class="row justify-content-center">

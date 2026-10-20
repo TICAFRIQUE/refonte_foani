@@ -389,16 +389,7 @@
     </style>
 
     {{-- Hero Section --}}
-    <div class="caisse-hero">
-        <div class="container">
-            <div class="caisse-hero-content">
-                <h2 class="title">
-                    <i class="bi bi-credit-card me-3"></i>Finaliser ma commande
-                </h2>
-                <p>Vérifiez les détails et confirmez votre commande</p>
-            </div>
-        </div>
-    </div>
+    {{-- bandeau remplacé par frontend.components.page-hero (layout) --}}
 
     <div class="caisse-container">
         <div class="container">
@@ -477,8 +468,11 @@
                             </h5>
                         </div>
                         <div class="card-body-custom">
-                            <form action="{{ route('panier.commande.store') }}" method="POST" class="needs-validation" novalidate>
+                            <form action="{{ route('panier.commande.store') }}" method="POST" class="needs-validation"
+                                id="form-commande" novalidate>
                                 @csrf
+                                {{-- Clé unique par affichage : empêche de créer deux fois la même commande --}}
+                                <input type="hidden" name="idempotency_key" value="{{ (string) \Illuminate\Support\Str::uuid() }}">
 
                                 {{-- Alertes d'erreur --}}
                                 @if ($errors->any())
@@ -606,10 +600,17 @@
 
                                 {{-- Bouton de validation --}}
                                 <div class="text-center mt-4">
-                                    <button type="submit" class="btn btn-confirmer">
-                                        <i class="bi bi-shield-check me-2"></i>
-                                        Confirmer ma commande
+                                    <button type="submit" class="btn btn-confirmer" id="btn-confirmer-commande">
+                                        <span class="lbl-idle">
+                                            <i class="bi bi-shield-check me-2"></i>Confirmer ma commande
+                                        </span>
+                                        <span class="lbl-busy" aria-hidden="true">
+                                            <span class="spinner-border spinner-border-sm me-2" role="status"></span>Validation en cours…
+                                        </span>
                                     </button>
+                                    <p class="small text-muted mt-2 mb-0 d-none" id="msg-attente" role="status">
+                                        Merci de patienter, ne fermez pas cette page.
+                                    </p>
                                 </div>
                             </form>
                         </div>
@@ -659,29 +660,57 @@
             // Déclenche le calcul au chargement si une commune est déjà sélectionnée
             $('#commune').trigger('change');
 
-            // Confirmation avant validation de la commande
-            $('form').on('submit', function(e) {
-                // Vérification HTML5 des champs requis
-                if (!this.checkValidity()) {
-                    this.classList.add('was-validated');
-                    return; // Ne lance pas la confirmation si le formulaire est invalide
+            // === Validation de la commande : confirmation + spinner + un seul envoi ===
+            const form = document.getElementById('form-commande');
+            const btn = document.getElementById('btn-confirmer-commande');
+            const attente = document.getElementById('msg-attente');
+            let envoiEnCours = false;
+
+            function verrouiller() {
+                envoiEnCours = true;
+                btn.disabled = true;
+                btn.classList.add('is-busy');
+                btn.setAttribute('aria-busy', 'true');
+                attente.classList.remove('d-none');
+            }
+
+            function deverrouiller() {
+                envoiEnCours = false;
+                btn.disabled = false;
+                btn.classList.remove('is-busy');
+                btn.removeAttribute('aria-busy');
+                attente.classList.add('d-none');
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Déjà envoyée (double clic, touche Entrée répétée…) : on ignore
+                if (envoiEnCours) return;
+
+                // Champs obligatoires non remplis : on affiche les erreurs, pas de confirmation
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    return;
                 }
 
-                e.preventDefault();
                 Swal.fire({
                     title: 'Confirmer la commande ?',
-                    text: "Voulez-vous vraiment valider cette commande ?",
+                    html: 'Total à payer : <strong>' + ($('#total-general').text() || $('#total_general_input').val()) + ' FCFA</strong>',
                     icon: 'question',
                     showCancelButton: true,
-                    confirmButtonColor: '#2a6b2a',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Oui, valider',
+                    confirmButtonText: '<i class="bi bi-check2-circle me-1"></i> Oui, valider',
                     cancelButtonText: 'Annuler'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.submit();
-                    }
+                }).then(function(result) {
+                    if (!result.isConfirmed || envoiEnCours) return;
+                    verrouiller();
+                    form.submit(); // n'est appelé qu'une seule fois
                 });
+            });
+
+            // Retour arrière du navigateur vers cette page : le bouton redevient utilisable
+            window.addEventListener('pageshow', function(e) {
+                if (e.persisted) deverrouiller();
             });
         });
     </script>

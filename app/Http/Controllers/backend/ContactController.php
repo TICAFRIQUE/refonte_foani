@@ -43,8 +43,8 @@ class ContactController extends Controller
         ]);
 
         // 3️⃣ Redirection avec message de succès
-        return redirect()->route('contact')
-            ->with('success', 'Votre message a été enregistré avec succès !');
+        // Retour sur la page d'origine (boutique ou site vitrine)
+        return back()->with('success', 'Merci ! Votre message a bien été envoyé, nous vous répondons rapidement.');
     }
 
     public function show($id)

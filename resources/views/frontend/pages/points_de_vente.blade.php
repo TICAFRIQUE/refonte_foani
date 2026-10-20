@@ -501,17 +501,7 @@
     </style>
 
     {{-- Hero Section --}}
-    <section class="points-vente-hero">
-        <div class="container">
-            <div class="points-vente-hero-content">
-                <div class="badge-categorie">{{ $categorie->libelle }}</div>
-                <h1>
-                    <i class="bi bi-geo-alt-fill me-3"></i>Points de vente
-                </h1>
-                <p>Retrouvez nos produits dans nos points de vente {{ $categorie->libelle }}</p>
-            </div>
-        </div>
-    </section>
+    {{-- bandeau remplacé par frontend.components.page-hero (layout) --}}
 
     {{-- Container principal --}}
     <section class="points-vente-container">

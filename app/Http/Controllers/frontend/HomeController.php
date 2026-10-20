@@ -51,12 +51,14 @@ class HomeController extends Controller
                 'accueil.categories',
                 now()->addMinutes(30),
                 fn() =>
-                Categorie::with(['produits' => function ($query) {
+                Categorie::with(['media', 'produits' => function ($query) {
                     $query->where('statut', true)
-                        // ->select('id', 'categorie_id', 'nom', 'prix', 'slug')
                         ->with('media')
+                        ->orderByRaw('stock > 0 DESC')
+                        ->latest()
                         ->limit(4);
                 }])
+                    ->withCount(['produits' => fn ($q) => $q->where('statut', true)])
                     ->active()
                     ->position()
                     // ->select('id', 'nom', 'slug', 'position')
@@ -69,6 +71,7 @@ class HomeController extends Controller
                 fn() =>
                 Slider::visible()
                     ->boutique()
+                    ->with('media')
                     ->orderBy('position', 'asc')
                     // ->select('id', 'image', 'titre', 'lien', 'position')
                     ->get()
@@ -80,13 +83,14 @@ class HomeController extends Controller
                 fn() =>
                 Produit::specialOffer()
                     ->active()
-                    ->with('categorie')
-                    // ->select('id', 'nom', 'prix', 'slug', 'categorie_id')
+                    ->with(['categorie', 'media'])
                     ->first()
             );
 
             return view('index', compact('categories', 'sliders', 'offreSpeciale'));
         } catch (\Throwable $th) {
+            report($th);
+
             return view('backend.utility.auth-404-basic');
         }
     }
@@ -120,7 +124,7 @@ class HomeController extends Controller
     // Liste des categories
     public function categories()
     {
-        $categories = Categorie::withCount('produits')->active()->position()->get();
+        $categories = Categorie::with('media')->withCount('produits')->active()->position()->get();
         return view('frontend.pages.categorie', compact('categories'));
     }
 }
