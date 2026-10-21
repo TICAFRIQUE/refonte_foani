@@ -1,186 +1,159 @@
 @extends('backend.layouts.master')
-
 @section('title', 'Commandes')
 
-@section('css')
-    <!-- Datatables CSS -->
-    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" />
-@endsection
-
 @section('content')
-    @component('backend.components.breadcrumb')
-        @slot('li_1')
-            Commandes
-        @endslot
-        @slot('title')
-            Liste des commandes
-        @endslot
-    @endcomponent
-
-    {{-- Statistiques par statut --}}
     @php
-        $_commandes = App\Models\Commande::all();
-        $stats = [
-            'en_attente' => $_commandes->where('statut', 'en_attente')->count(),
-            'en_cours' => $_commandes->where('statut', 'en_cours')->count(),
-            'livrée' => $_commandes->where('statut', 'livrée')->count(),
-            'annulée' => $_commandes->where('statut', 'annulée')->count(),
-        ];
-        $colors = [
-            'en_attente' => 'secondary',
-            'en_cours' => 'warning',
-            'livrée' => 'success',
-            'annulée' => 'danger',
-        ];
+        $fcfa = fn ($v) => number_format((float) $v, 0, ',', ' ');
+        $totalNombre = $parStatut->sum('nombre');
+        $totalMontant = $parStatut->sum('montant');
+        // Paramètres à conserver d'un onglet à l'autre
+        $garder = array_filter(request()->only(['periode', 'date_debut', 'date_fin', 'q']));
+        $periodeAffichee = $periode ?? \App\Support\Periode::depuisRequete(request(), 'mois');
     @endphp
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex flex-wrap gap-3 justify-content-center">
-                @foreach ($stats as $statut => $count)
-                    <div class="card border-0 shadow-sm" style="min-width:160px;">
-                        <a href="{{ route('commandes.index', ['statut' => $statut]) }}">
-                            <div class="card-body text-center">
-                                <span class="badge bg-{{ $colors[$statut] ?? 'secondary' }} mb-2" style="font-size:1.1em;">
-                                    {{ ucfirst(str_replace('_', ' ', $statut)) }}
-                                </span>
-                                <div class="fw-bold fs-4">{{ $count }}</div>
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
+
+    <div class="page-head">
+        <div>
+            <h1>Commandes</h1>
+            <p>
+                {{ $periode ? 'Période : ' . $periode->libelle() : 'Toutes les dates' }}
+                @if (request('q')) · recherche « {{ request('q') }} » @endif
+            </p>
         </div>
+        <a href="{{ route('commandes.export', array_merge($garder, ['statut' => $statut])) }}" class="btn btn-soft-success">
+            <i class="ri-file-excel-2-line me-1"></i> Exporter (CSV)
+        </a>
     </div>
 
-    {{-- Filtre par statut et date --}}
-    <div class="row mb-3">
-        <div class="col-lg-8 mx-auto">
-            <form method="GET" action="{{ route('commandes.index') }}"
-                class="row g-2 align-items-end justify-content-center">
-                <div class="col-md-3">
-                    <label for="date_debut" class="form-label mb-0">Date début</label>
-                    <input type="date" id="date_debut" name="date_debut" class="form-control"
-                        value="{{ request('date_debut') }}">
-                </div>
-                <div class="col-md-4">
-                    <label for="date_fin" class="form-label mb-0">Date fin</label>
-                    <input type="date" id="date_fin" name="date_fin" class="form-control"
-                        value="{{ request('date_fin') }}">
-                </div>
-                <div class="col-md-3 d-flex">
-                    <select name="statut" class="form-select">
-                        <option value="">-- Tous les statuts --</option>
-                        <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En attente
-                        </option>
-                        <option value="en_cours" {{ request('statut') == 'en_cours' ? 'selected' : '' }}>En cours</option>
-                        <option value="livrée" {{ request('statut') == 'livrée' ? 'selected' : '' }}>Livrée</option>
-                        <option value="annulée" {{ request('statut') == 'annulée' ? 'selected' : '' }}>Annulée</option>
-                    </select>
+    {{-- Bandeau : nouvelles commandes arrivées pendant la consultation (public/back/js/admin.js) --}}
+    <div class="new-items-banner" id="nouvellesCommandes">
+        <span><i class="ri-notification-3-line me-1"></i> De nouvelles commandes sont arrivées.</span>
+        <a href="{{ route('commandes.index', ['statut' => 'en_attente']) }}" class="btn btn-sm btn-warning">Actualiser la liste</a>
+    </div>
 
+    {{-- Onglets de statut --}}
+    <div class="statut-tabs mb-3">
+        <a href="{{ route('commandes.index', array_merge($garder, ['statut' => ''])) }}"
+            class="statut-tab statut-tab--all {{ $statut === '' || $statut === null ? 'is-active' : '' }}">
+            <span class="statut-tab__icon"><i class="ri-stack-line"></i></span>
+            <span><span class="statut-tab__count">{{ $totalNombre }}</span><span class="statut-tab__label">Toutes</span>
+                <span class="statut-tab__amount">{{ $fcfa($totalMontant) }} F</span></span>
+        </a>
+        @foreach (\App\Support\Statut::LISTE as $cle => $info)
+            @php $ligne = $parStatut->get($cle); @endphp
+            <a href="{{ route('commandes.index', array_merge($garder, ['statut' => $cle])) }}"
+                class="statut-tab statut-tab--{{ $info['couleur'] }} {{ $statut === $cle ? 'is-active' : '' }}">
+                <span class="statut-tab__icon"><i class="{{ $info['icone'] }}"></i></span>
+                <span><span class="statut-tab__count">{{ $ligne->nombre ?? 0 }}</span><span class="statut-tab__label">{{ $info['label'] }}</span>
+                    <span class="statut-tab__amount">{{ $fcfa($ligne->montant ?? 0) }} F</span></span>
+            </a>
+        @endforeach
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            {{-- Recherche + période --}}
+            <form method="GET" action="{{ route('commandes.index') }}" class="row g-2 align-items-center mb-3" data-no-lock>
+                <input type="hidden" name="statut" value="{{ $statut }}">
+                @foreach (array_filter(request()->only(['periode', 'date_debut', 'date_fin'])) as $k => $v)
+                    <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+                @endforeach
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="ri-search-line"></i></span>
+                        <input type="search" name="q" value="{{ request('q') }}" class="form-control"
+                            placeholder="Rechercher : code, client, téléphone, commune…">
+                    </div>
                 </div>
-                <div class="col-md-2 d-flex">
-                    <button class="btn btn-primary w-100" type="submit">
-                        <i class="bi bi-filter"></i> Filtrer
-                    </button>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Rechercher</button>
+                    @if (request()->hasAny(['q', 'periode', 'date_debut', 'date_fin']))
+                        <a href="{{ route('commandes.index', ['statut' => $statut]) }}" class="btn btn-light">Réinitialiser</a>
+                    @endif
                 </div>
             </form>
+            @include('backend.components.periode-filtre', ['periode' => $periodeAffichee, 'route' => 'commandes.index', 'garder' => ['statut', 'q']])
+            @unless ($periode)
+                <small class="text-muted d-block mt-2"><i class="ri-information-line"></i> Aucune période sélectionnée : toutes les dates sont affichées.</small>
+            @endunless
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Liste des commandes</h5>
+        <div class="card-body p-0">
+            @if ($commandes->isEmpty())
+                <div class="empty-box">
+                    <i class="ri-inbox-2-line"></i>
+                    Aucune commande {{ $statut ? '« ' . \App\Support\Statut::label($statut) . ' »' : '' }} pour ces critères.
                 </div>
-
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="buttons-datatables" class="table table-bordered table-striped dt-responsive nowrap"
-                            style="width:100%">
-                            <thead class="table-primary">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Code</th>
-                                    <th>Client</th>
-                                    <th>Contact</th>
-                                    <th>Total</th>
-                                    <th>Date</th>
-                                    <th>Statut</th>
-                                    <th class="text-center">Actions</th>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-modern align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Commande</th>
+                                <th>Client</th>
+                                <th>Livraison</th>
+                                <th class="text-end">Montant</th>
+                                <th>Statut</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($commandes as $commande)
+                                <tr id="row_{{ $commande->id }}">
+                                    <td>
+                                        <a href="{{ route('commandes.show', $commande->id) }}" class="cell-main">{{ $commande->code }}</a>
+                                        <span class="cell-sub" title="{{ $commande->created_at?->format('d/m/Y H:i') }}">
+                                            {{ $commande->created_at?->format('d/m/Y H:i') }} · {{ $commande->created_at?->diffForHumans() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="cell-main">{{ $commande->nom ?: 'Client' }}</span>
+                                        @if ($commande->telephone)
+                                            <a href="tel:{{ $commande->telephone }}" class="cell-sub">{{ $commande->telephone }}</a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span>{{ $commande->commune ?: '—' }}</span>
+                                        <span class="cell-sub">{{ $commande->ville }}</span>
+                                    </td>
+                                    <td class="text-end fw-bold text-nowrap">{{ $fcfa($commande->total) }} F</td>
+                                    <td>@include('backend.components.statut-badge', ['statut' => $commande->statut])</td>
+                                    <td class="text-end text-nowrap">
+                                        <a href="{{ route('commandes.show', $commande->id) }}" class="btn btn-sm btn-soft-primary" title="Voir et traiter">
+                                            <i class="ri-eye-line"></i><span class="d-none d-lg-inline ms-1">Voir</span>
+                                        </a>
+                                        @if ($commande->telephone)
+                                            <a href="https://wa.me/225{{ preg_replace('/\D/', '', $commande->telephone) }}" target="_blank" rel="noopener"
+                                                class="btn btn-sm btn-soft-success" title="Écrire sur WhatsApp"><i class="ri-whatsapp-line"></i></a>
+                                        @endif
+                                        <a href="#" class="btn btn-sm btn-soft-danger delete" data-id="{{ $commande->id }}" title="Supprimer"><i class="ri-delete-bin-line"></i></a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($commandes as $commande)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td><strong>{{ $commande->code }}</strong></td>
-                                        <td>{{ $commande->user->username ?? 'Inconnu' }}</td>
-                                        <td>{{ $commande->telephone ?? '—' }}</td>
-                                        <td>{{ $commande->total ?? '-' }} F</td>
-                                        <td>{{ $commande->created_at?->format('d/m/Y H:i') ?? '—' }}</td>
-                                        <td>
-                                            <span class="badge bg-{{ $colors[$commande->statut] ?? 'secondary' }}">
-                                                {{ ucfirst(str_replace('_', ' ', $commande->statut)) }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
-                                                    data-bs-toggle="dropdown">
-                                                    <i class="ri-more-fill"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>
-                                                        <a href="{{ route('commandes.show', $commande->id) }}"
-                                                            class="dropdown-item">
-                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Voir
-
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" class="dropdown-item remove-item-btn delete"
-                                                            data-id={{ $commande->id }}>
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-3">
+                    <small class="text-muted">{{ $commandes->firstItem() }}–{{ $commandes->lastItem() }} sur {{ $commandes->total() }} commande(s)</small>
+                    {{ $commandes->links() }}
+                </div>
+            @endif
         </div>
     </div>
 @endsection
 
 @section('script')
-    <!-- jQuery et DataTables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-
-    <!-- Initialisation DataTables -->
-    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    @include('backend.pages.commandes.scripts.new_orders_script')
-
-
     <script>
-        window.routeName = "commandes";
+        delete_row('commandes');
+
+        // Nouvelles commandes : le bandeau apparaît si le nombre « en attente » augmente
+        // par rapport au premier relevé fait à l'ouverture de la page
+        (function() {
+            var reference = null;
+            document.addEventListener('foani:notifications', function(e) {
+                var n = e.detail.counts.commandes || 0;
+                if (reference === null) { reference = n; return; }
+                if (n > reference) document.getElementById('nouvellesCommandes').classList.add('is-visible');
+            });
+        })();
     </script>
 @endsection

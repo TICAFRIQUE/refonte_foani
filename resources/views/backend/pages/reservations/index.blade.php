@@ -1,203 +1,126 @@
 @extends('backend.layouts.master')
-
 @section('title', 'Réservations')
 
-@section('css')
-    <!-- Datatables CSS -->
-    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" />
-@endsection
-
 @section('content')
-    @component('backend.components.breadcrumb')
-        @slot('li_1')
-            Réservations
-        @endslot
-        @slot('title')
-            Liste des réservations
-        @endslot
-    @endcomponent
-    {{-- Statistiques par statut --}}
     @php
-        $_reservations = App\Models\Reservation::all();
-        $stats = [
-            'en_attente' => $_reservations->where('statut', 'en_attente')->count(),
-            'en_cours' => $_reservations->where('statut', 'en_cours')->count(),
-            'livrée' => $_reservations->where('statut', 'livrée')->count(),
-            'annulée' => $_reservations->where('statut', 'annulée')->count(),
-        ];
-        $colors = [
-            'en_attente' => 'secondary',
-            'en_cours' => 'warning',
-            'livrée' => 'success',
-            'annulée' => 'danger',
-        ];
+        $fcfa = fn ($v) => number_format((float) $v, 0, ',', ' ');
+        $garder = array_filter(request()->only(['periode', 'date_debut', 'date_fin', 'q']));
+        $periodeAffichee = $periode ?? \App\Support\Periode::depuisRequete(request(), 'mois');
     @endphp
 
-       <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex flex-wrap gap-3 justify-content-center">
-                @foreach ($stats as $statut => $count)
-                    <div class="card border-0 shadow-sm" style="min-width:160px;">
-                        <a href="{{ route('reservations.index', ['statut' => $statut]) }}">
-                            <div class="card-body text-center">
-                                <span class="badge bg-{{ $colors[$statut] ?? 'secondary' }} mb-2" style="font-size:1.1em;">
-                                    {{ ucfirst(str_replace('_', ' ', $statut)) }}
-                                </span>
-                                <div class="fw-bold fs-4">{{ $count }}</div>
-                            </div>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
+    <div class="page-head">
+        <div>
+            <h1>Réservations</h1>
+            <p>Produits réservés par les clients quand ils étaient en rupture de stock ·
+                {{ $periode ? $periode->libelle() : 'toutes les dates' }}</p>
         </div>
+        <a href="{{ route('reservations.export', array_merge($garder, ['statut' => $statut])) }}" class="btn btn-soft-success">
+            <i class="ri-file-excel-2-line me-1"></i> Exporter (CSV)
+        </a>
     </div>
 
-    {{-- Filtre par statut et date --}}
-    <div class="row mb-3">
-        <div class="col-lg-8 mx-auto">
-            <form method="GET" action="{{ route('reservations.index') }}"
-                class="row g-2 align-items-end justify-content-center">
-                <div class="col-md-3">
-                    <label for="date_debut" class="form-label mb-0">Date début</label>
-                    <input type="date" id="date_debut" name="date_debut" class="form-control"
-                        value="{{ request('date_debut') }}">
-                </div>
-                <div class="col-md-4">
-                    <label for="date_fin" class="form-label mb-0">Date fin</label>
-                    <input type="date" id="date_fin" name="date_fin" class="form-control"
-                        value="{{ request('date_fin') }}">
-                </div>
-                <div class="col-md-3 d-flex">
-                    <select name="statut" class="form-select">
-                        <option value="">-- Tous les statuts --</option>
-                        <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En attente
-                        </option>
-                        <option value="en_cours" {{ request('statut') == 'en_cours' ? 'selected' : '' }}>En cours</option>
-                        <option value="livrée" {{ request('statut') == 'livrée' ? 'selected' : '' }}>Livrée</option>
-                        <option value="annulée" {{ request('statut') == 'annulée' ? 'selected' : '' }}>Annulée</option>
-                    </select>
+    <div class="statut-tabs mb-3">
+        <a href="{{ route('reservations.index', array_merge($garder, ['statut' => ''])) }}"
+            class="statut-tab statut-tab--all {{ $statut === '' || $statut === null ? 'is-active' : '' }}">
+            <span class="statut-tab__icon"><i class="ri-stack-line"></i></span>
+            <span><span class="statut-tab__count">{{ $parStatut->sum('nombre') }}</span><span class="statut-tab__label">Toutes</span>
+                <span class="statut-tab__amount">{{ $fcfa($parStatut->sum('montant')) }} F</span></span>
+        </a>
+        @foreach (\App\Support\Statut::LISTE as $cle => $info)
+            @php $ligne = $parStatut->get($cle); @endphp
+            <a href="{{ route('reservations.index', array_merge($garder, ['statut' => $cle])) }}"
+                class="statut-tab statut-tab--{{ $info['couleur'] }} {{ $statut === $cle ? 'is-active' : '' }}">
+                <span class="statut-tab__icon"><i class="{{ $info['icone'] }}"></i></span>
+                <span><span class="statut-tab__count">{{ $ligne->nombre ?? 0 }}</span><span class="statut-tab__label">{{ $info['label'] }}</span>
+                    <span class="statut-tab__amount">{{ $fcfa($ligne->montant ?? 0) }} F</span></span>
+            </a>
+        @endforeach
+    </div>
 
+    <div class="card">
+        <div class="card-header">
+            <form method="GET" action="{{ route('reservations.index') }}" class="row g-2 align-items-center mb-3" data-no-lock>
+                <input type="hidden" name="statut" value="{{ $statut }}">
+                @foreach (array_filter(request()->only(['periode', 'date_debut', 'date_fin'])) as $k => $v)
+                    <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+                @endforeach
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="ri-search-line"></i></span>
+                        <input type="search" name="q" value="{{ request('q') }}" class="form-control"
+                            placeholder="Rechercher : code, client, téléphone, produit, commune…">
+                    </div>
                 </div>
-                <div class="col-md-2 d-flex">
-                    <button class="btn btn-primary w-100" type="submit">
-                        <i class="bi bi-filter"></i> Filtrer
-                    </button>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Rechercher</button>
+                    @if (request()->hasAny(['q', 'periode', 'date_debut', 'date_fin']))
+                        <a href="{{ route('reservations.index', ['statut' => $statut]) }}" class="btn btn-light">Réinitialiser</a>
+                    @endif
                 </div>
             </form>
+            @include('backend.components.periode-filtre', ['periode' => $periodeAffichee, 'route' => 'reservations.index', 'garder' => ['statut', 'q']])
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Liste des réservations</h5>
+        <div class="card-body p-0">
+            @if ($reservations->isEmpty())
+                <div class="empty-box">
+                    <i class="ri-calendar-check-line"></i>
+                    Aucune réservation {{ $statut ? '« ' . \App\Support\Statut::label($statut) . ' »' : '' }} pour ces critères.
                 </div>
-
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="buttons-datatables" class="table table-bordered table-striped dt-responsive nowrap"
-                            style="width:100%">
-                            <thead class="table-primary">
-                                <tr>
-                                    {{-- <th>#</th> --}}
-                                    <th>Code</th>
-                                    <th>Client</th>
-                                    <th>Contact</th>
-                                    <th>Produit</th>
-                                    <th>Total</th>
-                                    <th>Date</th>
-                                    <th>Statut</th>
-                                    <th class="text-center">Actions</th>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-modern align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Réservation</th>
+                                <th>Client</th>
+                                <th>Produit</th>
+                                <th class="text-end">Montant</th>
+                                <th>Statut</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($reservations as $r)
+                                <tr id="row_{{ $r->id }}">
+                                    <td>
+                                        <a href="{{ route('reservations.show', $r->id) }}" class="cell-main">{{ $r->code }}</a>
+                                        <span class="cell-sub">{{ $r->created_at?->format('d/m/Y H:i') }} · {{ $r->created_at?->diffForHumans() }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="cell-main">{{ $r->nom ?: 'Client' }}</span>
+                                        @if ($r->telephone)<a href="tel:{{ $r->telephone }}" class="cell-sub">{{ $r->telephone }}</a>@endif
+                                    </td>
+                                    <td>
+                                        <span>{{ $r->produit->libelle ?? 'Produit supprimé' }}</span>
+                                        <span class="cell-sub">× {{ $r->quantite ?? 1 }} · {{ $r->commune ?: '—' }}</span>
+                                    </td>
+                                    <td class="text-end fw-bold text-nowrap">{{ $fcfa($r->total) }} F</td>
+                                    <td>@include('backend.components.statut-badge', ['statut' => $r->statut])</td>
+                                    <td class="text-end text-nowrap">
+                                        <a href="{{ route('reservations.show', $r->id) }}" class="btn btn-sm btn-soft-primary" title="Voir et traiter">
+                                            <i class="ri-eye-line"></i><span class="d-none d-lg-inline ms-1">Voir</span>
+                                        </a>
+                                        @if ($r->telephone)
+                                            <a href="https://wa.me/225{{ preg_replace('/\D/', '', $r->telephone) }}" target="_blank" rel="noopener"
+                                                class="btn btn-sm btn-soft-success" title="Écrire sur WhatsApp"><i class="ri-whatsapp-line"></i></a>
+                                        @endif
+                                        <a href="#" class="btn btn-sm btn-soft-danger delete" data-id="{{ $r->id }}" title="Supprimer"><i class="ri-delete-bin-line"></i></a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $colors = [
-                                        'en_attente' => 'secondary',
-                                        'en_cours' => 'warning',
-                                        'livrée' => 'success',
-                                        'annulée' => 'danger',
-                                    ];
-                                @endphp
-
-                                @foreach ($reservations as $reservation)
-                                    <tr>
-                                        {{-- <td>{{ $loop->iteration }}</td> --}}
-                                        <td><strong>{{ $reservation->code }}</strong></td>
-                                        <td>{{ $reservation->user->username ?? ($reservation->nom ?? 'Inconnu') }}</td>
-                                        <td>{{ $reservation->telephone ?? '—' }}</td>
-                                        <td>{{ $reservation->produit->libelle ?? '—' }}</td>
-
-                                        <td>
-                                            <span class="badge bg-success">
-                                                {{ number_format($reservation->total, 0, ',', ' ') }} F
-                                            </span>
-                                        </td>
-                                        <td>
-                                            {{ $reservation->date_reservation ? \Carbon\Carbon::parse($reservation->date_reservation)->format('d/m/Y H:i') : '—' }}
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-{{ $colors[$reservation->statut] ?? 'secondary' }}">
-                                                {{ ucfirst(str_replace('_', ' ', $reservation->statut)) }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="dropdown d-inline-block">
-                                                <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button"
-                                                    data-bs-toggle="dropdown">
-                                                    <i class="ri-more-fill"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>
-                                                        <a href="{{ route('reservations.show', $reservation->id) }}"
-                                                            class="dropdown-item">
-                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i> Voir
-
-                                                        </a>
-                                                    </li>
-
-                                                    <li>
-                                                        <button type="button" class="dropdown-item text-danger delete"
-                                                            data-id="{{ $reservation->id }}">
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                            Supprimer
-                                                        </button>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-3">
+                    <small class="text-muted">{{ $reservations->firstItem() }}–{{ $reservations->lastItem() }} sur {{ $reservations->total() }} réservation(s)</small>
+                    {{ $reservations->links() }}
+                </div>
+            @endif
         </div>
     </div>
 @endsection
 
 @section('script')
-    <!-- jQuery et DataTables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-
-    <!-- Initialisation DataTables -->
-    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    <script>
-        window.routeName = "reservations";
-    </script>
+    <script>delete_row('reservations');</script>
 @endsection

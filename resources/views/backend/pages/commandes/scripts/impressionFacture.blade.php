@@ -1,5 +1,5 @@
 <script>
-    // Ajoute ce script dans la section @section('script') de ton fichier show.blade.php
+    // Impression de la facture : inclus dans la section « script » de la fiche commande
 
 
     // Fonction d'impression de la facture

@@ -25,7 +25,14 @@
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-md-7 col-lg-6">
-            <a class="btn btn-primary mb-4" href="{{route('client.assign_role')}}">Assigner le role client </a>
+            {{-- Action qui modifie des données : formulaire POST (jamais un simple lien) --}}
+            <form action="{{ route('client.assign_role') }}" method="POST" class="d-inline"
+                onsubmit="return confirm('Attribuer le rôle « client » à tous les clients qui ne l\'ont pas encore ?');">
+                @csrf
+                <button type="submit" class="btn btn-primary mb-4">
+                    <i class="ri-user-star-line me-1"></i> Assigner le rôle client
+                </button>
+            </form>
             <div class="card shadow-sm">
                 <div class="card-header bg-success text-white">
                     <h4 class="mb-0"><i class="bi bi-upload me-2"></i>Importer une liste de clients (CSV)</h4>

@@ -212,16 +212,26 @@
                 });
             }
 
+            // Quantité valide d'une ligne : vide ou < 1 → 1, plafonnée au stock s'il est connu
+            function qteValide(input, valeur) {
+                let qte = parseInt(valeur, 10);
+                const max = parseInt(input.attr('max'), 10);
+                if (!(qte >= 1)) qte = 1;
+                if (max >= 1 && qte > max) qte = max;
+                return qte;
+            }
+
             // === Incrémenter ===
             $(document).on('click', '.btn-increment', function() {
                 const card = $(this).closest('.card');
                 const input = card.find('.quantite');
-                let qte = parseInt(input.val());
-                const max = parseInt(input.attr('max'));
+                const actuelle = qteValide(input, input.val());
+                const qte = qteValide(input, actuelle + 1);
 
-                if (qte < max) {
-                    qte++;
+                if (qte !== actuelle) {
                     updateLigne(card, qte);
+                } else if (parseInt(input.val(), 10) !== actuelle) {
+                    input.val(actuelle);
                 }
             });
 
@@ -229,22 +239,19 @@
             $(document).on('click', '.btn-decrement', function() {
                 const card = $(this).closest('.card');
                 const input = card.find('.quantite');
-                let qte = parseInt(input.val());
+                const actuelle = qteValide(input, input.val());
 
-                if (qte > 1) {
-                    qte--;
-                    updateLigne(card, qte);
+                if (actuelle > 1) {
+                    updateLigne(card, actuelle - 1);
+                } else {
+                    input.val(1);
                 }
             });
 
             // === Saisie directe ===
             $(document).on('change', '.quantite', function() {
                 const card = $(this).closest('.card');
-                let qte = parseInt($(this).val());
-                const max = parseInt($(this).attr('max'));
-                if (qte < 1) qte = 1;
-                if (qte > max) qte = max;
-                updateLigne(card, qte);
+                updateLigne(card, qteValide($(this), $(this).val()));
             });
 
             // === Supprimer un produit ===

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <title>@yield('title') | {{ config('app.name') }} </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Tableau de bord d'administration pour le restaurant Chez Jeanne" name="description" />
+    <meta content="Espace d'administration FOANI &amp; SERVICES" name="description" />
     <meta content="Ticafrique" name="author" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- App favicon -->
@@ -37,7 +37,7 @@
 
 @yield('content')
 
-@include('backend.layouts.vendor-scripts')
+@include('backend.layouts.vendor-scripts', ['sansNavigation' => true])
 </body>
 
 </html>

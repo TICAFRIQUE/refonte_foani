@@ -70,7 +70,7 @@ function initializeTables() {
         dom: "Bfrtip",
         responsive: true,
         language: {
-            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json",
+            url: "/front/vendor/datatables-i18n/fr-FR.json",
         },
         buttons: [
             { extend: "copy", text: '<i class="bi bi-clipboard"></i> Copier' },

@@ -5,50 +5,88 @@ namespace App\Http\Controllers\backend;
 
 use Exception;
 use App\Models\Reservation;
+use App\Support\Periode;
+use App\Support\Statut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ReservationAdminController extends Controller
 {
-    // Liste des réservations
+    // Liste des réservations : onglets de statut, période, recherche, pagination
     public function index(Request $request)
     {
         try {
-            $query = Reservation::with(['user', 'produit']);
+            [$base, $periode] = $this->requeteFiltree($request);
+            $statut = $request->has('statut') ? $request->input('statut') : Statut::EN_ATTENTE;
 
-            $hasFiltre = $request->filled('statut') || $request->filled('date') || $request->filled('date_debut') || $request->filled('date_fin');
+            $parStatut = (clone $base)
+                ->select('statut', DB::raw('COUNT(*) as nombre'), DB::raw('SUM(total) as montant'))
+                ->groupBy('statut')
+                ->get()
+                ->keyBy('statut');
 
-            if ($hasFiltre) {
-                // Filtre par statut
-                if ($request->filled('statut')) {
-                    $query->where('statut', $request->input('statut'));
-                }
-                // Filtre par date exacte
-                if ($request->filled('date')) {
-                    $query->whereDate('created_at', $request->input('date'));
-                }
-                // Filtre par intervalle de dates
-                if ($request->filled('date_debut')) {
-                    $query->whereDate('created_at', '>=', $request->input('date_debut'));
-                }
-                if ($request->filled('date_fin')) {
-                    $query->whereDate('created_at', '<=', $request->input('date_fin'));
-                }
-            } else {
-                // Aucun filtre : reservations du jour et en_attente
-                $query
-                    // ->whereDate('created_at', now()->toDateString())
-                    ->where('statut', 'en_attente');
-            }
+            $reservations = (clone $base)
+                ->with('produit:id,libelle')
+                ->when($statut !== null && $statut !== '', fn ($q) => $q->where('statut', $statut))
+                ->latest()
+                ->paginate(25)
+                ->withQueryString();
 
-            $reservations = $query->orderBy('created_at', 'desc')->get();
-            return view('backend.pages.reservations.index', compact('reservations'));
+            return view('backend.pages.reservations.index', compact('reservations', 'parStatut', 'statut', 'periode'));
         } catch (Exception $e) {
+            report($e);
             Alert::error('Erreur', 'Impossible de charger les réservations');
             return back();
         }
+    }
+
+    // Export CSV des réservations (mêmes filtres que la liste)
+    public function export(Request $request)
+    {
+        [$query] = $this->requeteFiltree($request);
+        $query->with('produit:id,libelle')
+            ->when($request->filled('statut'), fn ($q) => $q->where('statut', $request->input('statut')))
+            ->latest();
+
+        return response()->streamDownload(function () use ($query) {
+            $out = fopen('php://output', 'w');
+            fwrite($out, "\xEF\xBB\xBF");
+            fputcsv($out, ['Code', 'Date', 'Client', 'Téléphone', 'Produit', 'Quantité', 'Commune', 'Total', 'Statut'], ';');
+            $query->chunk(500, function ($lignes) use ($out) {
+                foreach ($lignes as $r) {
+                    fputcsv($out, [
+                        $r->code, $r->created_at?->format('d/m/Y H:i'), $r->nom, $r->telephone, $r->produit?->libelle,
+                        (int) $r->quantite, $r->commune, (int) $r->total, Statut::label($r->statut),
+                    ], ';');
+                }
+            });
+            fclose($out);
+        }, 'reservations-' . now()->format('Y-m-d-His') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    /** Requête de base : période (facultative) + recherche. Retourne [requête, Periode|null]. */
+    private function requeteFiltree(Request $request): array
+    {
+        $avecPeriode = $request->filled('periode') || $request->filled('date_debut') || $request->filled('date_fin');
+        $periode = $avecPeriode ? Periode::depuisRequete($request) : null;
+        $recherche = trim((string) $request->input('q'));
+
+        $query = Reservation::query()
+            ->when($periode, fn ($q) => $q->whereBetween('created_at', $periode->bornes()))
+            ->when($recherche !== '', function ($q) use ($recherche) {
+                $q->where(function ($q) use ($recherche) {
+                    $q->where('code', 'like', "%{$recherche}%")
+                        ->orWhere('nom', 'like', "%{$recherche}%")
+                        ->orWhere('telephone', 'like', "%{$recherche}%")
+                        ->orWhere('commune', 'like', "%{$recherche}%")
+                        ->orWhereHas('produit', fn ($p) => $p->where('libelle', 'like', "%{$recherche}%"));
+                });
+            });
+
+        return [$query, $periode];
     }
 
     // Affichage d'une réservation
@@ -56,7 +94,7 @@ class ReservationAdminController extends Controller
     {
 
         try {
-            $reservation = Reservation::with(['user', 'produit'])->findOrFail($id);
+            $reservation = Reservation::with(['user', 'produit.media'])->findOrFail($id);
 
             return view('backend.pages.reservations.partials.show', compact('reservation'));
         } catch (Exception $e) {
@@ -68,19 +106,16 @@ class ReservationAdminController extends Controller
     // Mise à jour
     public function update(Request $request, $id)
     {
+        // Validation hors du try : un statut invalide suit le circuit d'erreurs standard de Laravel
+        $request->validate(['statut' => Statut::regle()]);
+
         try {
             $reservation = Reservation::findOrFail($id);
 
-            $request->validate([
-                'statut' => 'required|string',
-            ]);
+            $reservation->update(['statut' => $request->statut]);
 
-            $reservation->update([
-                'statut' => $request->statut,
-            ]);
-
-            Alert::success('Succès', 'Statut de la réservation mis à jour avec succès');
-            return redirect()->route('reservations.index', $reservation->id);
+            Alert::toast('Réservation ' . $reservation->code . ' : ' . Statut::label($reservation->statut), 'success');
+            return redirect()->route('reservations.show', $reservation->id);
         } catch (Exception $e) {
             Alert::error('Erreur', 'Erreur lors de la mise à jour : ' . $e->getMessage());
             return back()->withInput();

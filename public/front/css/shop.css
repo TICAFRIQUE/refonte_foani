@@ -1619,8 +1619,10 @@ h1, h2, h3, h4, h5, h6, .title, .section-title {
 }
 
 .cart-line__qty button {
-    width: 36px;
+    width: 30px;
     height: 38px;
+    padding: 0;
+    flex-shrink: 0;
     border: 0;
     background: transparent;
     font-size: 1.15rem;
@@ -1632,9 +1634,13 @@ h1, h2, h3, h4, h5, h6, .title, .section-title {
 .cart-line__qty button:hover { background: var(--straw-soft); }
 
 .cart-line__qty input {
-    width: 44px;
+    width: 52px;
+    min-width: 0;
     height: 38px;
+    padding: 0 2px;
     border: 0;
+    font-size: 15px;
+    color: var(--leaf-dark);
     background: #fff;
     text-align: center;
     font-weight: 700;
@@ -1671,8 +1677,8 @@ h1, h2, h3, h4, h5, h6, .title, .section-title {
     .cart-line__qty { grid-area: qty; justify-self: start; }
     .cart-line__total { grid-area: total; min-width: 0; font-size: 15px; }
     .cart-line__remove { grid-area: del; width: 34px; height: 34px; align-self: start; justify-self: end; }
-    .cart-line__qty button { width: 32px; height: 34px; }
-    .cart-line__qty input { width: 36px; height: 34px; }
+    .cart-line__qty button { width: 28px; height: 34px; }
+    .cart-line__qty input { width: 46px; height: 34px; }
     .cart-line__name { font-size: 14px; }
 }
 
@@ -1837,3 +1843,7 @@ h1, h2, h3, h4, h5, h6, .title, .section-title {
     .fab { width: 46px; height: 46px; font-size: 1.25rem; }
     .fab--top { width: 40px; height: 40px; }
 }
+
+/* Sélecteur de quantité dans les formulaires (réservation) : même hauteur que les champs */
+.qty-stepper button,
+.qty-stepper input { height: 44px; }

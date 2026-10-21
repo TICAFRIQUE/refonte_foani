@@ -64,6 +64,12 @@ class AppServiceProvider extends ServiceProvider
             $model::saved(fn () => SiteCache::flush());
             $model::deleted(fn () => SiteCache::flush());
         }
+
+        // Notifications du back-office : badges à jour dès qu'une commande, réservation ou message change
+        foreach ([Commande::class, Reservation::class, Contact::class] as $model) {
+            $model::saved(fn () => \App\Http\Controllers\backend\NotificationController::oublier());
+            $model::deleted(fn () => \App\Http\Controllers\backend\NotificationController::oublier());
+        }
     }
 
     /**

@@ -74,7 +74,9 @@ class AdminController extends Controller
     public function index_client()
     {
         try {
-            $clients = User::with('roles')
+            // Colonnes utiles uniquement : la liste est envoyée en JSON et dessinée par DataTables
+            $clients = User::query()
+                ->select(['id', 'username', 'email', 'phone', 'created_at'])
                 ->where(function ($e) {
                     $e->whereHas('roles', function ($query) {
                         $query->where('name', 'client');

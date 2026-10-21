@@ -46,7 +46,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-6 col-md-2">
                                 <div class="mb-3">
                                     <label class="form-label">Prix (FCFA) <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" value="{{ $produit->prix_de_vente }}"
@@ -54,13 +54,13 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
-                                <label class="form-label">Quantité <span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <button type="button" class="btn btn-outline-secondary btn-decrease">-</button>
-                                    <input type="number" name="quantite" class="form-control text-center" min="1"
-                                        value="1" required>
-                                    <button type="button" class="btn btn-outline-secondary btn-increase">+</button>
+                            <div class="col-6 col-md-3">
+                                <label class="form-label d-block">Quantité <span class="text-danger">*</span></label>
+                                <div class="cart-line__qty qty-stepper" role="group" aria-label="Quantité">
+                                    <button type="button" class="btn-decrease" aria-label="Retirer un">−</button>
+                                    <input type="number" name="quantite" min="1" step="1" value="1" inputmode="numeric"
+                                        aria-label="Quantité" required>
+                                    <button type="button" class="btn-increase" aria-label="Ajouter un">+</button>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -117,10 +117,13 @@
 <script>
 $(function() {
     let prix = {{ $produit->prix_de_vente }};
+    // Quantité lue dans la case : vide ou < 1 compte pour 1 (la case est corrigée en quittant le champ)
+    function lireQte() {
+        let qte = parseInt($('input[name="quantite"]').val(), 10);
+        return qte >= 1 ? qte : 1;
+    }
     function updateTotal() {
-        let qte = parseInt($('input[name="quantite"]').val()) || 1;
-        if (qte < 1) qte = 1;
-        $('input[name="quantite"]').val(qte);
+        let qte = lireQte();
         let totalProduit = prix * qte;
         $('#total').val(totalProduit > 0 ? totalProduit.toLocaleString('fr-FR') + ' FCFA' : '');
         $('#total-produit').text(totalProduit.toLocaleString('fr-FR') + ' FCFA');
@@ -131,18 +134,17 @@ $(function() {
         let totalGeneral = totalProduit + frais;
         $('#total-general').text(totalGeneral.toLocaleString('fr-FR') + ' FCFA');
     }
-    $('input[name="quantite"]').on('input', updateTotal);
+    $('input[name="quantite"]').on('input', updateTotal).on('change blur', function() {
+        $(this).val(lireQte());
+        updateTotal();
+    });
     $('select[name="commune_id"]').on('change', updateTotal);
 
     $('.btn-increase').on('click', function() {
-        let input = $(this).siblings('input[name="quantite"]');
-        let val = parseInt(input.val()) || 1;
-        input.val(val + 1).trigger('input');
+        $('input[name="quantite"]').val(lireQte() + 1).trigger('input');
     });
     $('.btn-decrease').on('click', function() {
-        let input = $(this).siblings('input[name="quantite"]');
-        let val = parseInt(input.val()) || 1;
-        if (val > 1) input.val(val - 1).trigger('input');
+        $('input[name="quantite"]').val(Math.max(1, lireQte() - 1)).trigger('input');
     });
 
     $('form').on('submit', function(e) {

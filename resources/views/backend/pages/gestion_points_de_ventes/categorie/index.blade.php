@@ -76,8 +76,6 @@
     </div> {{-- Modal de création --}} @include('backend.pages.gestion_points_de_ventes.categorie.partials.create')
     @endsection @section('script')
     <!-- jQuery et DataTables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
@@ -88,7 +86,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> <!-- Initialisation DataTables -->
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
     <script>
         $(document).ready(function() {
 

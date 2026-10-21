@@ -14,7 +14,7 @@ class CategorieController extends Controller
     public function index()
     {
         try {
-            $categories = Categorie::position()->get();
+            $categories = Categorie::with('media')->position()->get();
             return view('backend.pages.categorie.index', compact('categories'));
         } catch (\Throwable $th) {
             return back()->with('error', 'Erreur lors du chargement des catégories : ' . $th->getMessage());

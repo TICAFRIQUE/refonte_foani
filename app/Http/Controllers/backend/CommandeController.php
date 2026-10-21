@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Backend;
 use Exception;
 use App\Models\User;
 use App\Models\Commande;
+use App\Support\Periode;
+use App\Support\Statut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -24,54 +27,86 @@ class CommandeController extends Controller
     //     }
     // }
 
-    // Liste des commandes avec filtres
+    // Liste des commandes : onglets de statut, période, recherche, pagination
     public function index(Request $request)
     {
         try {
-            $query = Commande::with(['user', 'produits']);
+            [$base, $periode] = $this->requeteFiltree($request);
 
-            $hasFiltre = $request->filled('statut') || $request->filled('date') || $request->filled('date_debut') || $request->filled('date_fin');
+            // Statut affiché : celui demandé, sinon « en attente » (la liste à traiter)
+            $statut = $request->has('statut') ? $request->input('statut') : Statut::EN_ATTENTE;
 
-            if ($hasFiltre) {
-                // Filtre par statut
-                if ($request->filled('statut')) {
-                    $query->where('statut', $request->input('statut'));
-                }
-                // Filtre par date exacte
-                if ($request->filled('date')) {
-                    $query->whereDate('created_at', $request->input('date'));
-                }
-                // Filtre par intervalle de dates
-                if ($request->filled('date_debut')) {
-                    $query->whereDate('created_at', '>=', $request->input('date_debut'));
-                }
-                if ($request->filled('date_fin')) {
-                    $query->whereDate('created_at', '<=', $request->input('date_fin'));
-                }
-            } else {
-                // Aucun filtre : commandes du jour et en_attente
-                $query
-                    // ->whereDate('created_at', now()->toDateString())
-                    ->where('statut', 'en_attente');
-            }
+            // Compteurs par statut (même période / recherche) pour les onglets
+            $parStatut = (clone $base)
+                ->select('statut', DB::raw('COUNT(*) as nombre'), DB::raw('SUM(total) as montant'))
+                ->groupBy('statut')
+                ->get()
+                ->keyBy('statut');
 
-            $commandes = $query->orderBy('created_at', 'desc')->get();
+            $commandes = (clone $base)
+                ->when($statut !== null && $statut !== '', fn ($q) => $q->where('statut', $statut))
+                ->latest()
+                ->paginate(25, ['id', 'code', 'user_id', 'nom', 'telephone', 'commune', 'ville', 'total', 'statut', 'created_at'])
+                ->withQueryString();
 
-            return view('backend.pages.commandes.index', compact('commandes'));
+            return view('backend.pages.commandes.index', compact('commandes', 'parStatut', 'statut', 'periode'));
         } catch (Exception $e) {
+            report($e);
             Alert::error('Erreur', 'Impossible de charger les commandes');
             return back();
         }
     }
 
+    // Export CSV des commandes (mêmes filtres que la liste)
+    public function export(Request $request)
+    {
+        [$query] = $this->requeteFiltree($request);
+        $query->when($request->filled('statut'), fn ($q) => $q->where('statut', $request->input('statut')))->latest();
 
+        $fichier = 'commandes-' . now()->format('Y-m-d-His') . '.csv';
 
+        return response()->streamDownload(function () use ($query) {
+            $out = fopen('php://output', 'w');
+            fwrite($out, "\xEF\xBB\xBF"); // BOM : accents corrects dans Excel
+            fputcsv($out, ['Code', 'Date', 'Client', 'Téléphone', 'Commune', 'Ville', 'Sous-total', 'Livraison', 'Total', 'Statut'], ';');
+            $query->chunk(500, function ($lignes) use ($out) {
+                foreach ($lignes as $c) {
+                    fputcsv($out, [
+                        $c->code, $c->created_at?->format('d/m/Y H:i'), $c->nom, $c->telephone, $c->commune, $c->ville,
+                        (int) $c->sous_total, (int) $c->frais_livraison, (int) $c->total, Statut::label($c->statut),
+                    ], ';');
+                }
+            });
+            fclose($out);
+        }, $fichier, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    /** Requête de base : période (facultative) + recherche. Retourne [requête, Periode|null]. */
+    private function requeteFiltree(Request $request): array
+    {
+        $avecPeriode = $request->filled('periode') || $request->filled('date_debut') || $request->filled('date_fin');
+        $periode = $avecPeriode ? Periode::depuisRequete($request) : null;
+        $recherche = trim((string) $request->input('q'));
+
+        $query = Commande::query()
+            ->when($periode, fn ($q) => $q->whereBetween('created_at', $periode->bornes()))
+            ->when($recherche !== '', function ($q) use ($recherche) {
+                $q->where(function ($q) use ($recherche) {
+                    $q->where('code', 'like', "%{$recherche}%")
+                        ->orWhere('nom', 'like', "%{$recherche}%")
+                        ->orWhere('telephone', 'like', "%{$recherche}%")
+                        ->orWhere('commune', 'like', "%{$recherche}%");
+                });
+            });
+
+        return [$query, $periode];
+    }
 
     // Affichage d'une commande
     public function show($id)
     {
         try {
-            $commande = Commande::with('user', 'produits')->findOrFail($id);
+            $commande = Commande::with(['user', 'produits.media'])->findOrFail($id);
             return view('backend.pages.commandes.partials.show', compact('commande'));
         } catch (Exception $e) {
             Alert::error('Erreur', 'Commande introuvable');
@@ -84,25 +119,21 @@ class CommandeController extends Controller
     // Mise à jour d'une commande
     public function update(Request $request, $id)
     {
+        // Validation hors du try : un statut invalide suit le circuit d'erreurs standard de Laravel
+        $request->validate(['statut' => Statut::regle()]);
+
         try {
             $commande = Commande::findOrFail($id);
 
-            $request->validate([
-                'statut' => 'required|string',
-            ]);
-
-            $commande->update([
-                'statut' => $request->statut,
-            ]);
-
-            // mettre à jour la date de livraison si le statut est "livrée"
-            if ($request->statut === 'livrée' && !$commande->date_livraison) {
+            $commande->statut = $request->statut;
+            // date de livraison renseignée au passage à « livrée »
+            if ($request->statut === Statut::LIVREE && !$commande->date_livraison) {
                 $commande->date_livraison = now();
-                $commande->save();
             }
+            $commande->save();
 
-            Alert::success('Succès', 'Commande mise à jour avec succès');
-            return redirect()->route('commandes.index', $commande->id);
+            Alert::toast('Commande ' . $commande->code . ' : ' . Statut::label($commande->statut), 'success');
+            return redirect()->route('commandes.show', $commande->id);
         } catch (Exception $e) {
             Alert::error('Erreur', 'Erreur lors de la mise à jour : ' . $e->getMessage());
             return back()->withInput();

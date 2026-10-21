@@ -15,7 +15,7 @@ class PageController extends  Controller
     public function index()
     {
         try {
-            $pages = Page::with('categorie')->position()->get();
+            $pages = Page::with(['categorie', 'media'])->position()->get();
             return view('backend.pages.pages.pages.index', compact('pages'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());

@@ -99,13 +99,10 @@
 
 
 @section('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!-- CKEditor -->
     <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/ecommerce-product-create.init.js') }}"></script>
     <!-- App js -->
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
         $(document).ready(function() {

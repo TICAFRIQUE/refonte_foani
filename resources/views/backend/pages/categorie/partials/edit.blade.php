@@ -45,7 +45,7 @@
                                  <select name="position" class="form-control">
                                      @php
                                          //compter le nombre de categorie pour la position
-                                         $data_count = \App\Models\Categorie::count();
+                                         $data_count = isset($categories) ? $categories->count() : \App\Models\Categorie::count(); // liste déjà chargée : pas de requête par catégorie
 
                                      @endphp
                                      @for ($i = 1; $i <= $data_count; $i++)

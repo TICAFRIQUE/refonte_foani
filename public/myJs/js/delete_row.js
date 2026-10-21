@@ -72,7 +72,7 @@ function delete_row(route) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        type: "GET",
+                        type: "POST", // suppression : jamais en GET (protection CSRF, jeton envoyé par $.ajaxSetup)
                         url: url + Id,
                         dataType: "json",
                         success: function (response) {

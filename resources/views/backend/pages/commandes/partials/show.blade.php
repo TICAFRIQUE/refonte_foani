@@ -1,165 +1,162 @@
 @extends('backend.layouts.master')
-
-@section('title', 'Détails de la commande')
-
-@section('css')
-    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" />
-    <style>
-        /* Formulaire et select */
-        .statut-select:focus {
-            box-shadow: 0 0 0 0.2rem #0d6efd40;
-            border-color: #0d6efd;
-        }
-
-        .statut-select:hover {
-            box-shadow: 0 0 0 0.2rem #0d6efd40;
-            border-color: #0d6efd;
-            cursor: pointer;
-        }
-
-        /* Table des produits */
-        #produits-table tbody tr:nth-child(odd) {
-            background-color: #f9f9f9;
-        }
-
-        #produits-table tbody tr:hover {
-            background-color: #e9f5ff;
-        }
-
-        /* Card */
-        .card-shadow {
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-    </style>
-@endsection
+@section('title', 'Commande ' . $commande->code)
 
 @section('content')
-    @component('backend.components.breadcrumb')
-        @slot('li_1')
-            Commandes
-        @endslot
-        @slot('title')
-            Détails de la commande #{{ $commande->code }}
-        @endslot
-    @endcomponent
+    @php
+        $fcfa = fn ($v) => number_format((float) $v, 0, ',', ' ');
+        $statut = $commande->statut;
+        $annulee = $statut === \App\Support\Statut::ANNULEE;
+        $rang = array_search($statut, \App\Support\Statut::ETAPES, true);
+        $tel = preg_replace('/\D/', '', (string) $commande->telephone);
+        $nbArticles = $commande->produits->sum(fn ($p) => $p->pivot->quantite);
+        // Prochaine étape logique proposée en bouton principal
+        $suivante = [\App\Support\Statut::EN_ATTENTE => \App\Support\Statut::EN_COURS, \App\Support\Statut::EN_COURS => \App\Support\Statut::LIVREE][$statut] ?? null;
+    @endphp
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-shadow mb-4">
+    <div class="page-head">
+        <div>
+            <a href="{{ route('commandes.index') }}" class="text-muted small"><i class="ri-arrow-left-line"></i> Retour aux commandes</a>
+            <h1 class="d-flex flex-wrap align-items-center gap-2 mt-1">
+                Commande {{ $commande->code }} @include('backend.components.statut-badge', ['statut' => $statut])
+            </h1>
+            <p>Passée le {{ $commande->created_at?->format('d/m/Y à H:i') }} ({{ $commande->created_at?->diffForHumans() }})
+                @if ($commande->date_livraison) · livrée le {{ $commande->date_livraison->format('d/m/Y à H:i') }} @endif
+            </p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-soft-secondary" onclick="imprimerFacture()"><i class="ri-printer-line me-1"></i> Imprimer la facture</button>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-xl-8">
+            {{-- Suivi --}}
+            <div class="card">
                 <div class="card-body">
-                    <div class="row g-4">
-                        {{-- Infos client --}}
-                        <div class="col-md-6">
-                            <h5 class="fw-bold">Informations client</h5>
-                            <p><strong>Client :</strong> {{ $commande->user->username ?? 'Inconnu' }}</p>
-                            <p><strong>Téléphone :</strong> {{ $commande->telephone ?? '—' }}</p>
-                            <p><strong>Date :</strong> {{ $commande->created_at?->format('d/m/Y H:i') ?? '—' }}</p>
-                            <p><strong>Adresse :</strong> {{ $commande->commune ?? '—' }} ,  <i>{{ $commande->adresse ?? '—' }}</i></p>
-
-                            <p><strong>Date de livraison :</strong>
-                                {{ $commande->date_livraison?->format('d/m/Y à H:i') ?? '—' }}</p>
-                        </div>
-
-                        {{-- Statut et totaux --}}
-                        <div class="col-md-6">
-
-                            <form action="{{ route('commandes.update', $commande->id) }}" method="POST">
-                                @csrf
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">Statut :</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light">
-                                            <i class="bi bi-arrow-repeat text-primary"></i>
-                                        </span>
-                                        <select name="statut"
-                                            class="form-select fw-bold border-primary shadow-sm statut-select"
-                                            title="Cliquez pour changer le statut" onchange="this.form.submit()">
-                                            <option value="en_attente" @selected($commande->statut == 'en_attente')>🕒 En attente</option>
-                                            <option value="en_cours" @selected($commande->statut == 'en_cours')>🚚 En cours</option>
-                                            <option value="livrée" @selected($commande->statut == 'livrée')>✅ Livrée</option>
-                                            <option value="annulée" @selected($commande->statut == 'annulée')>❌ Annulée</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <p class="mt-3"><strong>Sous-total :</strong>
-                                    <span class="badge bg-primary fs-6">
-                                        {{ number_format($commande->sous_total, 0, ',', ' ') }} Fcfa
-                                    </span>
-                                </p>
-                                <p><strong>Frais de livraison :</strong>
-                                    <span class="badge bg-warning text-dark fs-6">
-                                        {{ number_format($commande->frais_livraison, 0, ',', ' ') }} Fcfa
-                                    </span>
-                                </p>
-                                <p><strong>Total :</strong>
-                                    <span class="badge bg-success fs-6">
-                                        {{ number_format($commande->total, 0, ',', ' ') }} Fcfa
-                                    </span>
-                                </p>
-                            </form>
-                        </div>
+                    <div class="stepper {{ $annulee ? 'is-cancelled' : '' }}">
+                        @foreach (\App\Support\Statut::ETAPES as $i => $etape)
+                            @php $info = \App\Support\Statut::info($etape); @endphp
+                            <div class="stepper__step {{ !$annulee && $rang !== false && $i <= $rang ? 'is-done' : '' }} {{ !$annulee && $rang === $i ? 'is-current' : '' }}">
+                                <span class="stepper__dot"><i class="{{ $info['icone'] }}"></i></span>
+                                {{ $info['label'] }}
+                            </div>
+                        @endforeach
                     </div>
+                    @if ($annulee)
+                        <div class="alert alert-danger mb-0 mt-3"><i class="ri-close-circle-line me-1"></i> Cette commande a été annulée.</div>
+                    @endif
+
                     <hr>
+                    <form action="{{ route('commandes.update', $commande->id) }}" method="POST" id="formStatut">
+                        @csrf
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <span class="fw-semibold">Changer le statut :</span>
+                            <div class="statut-actions">
+                                @if ($suivante)
+                                    @php $infoS = \App\Support\Statut::info($suivante); @endphp
+                                    <button type="submit" name="statut" value="{{ $suivante }}" class="btn btn-primary">
+                                        <i class="{{ $infoS['icone'] }}"></i> Passer à « {{ $infoS['label'] }} »
+                                    </button>
+                                @endif
+                                @foreach (\App\Support\Statut::LISTE as $cle => $info)
+                                    @continue($cle === $statut || $cle === $suivante)
+                                    <button type="submit" name="statut" value="{{ $cle }}"
+                                        class="btn btn-sm btn-soft-{{ $info['couleur'] }}"
+                                        @if ($cle === \App\Support\Statut::ANNULEE) data-confirm="Annuler la commande {{ $commande->code }} ?" @endif>
+                                        <i class="{{ $info['icone'] }}"></i> {{ $info['label'] }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-                    {{-- Table des produits --}}
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold mb-3">Produits commandés</h5>
-                        <button class="btn btn-primary" onclick="imprimerFacture()">Imprimer la facture <i
-                                class="bi bi-printer"></i></button>
-                    </div>
+            {{-- Produits --}}
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0"><i class="ri-shopping-basket-2-line me-1 text-success"></i> Produits commandés</h5>
+                    <span class="badge bg-success-subtle text-success">{{ $nbArticles }} article(s)</span>
+                </div>
+                <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover" id="buttons-datatables"
-                            style="width:100%">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Produit</th>
-                                    <th>Quantité</th>
-                                    <th>Prix unitaire</th>
-                                    <th>Total</th>
-                                </tr>
+                        <table class="table table-modern align-middle mb-0">
+                            <thead>
+                                <tr><th>Produit</th><th class="text-center">Qté</th><th class="text-end">Prix unitaire</th><th class="text-end">Total</th></tr>
                             </thead>
                             <tbody>
-                                @forelse ($commande->produits as $index => $produit)
+                                @forelse ($commande->produits as $produit)
                                     <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $produit->libelle }}</td>
-                                        <td>{{ $produit->pivot->quantite }}</td>
-                                        <td>{{ number_format($produit->pivot->prix_unitaire, 0, ',', ' ') }} Fcfa</td>
-                                        <td>{{ number_format($produit->pivot->total, 0, ',', ' ') }} Fcfa</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="{{ $produit->getFirstMediaUrl('image_principale', 'thumb') ?: asset('front/images/produits/poulet.png') }}"
+                                                    alt="" width="44" height="44" class="rounded" style="object-fit: cover;" loading="lazy">
+                                                <span class="cell-main">{{ $produit->libelle }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">× {{ $produit->pivot->quantite }}</td>
+                                        <td class="text-end text-nowrap">{{ $fcfa($produit->pivot->prix_unitaire) }} F</td>
+                                        <td class="text-end text-nowrap fw-semibold">{{ $fcfa($produit->pivot->total) }} F</td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted">Aucun produit associé.</td>
-                                    </tr>
+                                    <tr><td colspan="4" class="empty-box">Aucun produit associé à cette commande.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="col-xl-4">
+            {{-- Client --}}
+            <div class="card">
+                <div class="card-header"><h5 class="card-title mb-0"><i class="ri-user-3-line me-1 text-success"></i> Client</h5></div>
+                <div class="card-body">
+                    <ul class="info-list">
+                        <li><i class="ri-user-line"></i><div><small>Nom</small><strong>{{ $commande->nom ?: ($commande->user->username ?? 'Inconnu') }}</strong></div></li>
+                        <li><i class="ri-phone-line"></i><div><small>Téléphone</small><strong>{{ $commande->telephone ?: '—' }}</strong></div></li>
+                        <li><i class="ri-map-pin-line"></i><div><small>Adresse de livraison</small>
+                            <strong>{{ $commande->commune ?: '—' }}{{ $commande->ville ? ', ' . $commande->ville : '' }}</strong>
+                            @if ($commande->adresse)<span class="d-block text-muted small">{{ $commande->adresse }}</span>@endif
+                        </div></li>
+                        @if ($commande->commentaire)
+                            <li><i class="ri-chat-3-line"></i><div><small>Commentaire</small>{{ $commande->commentaire }}</div></li>
+                        @endif
+                        <li><i class="ri-bank-card-line"></i><div><small>Paiement</small><strong>{{ $commande->mode_paiement === 'espece' ? 'Espèces à la livraison' : ($commande->mode_paiement ?: '—') }}</strong></div></li>
+                    </ul>
+                    @if ($tel)
+                        <div class="d-flex gap-2 mt-3">
+                            <a href="tel:{{ $tel }}" class="btn btn-soft-primary flex-fill"><i class="ri-phone-fill me-1"></i> Appeler</a>
+                            <a href="https://wa.me/225{{ $tel }}?text={{ rawurlencode('Bonjour, FOANI concernant votre commande ' . $commande->code) }}" target="_blank" rel="noopener"
+                                class="btn btn-soft-success flex-fill"><i class="ri-whatsapp-line me-1"></i> WhatsApp</a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Montants --}}
+            <div class="card">
+                <div class="card-header"><h5 class="card-title mb-0"><i class="ri-money-dollar-circle-line me-1 text-success"></i> Montants</h5></div>
+                <div class="card-body">
+                    <ul class="totaux">
+                        <li><span>Sous-total</span><strong>{{ $fcfa($commande->sous_total) }} F</strong></li>
+                        <li><span>Livraison</span><strong>{{ $fcfa($commande->frais_livraison) }} F</strong></li>
+                        <li class="is-total"><span>Total</span><span>{{ $fcfa($commande->total) }} FCFA</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-@include('backend.pages.commandes.scripts.impressionFacture')
 
 @section('script')
-    <!-- jQuery et DataTables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <!-- Initialisation DataTables -->
-    <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
+    @include('backend.pages.commandes.scripts.impressionFacture')
+    <script>
+        // Confirmation avant une action sensible (annulation)
+        document.getElementById('formStatut').addEventListener('click', function(e) {
+            var btn = e.target.closest('button[data-confirm]');
+            if (btn && !confirm(btn.dataset.confirm)) e.preventDefault();
+        });
+    </script>
 @endsection

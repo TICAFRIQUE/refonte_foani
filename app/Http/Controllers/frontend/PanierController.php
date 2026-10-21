@@ -56,7 +56,8 @@ class PanierController extends Controller
     // Mettre à jour la quantité d’un produit
     public function update(Request $request, $produit_id)
     {
-        $quantite = (int) $request->input('quantite');
+        // Quantité minimale : 1 (une valeur vide ou nulle ne vide jamais la ligne)
+        $quantite = max(1, (int) $request->input('quantite'));
         $panier = Session::get('panier', []);
 
         if (isset($panier[$produit_id])) {

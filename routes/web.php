@@ -56,13 +56,16 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     // dashboard admin
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
+    // Notifications (badges header + sidebar) : un seul appel, mis en cache 15 s
+    Route::get('/notifications', [\App\Http\Controllers\backend\NotificationController::class, 'index'])->name('admin.notifications');
+
     // parametre application
     Route::prefix('parametre')->controller(ParametreController::class)->group(function () {
         route::get('', 'index')->name('parametre.index');
         route::post('store', 'store')->name('parametre.store');
-        route::get('maintenance-up', 'maintenanceUp')->name('parametre.maintenance-up');
-        route::get('maintenance-down', 'maintenanceDown')->name('parametre.maintenance-down');
-        route::get('optimize-clear', 'optimizeClear')->name('parametre.optimize-clear');
+        route::post('maintenance-up', 'maintenanceUp')->name('parametre.maintenance-up');
+        route::post('maintenance-down', 'maintenanceDown')->name('parametre.maintenance-down');
+        route::post('optimize-clear', 'optimizeClear')->name('parametre.optimize-clear');
         Route::get('download-backup/{file}', 'downloadBackup')->name('setting.download-backup');  // download backup db
     });
 
@@ -72,7 +75,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         route::get('', 'index')->name('admin-register.index');
         route::post('store', 'store')->name('admin-register.store');
         route::post('update/{id}', 'update')->name('admin-register.update');
-        route::get('delete/{id}', 'delete')->name('admin-register.delete');
+        route::post('delete/{id}', 'delete')->name('admin-register.delete');
         route::get('profil/{id}', 'profil')->name('admin-register.profil');
         route::post('change-password', 'changePassword')->name('admin-register.new-password');
     });
@@ -82,7 +85,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         route::get('', 'index')->name('role.index');
         route::post('store', 'store')->name('role.store');
         route::post('update/{id}', 'update')->name('role.update');
-        route::get('delete/{id}', 'delete')->name('role.delete');
+        route::post('delete/{id}', 'delete')->name('role.delete');
     });
 
     //permission
@@ -92,7 +95,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         route::post('store', 'store')->name('permission.store');
         route::get('edit{id}', 'edit')->name('permission.edit');
         route::put('update/{id}', 'update')->name('permission.update');
-        route::get('delete/{id}', 'delete')->name('permission.delete');
+        route::post('delete/{id}', 'delete')->name('permission.delete');
     });
 
     //module
@@ -100,7 +103,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         route::get('', 'index')->name('module.index');
         route::post('store', 'store')->name('module.store');
         route::post('update/{id}', 'update')->name('module.update');
-        route::get('delete/{id}', 'delete')->name('module.delete');
+        route::post('delete/{id}', 'delete')->name('module.delete');
     });
 
 
@@ -109,7 +112,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('', 'index')->name('categorie.index');
         Route::post('store', 'store')->name('categorie.store');
         Route::post('update/{id}', 'update')->name('categorie.update');
-        Route::get('delete/{id}', 'delete')->name('categorie.delete');
+        Route::post('delete/{id}', 'delete')->name('categorie.delete');
     });
 
     //    offre
@@ -119,7 +122,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         // Route::get('show/{id}', 'show')->name('offre.show');
         Route::get('offre/{id}', 'edit')->name('offre.edit');
         Route::put('offre/{type_offre}',  'update')->name('offre.update');
-        Route::get('offre/{id}',  'delete')->name('offre.delete');
+        Route::post('delete/{id}', 'delete')->name('offre.delete'); // avant : GET offre/{id}, en conflit avec la modification
     });
 
     // produit
@@ -130,7 +133,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         // Route::get('show/{id}', 'show')->name('produit.show');
         Route::get('edit/{id}', 'edit')->name('produit.edit');
         Route::put('update/{id}', 'update')->name('produit.update');
-        Route::get('delete/{id}', 'delete')->name('produit.delete');
+        Route::post('delete/{id}', 'delete')->name('produit.delete');
     });
 
 
@@ -141,7 +144,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('', 'store')->name('ville.store');
         Route::get('{id}/edit', 'edit')->name('ville.edit');
         Route::post('/update/{id}', 'update')->name('ville.update');
-        Route::get('/delete/{id}', 'delete')->name('ville.delete');
+        Route::post('/delete/{id}', 'delete')->name('ville.delete');
     });
 
     //CommuneLivraison
@@ -149,7 +152,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/', 'index')->name('commune.index');            // Liste des communes
         Route::post('/store', 'store')->name('commune.store');       // Ajouter une commune
         Route::post('/update/{id}', 'update')->name('commune.update'); // Modifier une commune
-        Route::get('/delete/{id}', 'delete')->name('commune.delete'); // Supprimer une commune
+        Route::post('/delete/{id}', 'delete')->name('commune.delete'); // Supprimer une commune
     });
 
 
@@ -159,7 +162,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('/store', 'store')->name('categorie_page.store'); // Enregistrement
         Route::get('/edit/{id}', 'edit')->name('categorie_page.edit'); // Récupération d'une catégorie pour édition
         Route::post('/update/{id}', 'update')->name('categorie_page.update'); // Mise à jour
-        Route::get('/delete/{id}', 'delete')->name('categorie_page.delete'); // Suppression
+        Route::post('/delete/{id}', 'delete')->name('categorie_page.delete'); // Suppression
     });
 
 
@@ -170,7 +173,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('store', 'store')->name('pages.store');
         Route::get('edit/{id}', 'edit')->name('pages.edit');
         Route::post('update/{id}', 'update')->name('pages.update');
-        Route::get('delete/{id}', 'delete')->name('pages.delete');
+        Route::post('delete/{id}', 'delete')->name('pages.delete');
     });
     // categorie point de vente
     Route::prefix('categorie_point_de_vente')->name('categorie_point_de_vente.')->controller(CategoriePointVenteController::class)->group(function () {
@@ -178,7 +181,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('store', 'store')->name('store');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('update/{id}', 'update')->name('update');
-        Route::get('delete/{id}', 'delete')->name('delete');
+        Route::post('delete/{id}', 'delete')->name('delete');
     });
 
     // ville point de vente
@@ -187,7 +190,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('store', 'store')->name('store');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('update/{id}', 'update')->name('update');
-        Route::get('delete/{id}', 'delete')->name('delete');
+        Route::post('delete/{id}', 'delete')->name('delete');
     });
 
     // sliders
@@ -197,7 +200,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('store', 'store')->name('store');      // Enregistrement
         Route::get('edit/{id}', 'edit')->name('edit');     // Formulaire d'édition
         Route::post('update/{id}', 'update')->name('update'); // Mise à jour
-        Route::get('delete/{id}', 'delete')->name('delete');  // Suppression
+        Route::post('delete/{id}', 'delete')->name('delete');  // Suppression
     });
 
     // commandes
@@ -208,9 +211,10 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
             Route::get('/', 'index')->name('index'); // Liste des commandes
             Route::post('store', 'store')->name('store'); // Enregistrement d'une commande
             Route::get('newOrders', 'newOrders')->name('newOrders'); // JSON polling
+            Route::get('export', 'export')->name('export'); // Export CSV (filtres de la liste)
             Route::get('{commande}', 'show')->name('show'); // Détail d'une commande
             Route::post('{commande}', 'update')->name('update'); // Mise à jour
-            Route::get('delete/{id}', 'delete')->name('delete'); // Suppression
+            Route::post('delete/{id}', 'delete')->name('delete'); // Suppression
 
             // Route::get('{commande}/pdf', 'pdf')->name('pdf');
         });
@@ -221,9 +225,10 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::prefix('reservations')->name('reservations.')->controller(ReservationAdminController::class)->group(function () {
         Route::get('/', 'index')->name('index');           // Liste des réservations
         Route::get('newReservationCount', 'newReservationCount')->name('newReservationCount'); // JSON polling
+        Route::get('export', 'export')->name('export'); // Export CSV (filtres de la liste)
         Route::post('{reservation}', 'update')->name('update'); // Mise à jour
         Route::get('{reservation}', 'show')->name('show'); // Détail d'une réservation
-        Route::get('delete/{id}', 'delete')->name('delete'); // Suppression
+        Route::post('delete/{id}', 'delete')->name('delete'); // Suppression
     });
 
     // clients
@@ -231,16 +236,16 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/', 'index_client')->name('index_client');            // Liste des clients
         Route::get('importer', 'importer_client')->name('importer');     // Formulaire d'importation
         Route::post('importer/store', 'importer_client')->name('importer_store'); // Traitement de l'importation
-        Route::get('assign-role', 'assignRole')->name('assign_role');     // Assigner le rôle client aux utilisateurs existants
+        Route::post('assign-role', 'assignRole')->name('assign_role');     // Assigner le rôle client aux utilisateurs existants
 
 
-        // Route::get('delete/{id}', 'delete_client')->name('delete_client');    // Suppression (retour JSON recommandé)
+        // Route::post('delete/{id}', 'delete_client')->name('delete_client');    // Suppression (retour JSON recommandé)
     });
 
     // candidats
     Route::prefix('candidats')->name('candidats.')->controller(CandidatController::class)->group(function () {
         Route::get('/', 'index')->name('index');           // liste des candidats
-        Route::get('delete/{id}', 'delete')->name('delete'); // suppression
+        Route::post('delete/{id}', 'delete')->name('delete'); // suppression
     });
 
     // messages contact
@@ -249,12 +254,13 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         // Envoi du formulaire de contact : public (visiteurs), limité contre le spam
         Route::post('/', 'store')->name('store')->withoutMiddleware('admin')->middleware('throttle:5,1');
         Route::get('/{id}', 'show')->name('show');     // Voir un contact
-        Route::get('delete/{id}', 'delete')->name('delete'); // Supprimer un contact
+        Route::post('delete/{id}', 'delete')->name('delete'); // Supprimer un contact
     });
 
     // rapports
     Route::prefix('rapports')->name('rapports.')->controller(RapportController::class)->group(function () {
         Route::get('vente', 'rapportVente')->name('vente'); // Rapport de vente
+        Route::get('vente/export', 'export')->name('vente.export'); // Export CSV du rapport
     });
 });
 

@@ -373,7 +373,6 @@
 @endsection
 @section('script')
     <script src="{{ URL::asset('build/js/pages/profile-setting.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -382,7 +381,7 @@
             $('.btn-clear').click(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    type: "get",
+                    type: "post",
                     url: "{{ route('parametre.optimize-clear') }}",
                     // data: "data",
                     dataType: "json",
@@ -427,7 +426,7 @@
             $('.btn-mode-down').click(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    type: "get",
+                    type: "post",
                     url: "{{ route('parametre.maintenance-down') }}",
                     // data: "data",
                     dataType: "json",
@@ -452,7 +451,7 @@
             $('.btn-mode-up').click(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    type: "get",
+                    type: "post",
                     url: "{{ route('parametre.maintenance-up') }}",
                     // data: "data",
                     dataType: "json",

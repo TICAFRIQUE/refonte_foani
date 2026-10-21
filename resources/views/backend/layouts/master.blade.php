@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title') | {{ config('app.name') }} </title>
+    <title>@yield('title') | FOANI Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Tableau de bord d'administration Foani&Services" name="description" />
     <meta content="Ticafrique" name="author" />
@@ -13,7 +13,6 @@
     <!-- App favicon -->
     {{-- <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico') }}"> --}}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('assets/img/favicon/apple-icon-57x57.png') }}">
     <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('assets/img/favicon/apple-icon-60x60.png') }}">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('assets/img/favicon/apple-icon-72x72.png') }}">
@@ -31,7 +30,7 @@
     <link rel="manifest" href="{{ asset('assets/img/favicon/manifest.json') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ asset('assets/img/favicon/ms-icon-144x144.png') }}">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#163a14">
     @include('backend.layouts.head-css')
 </head>
 

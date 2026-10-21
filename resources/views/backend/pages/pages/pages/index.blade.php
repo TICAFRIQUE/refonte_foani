@@ -53,7 +53,7 @@
                                         <td class="text-center">{{ $page->position }}</td>
                                          <td>
                                             <img class="rounded avatar-sm"
-                                                src="{{ $page->hasMedia('image') ? $page->getFirstMediaUrl('image') : asset('front/images/logo.png') }}"
+                                                src="{{ $page->hasMedia('image') ? $page->getFirstMediaUrl('image', 'thumb') : asset('front/images/logo.png') }}"
                                                 width="50px" alt="{{ $page['libelle'] }}">
                                         </td>
                                         <td class="fw-semibold">{{ $page->libelle }}</td>
@@ -117,8 +117,6 @@
 
 @section('script')
     <!-- jQuery et DataTables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
@@ -132,7 +130,6 @@
 
     <!-- Initialisation DataTables -->
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
         $(document).ready(function() {

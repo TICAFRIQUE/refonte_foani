@@ -62,7 +62,7 @@
                                         {{-- Image --}}
                                         <td>
                                             @if ($slider->hasMedia('image'))
-                                                <img src="{{ $slider->getFirstMediaUrl('image') }}" alt="Image Slider"
+                                                <img loading="lazy" src="{{ $slider->getFirstMediaUrl('image', 'thumb') }}" alt="Image Slider"
                                                     class="img-thumbnail"
                                                     style="width: 50px; height: 50px; object-fit: cover;">
                                             @else
@@ -142,8 +142,6 @@
 
 @section('script')
     <!-- jQuery et DataTables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
@@ -156,7 +154,6 @@
 
     <!-- Initialisation DataTables -->
     <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
         $(document).ready(function() {

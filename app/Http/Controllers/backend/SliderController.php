@@ -16,7 +16,7 @@ class SliderController extends Controller
      */
     public function index()
     {
-        $sliders = Slider::latest()->get();
+        $sliders = Slider::with('media')->latest()->get();
         return view('backend.pages.slider.index', compact('sliders'));
     }
 
