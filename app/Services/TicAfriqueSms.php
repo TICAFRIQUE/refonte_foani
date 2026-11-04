@@ -4,61 +4,87 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Envoi de SMS via l'API TIC Afrique.
+ * Réglages dans le .env (lus via config/services.php) :
+ *   TICAFRIQUE_SMS_KEY  clé API
+ *   SMS_ADMIN_PHONE     numéro(s) de l'administrateur, séparés par des virgules
+ */
 class TicAfriqueSms
 {
     /**
      * Envoyer un SMS via l'API TIC Afrique
      */
-    private function sendSms($numero, $message)
+    private function sendSms(string $numero, string $message): array
     {
-        $apiKey = 'sk_dc830cc321f38bdac8f026edbd051386e9886c498478fe75bd24b45f652a1d89';
-        $url = 'https://sms.ticafrique.ci/api/v1/sms/send';
-
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_URL, config('services.ticafrique.url'));
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
             'to' => $numero,
             'message' => $message,
-            'sender_id' => 'FOANI'
+            'sender_id' => config('services.ticafrique.sender'),
         ]));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Délais courts : l'envoi a lieu juste après la commande, le client ne doit pas attendre
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $apiKey,
-            'Content-Type: application/json'
+            'Authorization: Bearer ' . config('services.ticafrique.key'),
+            'Content-Type: application/json',
         ]);
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $erreur = curl_error($ch);
 
         return [
             'http_code' => $httpCode,
-            'response' => $response
+            'response' => $response === false ? $erreur : $response,
         ];
     }
 
-
-
-    /**Envoyer un SMS  a l'administrateur pour la nouvelle commande */
-    public function sendNewOrderSms($commande)
+    /**
+     * Numéros de l'administrateur (SMS_ADMIN_PHONE), au format international +225XXXXXXXXXX.
+     * Accepte « 0700000000 », « 2250700000000 » ou « +225 07 00 00 00 00 », séparés par des virgules.
+     */
+    public static function numerosAdmin(): array
     {
-        // Préparer le numéro (ajouter +225 si besoin)
-        $numero = '+2250757242237';
-        
-        // Construire le message
-        $message = $this->construireMessageAdmin($commande);
-        
-        // Envoyer le SMS
-        $result = $this->sendSms($numero, $message);
+        return collect(explode(',', (string) config('services.ticafrique.admin_phone')))
+            ->map(fn ($n) => preg_replace('/\D/', '', $n))
+            ->filter()
+            ->map(fn ($n) => '+' . (strlen($n) === 10 ? '225' . $n : $n))
+            ->unique()
+            ->values()
+            ->all();
+    }
 
-        // Log du résultat
-        Log::info('SMS TIC Afrique envoyé', [
-            'commande_id' => $commande->id,
-            'numero' => $numero,
-            'message' => $message,
-            'http_code' => $result['http_code'],
-            'response' => $result['response']
-        ]);
+    /** Envoyer un SMS à l'administrateur pour la nouvelle commande */
+    public function sendNewOrderSms($commande): void
+    {
+        $numeros = self::numerosAdmin();
+
+        if (! $numeros || ! config('services.ticafrique.key')) {
+            Log::warning('SMS TIC Afrique non envoyé : SMS_ADMIN_PHONE ou TICAFRIQUE_SMS_KEY manquant dans le .env', [
+                'commande_id' => $commande->id,
+            ]);
+
+            return;
+        }
+
+        $message = $this->construireMessageAdmin($commande);
+
+        foreach ($numeros as $numero) {
+            $result = $this->sendSms($numero, $message);
+
+            Log::info('SMS TIC Afrique envoyé', [
+                'commande_id' => $commande->id,
+                'numero' => $numero,
+                'message' => $message,
+                'http_code' => $result['http_code'],
+                'response' => $result['response'],
+            ]);
+        }
     }
 
     /**

@@ -629,6 +629,12 @@
 
                             <form action="{{ route('contact.store') }}" method="POST" class="needs-validation" novalidate>
                                 @csrf
+                                @include('frontend.components.anti-robot')
+                                @if ($errors->any())
+                                    <div class="alert alert-danger" role="alert">
+                                        @foreach ($errors->all() as $error)<div>{{ $error }}</div>@endforeach
+                                    </div>
+                                @endif
                                 <div class="form-group">
                                     <label class="form-label">
                                         <i class="bi bi-person"></i>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
+use App\Support\AntiRobot;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -23,15 +24,27 @@ class ContactController extends Controller
 
 
         // 1️⃣ Validation des champs
+        $texte = AntiRobot::regleTexte();
         $request->validate([
-            'nom_prenoms' => 'required|string|max:255',
-            'objet' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'telephone' => 'required|string|max:20',
-            'message' => 'required',
-
+            'nom_prenoms' => ['required', 'string', 'min:2', 'max:100', $texte],
+            'objet' => ['required', 'string', 'max:150', $texte],
+            'email' => ['required', 'email', 'max:150'],
+            'telephone' => ['required', 'string', 'max:20', 'regex:/^[0-9+().\s-]{8,20}$/'],
+            'message' => ['required', 'string', 'min:10', 'max:3000', $texte],
+        ], [
+            'telephone.regex' => "Le numéro de téléphone n'est pas valide.",
+            'message.min' => 'Votre message est trop court (10 caractères minimum).',
         ]);
 
+        // Même message déjà reçu dans les dernières 24 h (double envoi ou robot) : on ne l'enregistre pas deux fois
+        $doublon = Contact::where('email', $request->email)
+            ->where('message', $request->message)
+            ->where('created_at', '>=', now()->subDay())
+            ->exists();
+
+        if ($doublon) {
+            return back()->with('success', 'Merci ! Votre message a bien été envoyé, nous vous répondons rapidement.');
+        }
 
         Contact::create([
             'nom_prenoms' => $request->nom_prenoms,

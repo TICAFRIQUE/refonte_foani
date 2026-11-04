@@ -22,6 +22,7 @@
 
                 <form action="{{ route('user.register') }}" method="POST" class="needs-validation" novalidate>
                     @csrf
+                    @include('frontend.components.anti-robot')
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label" for="reg-name">Nom &amp; prénoms <span class="text-danger">*</span></label>

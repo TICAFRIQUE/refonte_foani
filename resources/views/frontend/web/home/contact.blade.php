@@ -49,6 +49,7 @@
             <div class="col-lg-7">
                 <form action="{{ route('contact.store') }}" method="POST" class="vt-form reveal" style="--d:.1s" id="vtContactForm" novalidate>
                     @csrf
+                    @include('frontend.components.anti-robot')
                     <h3><i class="bi bi-chat-dots-fill"></i> Envoyez-nous un message</h3>
 
                     @if ($errors->any())

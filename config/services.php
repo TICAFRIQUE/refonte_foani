@@ -39,7 +39,16 @@ return [
         'url' => env('SMS_API_URL'),
         'username' => env('SMS_API_USERNAME'),
         'password' => env('SMS_API_PASSWORD'),
-        'sender' => env('SMS_API_SENDER'),  
+        'sender' => env('SMS_API_SENDER'),
+    ],
+
+    // SMS TIC Afrique (alerte « nouvelle commande » envoyée à l'administrateur)
+    'ticafrique' => [
+        'url' => env('TICAFRIQUE_SMS_URL', 'https://sms.ticafrique.ci/api/v1/sms/send'),
+        'key' => env('TICAFRIQUE_SMS_KEY'),
+        'sender' => env('TICAFRIQUE_SMS_SENDER', 'FOANI'),
+        // un ou plusieurs numéros séparés par des virgules (ex. 2250700000000,2250500000000)
+        'admin_phone' => env('SMS_ADMIN_PHONE'),
     ],
 
 

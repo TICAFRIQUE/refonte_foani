@@ -47,7 +47,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     // login and logout
     Route::controller(AdminController::class)->group(function () {
         route::get('/login', 'login')->name('admin.login')->withoutMiddleware('admin'); // page formulaire de connexion
-        route::post('/login', 'login')->name('admin.login.submit')->withoutMiddleware('admin'); // envoi du formulaire
+        route::post('/login', 'login')->name('admin.login.submit')->withoutMiddleware('admin')->middleware('throttle:connexion'); // envoi du formulaire
         route::post('/logout', 'logout')->name('admin.logout');
     });
 
@@ -252,7 +252,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::prefix('contact')->name('contact.')->controller(ContactController::class)->group(function () {
         Route::get('/', 'index')->name('index');       // Liste des contacts
         // Envoi du formulaire de contact : public (visiteurs), limité contre le spam
-        Route::post('/', 'store')->name('store')->withoutMiddleware('admin')->middleware('throttle:5,1');
+        Route::post('/', 'store')->name('store')->withoutMiddleware('admin')->middleware(['throttle:contact', 'antirobot']);
         Route::get('/{id}', 'show')->name('show');     // Voir un contact
         Route::post('delete/{id}', 'delete')->name('delete'); // Supprimer un contact
     });
@@ -270,9 +270,9 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
 //Authentification user
 Route::controller(UserController::class)->group(function () {
     route::get('login', 'loginForm')->name('user.loginForm');
-    route::post('loginStore', 'login')->name('user.login');
+    route::post('loginStore', 'login')->name('user.login')->middleware('throttle:connexion');
     route::get('register', 'registerForm')->name('user.registerForm');
-    route::post('registerStore', 'register')->name('user.register');
+    route::post('registerStore', 'register')->name('user.register')->middleware(['throttle:inscription', 'antirobot']);
     route::get('mes-commandes', 'mesCommandes')->name('user.commandes')->middleware('client');
     route::get('mes-commandes/{id}', 'mesCommandesShow')->name('user.commandes.show')->middleware('client');
     route::get('mes-reservations', 'mesReservations')->name('user.reservations')->middleware('client');

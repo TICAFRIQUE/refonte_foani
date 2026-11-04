@@ -16,7 +16,11 @@ use App\Observers\CategorieObserver;
 use App\Observers\ProduitObserver;
 use App\Observers\SliderObserver;
 use App\Support\SiteCache;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -37,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->limitesAntiAbus();
+
         Categorie::observe(CategorieObserver::class);
         Produit::observe(ProduitObserver::class);
         Slider::observe(SliderObserver::class);
@@ -131,5 +137,40 @@ class AppServiceProvider extends ServiceProvider
         } catch (Throwable) {
             return $default;
         }
+    }
+
+    /**
+     * Limites d'envoi par adresse IP sur les formulaires publics (contre les robots
+     * et les essais de mots de passe). Au-delà : retour au formulaire avec un message clair.
+     */
+    private function limitesAntiAbus(): void
+    {
+        $refus = fn (string $message) => function (Request $request) use ($message) {
+            $retour = back()
+                ->withInput($request->except(['password', 'password_confirmation']))
+                ->withErrors(['formulaire' => $message]);
+
+            return $request->routeIs('contact.store') ? $retour->with('error', $message) : $retour;
+        };
+
+        // Contact : 5 messages / 10 min et 20 / jour par IP
+        RateLimiter::for('contact', fn (Request $request) => [
+            Limit::perMinutes(10, 5)->by('contact:' . $request->ip())
+                ->response($refus('Trop de messages envoyés. Réessayez dans quelques minutes.')),
+            Limit::perDay(20)->by('contact-jour:' . $request->ip())
+                ->response($refus("Trop de messages envoyés aujourd'hui. Contactez-nous par téléphone ou WhatsApp.")),
+        ]);
+
+        // Inscription : 5 comptes / heure par IP
+        RateLimiter::for('inscription', fn (Request $request) => Limit::perHour(5)->by('inscription:' . $request->ip())
+            ->response($refus("Trop d'inscriptions depuis cette connexion. Réessayez plus tard.")));
+
+        // Connexion : 5 essais / minute par identifiant, 20 / minute par IP
+        RateLimiter::for('connexion', fn (Request $request) => [
+            Limit::perMinute(5)->by('connexion:' . Str::lower((string) ($request->input('phone') ?? $request->input('email'))) . '|' . $request->ip())
+                ->response($refus('Trop de tentatives de connexion. Patientez une minute puis réessayez.')),
+            Limit::perMinute(20)->by('connexion-ip:' . $request->ip())
+                ->response($refus('Trop de tentatives de connexion. Patientez une minute puis réessayez.')),
+        ]);
     }
 }
